@@ -1,0 +1,13 @@
+@import "./css/component-adaptive-editor.css";
+
+body {
+  *::-webkit-scrollbar {
+    display: none;
+    width: 0;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0;
+  }
+}

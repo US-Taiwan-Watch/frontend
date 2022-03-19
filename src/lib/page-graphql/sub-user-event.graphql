@@ -1,0 +1,5 @@
+subscription onUserEvent($userId: String!) {
+  onUserEvent(userId: $userId) {
+    data
+  }
+}
