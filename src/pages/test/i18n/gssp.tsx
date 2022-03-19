@@ -24,7 +24,7 @@ const Page: NextPage<PageProps> = (props) => {
       <p>asPath: {asPath}</p>
       <p>pathname: {pathname}</p>
 
-      <p>text = {i18n.strings.home.festivalTitle.ticketBtnTitle}</p>
+      <p>text = {i18n.strings.landing.testI18n}</p>
 
       <LocaleSwitcher />
 

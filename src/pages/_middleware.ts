@@ -11,6 +11,6 @@ export function middleware(request: NextRequest) {
   if (shouldHandleLocale) {
     const acceptLang = request.headers.get("accept-language");
     const lang = acceptLang?.startsWith("zh") ? "zh-TW" : "en";
-    return NextResponse.redirect(`/${lang}${request.nextUrl.href}`);
+    return NextResponse.redirect(`/${lang}${request.nextUrl.pathname}`);
   }
 }

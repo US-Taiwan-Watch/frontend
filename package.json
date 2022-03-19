@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.5.10",
-    "@auth0/nextjs-auth0": "^1.6.2",
+    "@auth0/nextjs-auth0": "^1.7.0",
     "@emotion/cache": "latest",
     "@emotion/react": "latest",
     "@emotion/server": "latest",
