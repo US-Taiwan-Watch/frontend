@@ -1,7 +1,7 @@
 FROM node:lts as dependencies
 WORKDIR /app
 COPY package.json yarn.lock .yarnrc ./
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile --network-timeout 100000
 
 FROM node:lts as builder
 WORKDIR /app
