@@ -1,0 +1,8 @@
+query Bills {
+  bills {
+    congress
+    billType
+    billNumber
+    introducedDate
+  }
+}

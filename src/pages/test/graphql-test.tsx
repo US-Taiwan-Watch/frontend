@@ -4,25 +4,32 @@ import { Layout } from "../../components/layout";
 import { useFetchUser } from "../../lib/user";
 import { NextPageWithApollo, withApollo } from "../../lib/with-apollo";
 import { ImUserDocument } from "../../lib/page-graphql/query-imuser.graphql.interface";
+import { BillsDocument, BillsQuery } from "../../lib/page-graphql/query-bills.graphql.interface";
 import { OnUserEventDocument as OnUserEvent } from "../../lib/page-graphql/sub-user-event.graphql.interface";
 import { Box } from "@mui/material";
 
 const TestGraphQL: React.FC = () => {
   const client = useApolloClient();
-  const [data, setData] = React.useState({});
+  const [data, setData] = React.useState<BillsQuery>();
 
   React.useEffect(() => {
     if (client) {
       (async () => {
         const data = await client.query({
-          query: ImUserDocument,
+          query: BillsDocument,  //ImUserDocument,
           fetchPolicy: "network-only",
         });
-        setData(data);
+        console.log(data.data);
+        setData(data.data);
       })();
     }
   }, [client]);
-  return <pre>{JSON.stringify(data)}</pre>;
+  return (<Box sx={{ backgroundColor: "darkcyan" }}>
+    {"Bills: "}
+    {data?.bills.map((bill) => (
+      <pre>{JSON.stringify(bill)}</pre>
+    ))}
+  </Box>);
 };
 
 const SubscriptionTest: React.FC = () => {
@@ -74,7 +81,7 @@ const Page: NextPageWithApollo<PageProps> = ({ data }) => {
       )}
 
       {user && <TestGraphQL />}
-      <SubscriptionTest />
+      {/* <SubscriptionTest /> */}
 
       {data && <pre>{`PAGE_PROPS = ${JSON.stringify(data)}`}</pre>}
     </Layout>
