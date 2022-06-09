@@ -37,10 +37,8 @@ export type Member = {
   lastName?: Maybe<Scalars['String']>;
   nickname?: Maybe<Scalars['String']>;
   office?: Maybe<Scalars['String']>;
-  osId?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   profilePictureUri?: Maybe<Scalars['String']>;
-  pvsId?: Maybe<Scalars['String']>;
   twitterId?: Maybe<Scalars['String']>;
   website?: Maybe<Scalars['String']>;
   youtubeId?: Maybe<Scalars['String']>;
