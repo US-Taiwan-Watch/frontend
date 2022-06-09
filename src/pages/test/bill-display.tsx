@@ -7,9 +7,12 @@ import { ImUserDocument } from "../../lib/page-graphql/query-imuser.graphql.inte
 import { BillsDocument, BillsQuery } from "../../lib/page-graphql/query-bills.graphql.interface";
 import { Box } from "@mui/material";
 import { Bill } from "../../generated/graphql-types";
+import { createApolloClient } from "../../lib/apollo-client";
 
+// Server side code
 export async function getStaticProps() {
-  const client = useApolloClient();
+  // useApolloClient is a React hook, can only be used at client side.
+  const client = createApolloClient();
   const { data } = await client.query({
     query: BillsDocument,  //ImUserDocument,
     fetchPolicy: "network-only",
@@ -52,6 +55,7 @@ interface PageProps {
   bills?: Bill[];
 }
 
+// Client side code (React)
 const DisplayBills: NextPageWithApollo<PageProps> = ({ bills }) => {
   const { user, loading } = useFetchUser();
 
@@ -73,11 +77,18 @@ const DisplayBills: NextPageWithApollo<PageProps> = ({ bills }) => {
         </>
       )}
 
-      {user}
+      {user?.email}
 
       {bills && <pre>{`PAGE_PROPS = ${JSON.stringify(bills)}`}</pre>}
     </Layout>
   );
 };
 
-export default withApollo()(DisplayBills);
+// withApollo is needed only if this page requires fetching data from CLIENT SIDE.
+// It can be used along with either both SSR or SSG page.
+// By default (ssr: true) it adds getInitialProps to let SERVER SIDE RENDER the initial page
+// (ref: https://nextjs.org/docs/api-reference/data-fetching/get-initial-props)
+// which is not compatible with STATIC SITE GENERATION.
+// We could remove withApollo if no client side fetching data is needed.
+export default withApollo({ ssr: false })(DisplayBills);
+// export default DisplayBills;
