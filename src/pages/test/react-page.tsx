@@ -1,6 +1,7 @@
-import { Container } from "@mui/material";
+import { Button, Checkbox, Container } from "@mui/material";
 import { Value } from "@react-page/editor";
 import { GetStaticProps, NextPage } from "next";
+import { useState } from "react";
 import { AdaptiveEditor } from "../../components/component-adaptive-editor";
 import { LocaleSwitcher } from "../../components/locale-switcher";
 
@@ -8,12 +9,26 @@ interface PageProps {
   value: string;
 }
 
-const Page: NextPage<PageProps> = ({ value }) => (
-  <Container>
-    <LocaleSwitcher />
-    <AdaptiveEditor value={value} viewOnly={true} />
-  </Container>
-);
+const Page: NextPage<PageProps> = ({ value }) => {
+  const [editing, setEditing] = useState(false);
+  const [editorValue, setEditorValue] = useState(value);
+  const [savedValue, setSavedValue] = useState(typeof window !== 'undefined' && localStorage.getItem('value') || '');
+
+  return (
+    <Container>
+      <LocaleSwitcher />
+      Edit Mode: <Checkbox checked={editing} onChange={() => setEditing(!editing)} />
+      <Button onClick={() => setEditorValue('')}>Clear</Button>
+      <Button onClick={() => {
+        setSavedValue(editorValue);
+        localStorage.setItem('value', editorValue);
+      }}>Save</Button>
+      <Button onClick={() => setEditorValue(value)}>Reset</Button>
+      <Button onClick={() => setEditorValue(savedValue)}>Reset to Saved</Button>
+      <AdaptiveEditor value={editorValue} viewOnly={!editing} onSave={(val => setEditorValue(val))} />
+    </Container>
+  )
+};
 
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
   const value: Value = {

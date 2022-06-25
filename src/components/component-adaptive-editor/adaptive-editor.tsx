@@ -79,7 +79,7 @@ export const AdaptiveEditor = React.memo<AdaptiveEditorProps>(
   }) => {
     const classes = useStyles();
     const { lang } = useI18n();
-    const [value, setValue] = React.useState<Value>(
+    const [value, setValue] = React.useState<Value | null>(
       defaultValue && JSON.parse(defaultValue)
     );
     const [language, setLanguage] = React.useState<EditorLanguage>(EnLanguage);
@@ -87,6 +87,10 @@ export const AdaptiveEditor = React.memo<AdaptiveEditorProps>(
     React.useEffect(() => {
       handleLangChange(lang);
     }, [lang]);
+
+    React.useEffect(() => {
+      setValue(defaultValue ? JSON.parse(defaultValue) : defaultValue);
+    }, [defaultValue]);
 
     const handleLangChange = (lang: string) => {
       switch (lang) {
