@@ -3,6 +3,10 @@ query Bills {
     congress
     billType
     billNumber
+    title {
+      zh
+      en
+    }
     introducedDate
   }
 }

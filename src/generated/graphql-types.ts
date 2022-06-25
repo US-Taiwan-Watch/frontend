@@ -18,11 +18,19 @@ export type Bill = {
   billType: Scalars['String'];
   congress: Scalars['Float'];
   introducedDate?: Maybe<Scalars['String']>;
+  title: I18NText;
 };
 
 export type EventPayloadPublish = {
   __typename?: 'EventPayloadPublish';
   data?: Maybe<Scalars['String']>;
+};
+
+export type I18NText = {
+  __typename?: 'I18NText';
+  en?: Maybe<Scalars['String']>;
+  text?: Maybe<Scalars['String']>;
+  zh?: Maybe<Scalars['String']>;
 };
 
 export type Member = {

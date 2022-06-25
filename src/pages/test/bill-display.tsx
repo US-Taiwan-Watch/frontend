@@ -17,7 +17,7 @@ export async function getStaticProps() {
     query: BillsDocument,  //ImUserDocument,
     fetchPolicy: "network-only",
   });
-  console.log(data.bills);
+  // console.log(data.bills);
   return {
     props: {
       bills: data.bills.slice(0, 10),
@@ -58,6 +58,7 @@ interface PageProps {
 // Client side code (React)
 const DisplayBills: NextPageWithApollo<PageProps> = ({ bills }) => {
   const { user, loading } = useFetchUser();
+  console.log(bills);
 
   return (
     <Layout user={user} loading={loading}>
