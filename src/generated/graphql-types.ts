@@ -12,9 +12,48 @@ export type Scalars = {
   Float: number;
 };
 
+export type Bill = {
+  __typename?: 'Bill';
+  billNumber: Scalars['Float'];
+  billType: Scalars['String'];
+  congress: Scalars['Float'];
+  introducedDate?: Maybe<Scalars['String']>;
+};
+
 export type EventPayloadPublish = {
   __typename?: 'EventPayloadPublish';
   data?: Maybe<Scalars['String']>;
+};
+
+export type Member = {
+  __typename?: 'Member';
+  birthday?: Maybe<Scalars['String']>;
+  congressRoles: Array<MemberRole>;
+  cspanId?: Maybe<Scalars['String']>;
+  facebookId?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  gender?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  lastName?: Maybe<Scalars['String']>;
+  nickname?: Maybe<Scalars['String']>;
+  office?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  profilePictureUri?: Maybe<Scalars['String']>;
+  twitterId?: Maybe<Scalars['String']>;
+  website?: Maybe<Scalars['String']>;
+  youtubeId?: Maybe<Scalars['String']>;
+};
+
+export type MemberRole = {
+  __typename?: 'MemberRole';
+  chamber: Scalars['String'];
+  congressNumbers: Array<Scalars['Int']>;
+  district?: Maybe<Scalars['Int']>;
+  endDate: Scalars['Float'];
+  party: Scalars['String'];
+  senatorClass?: Maybe<Scalars['Int']>;
+  startDate: Scalars['Float'];
+  state: Scalars['String'];
 };
 
 export type Mutation = {
@@ -41,9 +80,36 @@ export type MutationEmitUserEventArgs = {
   userIdx: Array<Scalars['String']>;
 };
 
+export type PaginatedBills = {
+  __typename?: 'PaginatedBills';
+  hasMore: Scalars['Boolean'];
+  items: Array<Bill>;
+  total: Scalars['Int'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  bill?: Maybe<Bill>;
+  bills: PaginatedBills;
   imUser?: Maybe<User>;
+  member?: Maybe<Member>;
+  members: Array<Member>;
+};
+
+
+export type QueryBillArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryBillsArgs = {
+  limit?: InputMaybe<Scalars['Float']>;
+  offset?: InputMaybe<Scalars['Float']>;
+};
+
+
+export type QueryMemberArgs = {
+  bioGuideId: Scalars['String'];
 };
 
 export type Subscription = {

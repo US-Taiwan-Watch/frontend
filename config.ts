@@ -1,6 +1,6 @@
 export const appConfig = {
   graphql: {
-    httpHost: "https://api.ustw.watch",
-    wsHost: "wss://api.ustw.watch",
+    httpHost: process.env.NEXT_PUBLIC_GRAPHQL_HTTP_HOST,
+    wsHost: process.env.NEXT_PUBLIC_GRAPHQL_WS_HOST || '',
   },
 };
