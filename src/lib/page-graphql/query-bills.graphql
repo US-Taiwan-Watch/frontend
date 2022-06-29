@@ -1,0 +1,12 @@
+query bills($offset: Float, $limit: Float) {
+  bills(offset: $offset, limit: $limit) {
+    total
+    hasMore
+    items {
+      congress
+      billType
+      billNumber
+      introducedDate
+    }
+  }
+}
