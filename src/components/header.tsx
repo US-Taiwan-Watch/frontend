@@ -1,89 +1,57 @@
 import * as React from "react";
-import Link from "next/link";
 import { IUser } from "../lib/user";
+import { GlobalStyles, Link, Toolbar, Typography } from "@mui/material";
+import { useI18n } from "../context/i18n";
+import { LocaleSwitcher } from "./locale-switcher";
+import { showDevContent } from "../utils/gate-keeper";
 
 export interface IHeaderProps {
   user?: IUser;
   loading?: boolean;
 }
 
-export const Header: React.FC<IHeaderProps> = ({ user, loading }) => (
-  <header>
-    <nav>
-      <ul>
-        <li>
-          <Link href="/">
-            <a>Home</a>
-          </Link>
-        </li>
-        <li>
-          <Link href="/test/about">
-            <a>About</a>
-          </Link>
-        </li>
-        {!loading &&
+const NavLink: React.FC<{ href?: string | undefined }> = ({ href, children }) => (
+  <Link href={href} style={{ textDecoration: 'none' }}
+    variant="button"
+    color="text.primary" sx={{ my: 1, mx: 1.5 }}>
+    {children}
+  </Link>
+);
+
+export const Header: React.FC<IHeaderProps> = ({ user, loading }) => {
+  const { i18n } = useI18n();
+  return (
+    <Toolbar sx={{ flexWrap: 'wrap' }}>
+      {/* <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' }, a: { textDecoration: 'none' } }} /> */}
+      <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
+        {i18n.strings.brand.fullName}
+      </Typography>
+      <nav>
+        <NavLink href="#">
+          {i18n.strings.header.aboutUs}
+        </NavLink>
+        <NavLink href="#">
+          合作夥伴
+        </NavLink>
+        {showDevContent && !loading &&
           (user ? (
             <>
-              <li>
-                <Link href="/test/profile">
-                  <a>Client-rendered profile</a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/test/profile-ssr">
-                  <a>Server rendered profile (advanced)</a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/test/graphql-test">
-                  <a>GraphQL</a>
-                </Link>
-              </li>
-              <li>
-                <a href="/api/logout">Logout</a>
-              </li>
+              <NavLink href="/test/profile">
+                Client-rendered profile
+              </NavLink>
+              <NavLink href="/test/profile-ssr">
+                Server rendered profile (advanced)
+              </NavLink>
+              <NavLink href="/test/graphql-test">
+                GraphQL
+              </NavLink>
+              <NavLink href="/api/logout">Logout</NavLink>
             </>
           ) : (
-            <li>
-              <a href="/api/login">Login</a>
-            </li>
+            <NavLink href="/api/login">Login</NavLink>
           ))}
-      </ul>
-    </nav>
-
-    <style jsx>{`
-      header {
-        padding: 0.2rem;
-        color: #fff;
-        background-color: #333;
-      }
-      nav {
-        max-width: 42rem;
-        margin: 1.5rem auto;
-      }
-      ul {
-        display: flex;
-        list-style: none;
-        margin-left: 0;
-        padding-left: 0;
-      }
-      li {
-        margin-right: 1rem;
-      }
-      li:nth-child(2) {
-        margin-right: auto;
-      }
-      a {
-        color: #fff;
-        text-decoration: none;
-      }
-      button {
-        font-size: 1rem;
-        color: #fff;
-        cursor: pointer;
-        border: none;
-        background: none;
-      }
-    `}</style>
-  </header>
-);
+        <LocaleSwitcher />
+      </nav>
+    </Toolbar>
+  )
+};
