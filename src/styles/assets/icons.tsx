@@ -8,5 +8,20 @@ export const LightBulbIcon = (props: SvgIconProps) => (
 
 import SvgIconFB from "./icon-fb.svg";
 export const IconFB = (props: SvgIconProps) => (
-  <SvgIcon component={SvgIconFB} viewBox="0 0 35 35" {...props} />
+  <SvgIcon component={SvgIconFB} viewBox="0 0 512 512" {...props} />
+);
+
+import SvgIconIG from "./icon-ig.svg";
+export const IconIG = (props: SvgIconProps) => (
+  <SvgIcon component={SvgIconIG} viewBox="0 0 1005 1005" {...props} />
+);
+
+import SvgIconTwitter from "./icon-tw.svg";
+export const IconTwitter = (props: SvgIconProps) => (
+  <SvgIcon component={SvgIconTwitter} viewBox="0 0 512 512" {...props} />
+);
+
+import SvgIconYT from "./icon-yt.svg";
+export const IconYT = (props: SvgIconProps) => (
+  <SvgIcon component={SvgIconYT} viewBox="0 0 512 512" {...props} />
 );

@@ -22,24 +22,12 @@ export default class MyDocument extends Document {
           />
 
           {/* ---- FAV ICON ---- */}
-          {/* <link
-            rel="icon"
-            type="image/png"
-            sizes="48x48"
-            href="https://aikhun-assets.s3.amazonaws.com/public-static/favicon-48x48.png"
-          />
-          <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="https://aikhun-assets.s3.amazonaws.com/public-static/favicon-32x32.png"
-          />
           <link
             rel="icon"
             type="image/png"
             sizes="16x16"
-            href="https://aikhun-assets.s3.amazonaws.com/public-static/favicon-16x16.png"
-          /> */}
+            href="/assets/logo.png"
+          />
         </Head>
         <body>
           <Main />

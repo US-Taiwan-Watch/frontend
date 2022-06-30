@@ -66,7 +66,7 @@ const Home: NextPage = () => {
                 subtitle
               </Typography>
               <Link variant="subtitle1" href="#">
-                <IconFB sx={{ verticalAlign: "middle", height: 35, width: 35 }} />
+                Learn more
               </Link>
 
             </Box>
@@ -119,19 +119,6 @@ const Home: NextPage = () => {
           前往贊助
         </Link>
       </Section>
-      <Box
-        sx={{
-          my: 4,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <IconFB sx={{ verticalAlign: "middle", height: 35, width: 35 }} />
-        <Copyright color={"green"} />
-      </Box>
-
     </Layout >
   );
 };
