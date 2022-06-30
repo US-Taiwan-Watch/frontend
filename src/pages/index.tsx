@@ -1,20 +1,14 @@
-import * as React from "react";
 import type { NextPage } from "next";
-import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box, { BoxProps } from "@mui/material/Box";
 import { Link } from "../components/link";
-import { ProTip } from "../components/pro-tip";
-import { Copyright } from "../components/copyright";
-import { useFetchUser } from "../lib/user";
 import { Layout } from "../components/layout";
-import { IconFB } from "../styles";
-import Image from "next/image";
 import { Grid, Paper } from "@mui/material";
 import { theme } from "../styles/theme";
 
 const Section: React.FC<BoxProps> = (props) => (
   <Box {...props} sx={{
+    ...props.sx,
     py: 5,
     display: "flex",
     flexDirection: "column",
@@ -35,12 +29,12 @@ const Home: NextPage = () => {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
-          backgroundImage: `url(/assets/banner.png)`,
+          backgroundImage: `url(/assets/banner.jpg)`,
           borderRadius: 0,
         }}
       >
         {/* Increase the priority of the hero background image */}
-        {<img style={{ display: 'none' }} src='/assets/banner.png' alt='oo' />}
+        {<img style={{ display: 'none' }} src='/assets/banner.jpg' alt='US Taiwan Watch' />}
         <Box
           sx={{
             position: 'absolute',
@@ -81,7 +75,7 @@ const Home: NextPage = () => {
           lalalalala
         </Typography>
       </Section>
-      <Section id="partners">
+      <Section id="partners" sx={{ backgroundColor: theme.palette.background.paper }}>
         <Typography variant="h5" component="h1" gutterBottom id="about">
           合作夥伴
         </Typography>
@@ -97,7 +91,7 @@ const Home: NextPage = () => {
           lalalalal
         </Typography>
       </Section>
-      <Section id="join">
+      <Section id="join" sx={{ backgroundColor: theme.palette.background.paper }}>
         <Typography variant="h5" component="h1" gutterBottom id="about">
           加入我們
         </Typography>

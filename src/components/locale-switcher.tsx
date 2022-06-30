@@ -1,5 +1,4 @@
 import { Button, ButtonGroup } from "@mui/material";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useI18n } from "../context/i18n";
 
@@ -13,10 +12,10 @@ export const LocaleSwitcher: React.FC = () => {
     <ButtonGroup size="small" aria-label="small button group"
       variant={"contained"}>
       <Button
-        onClick={() => setLanguage("zh-TW")}
+        onClick={() => setLanguage("zh")}
         disabled={activeLocale?.startsWith("zh")}
       >
-        {"zh-TW"}
+        {"中文"}
       </Button>
       <Button
         onClick={() => setLanguage("en")}
