@@ -2,6 +2,9 @@ import * as React from "react";
 import Head from "next/head";
 import { IUser } from "../lib/user";
 import { Header } from "./header";
+import { IconFB } from "../styles";
+import { Copyright } from "./copyright";
+import { Box } from "@material-ui/core";
 
 export interface ILayoutProps {
   user?: IUser;
@@ -21,20 +24,17 @@ export const Layout: React.FC<ILayoutProps> = ({
     <Header user={user} loading={loading} />
 
     <main>
-      <div className="container">{children}</div>
+      <div>{children}</div>
     </main>
 
-    <style jsx>{`
-      .container {
-        max-width: 42rem;
-        margin: 1.5rem auto;
-      }
-    `}</style>
     <style jsx global>{`
       body {
         margin: 0;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      }
+      html {
+        scroll-behavior: smooth;
       }
     `}</style>
   </>

@@ -10,7 +10,7 @@ interface CopyrightProps {
 const StyledRoot = styled(Box)<CopyrightProps>(({ theme, color }) => ({
   color,
   "&::after": {
-    content: '"XXXXX"',
+    content: '""',
     color: theme.color.yellow[100],
   },
 }));
@@ -19,8 +19,8 @@ export const Copyright: React.FC<CopyrightProps> = ({ ...props }) => (
   <StyledRoot {...props}>
     <Typography variant="body2" color="text.secondary" align="center" sx={{}}>
       {"Copyright © "}
-      <MuiLink color="inherit" href="https://mui.com/">
-        Your Website
+      <MuiLink color="inherit" href=".">
+        U.S. Taiwan Watch
       </MuiLink>{" "}
       {new Date().getFullYear()}.
     </Typography>
