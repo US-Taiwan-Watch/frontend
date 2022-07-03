@@ -5,6 +5,7 @@ import { useI18n } from "../context/i18n";
 import { LocaleSwitcher } from "./locale-switcher";
 import { showDevContent } from "../utils/gate-keeper";
 import { Link } from "./link";
+import Image from "next/image";
 
 export interface IHeaderProps {
   user?: IUser;
@@ -23,13 +24,19 @@ export const Header: React.FC<IHeaderProps> = ({ user, loading }) => {
   const { i18n } = useI18n();
   return (
     <Toolbar sx={{ flexWrap: 'wrap' }}>
-      {/* <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' }, a: { textDecoration: 'none' } }} /> */}
-      <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-        <Link href='/' style={{ textDecoration: 'none' }} scroll={false}
-          color="text.primary" sx={{ my: 1, mx: 1.5 }}>
+      <Link href='/' style={{ textDecoration: 'none' }} scroll={false}
+        color="text.primary" sx={{
+          my: 1, mx: 1.5,
+          flexGrow: 1,
+          display: 'flex',
+          alignItems: 'center'
+        }}>
+        <Image src="/assets/logo.png" width={30} height={30} />
+        {/* <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' }, a: { textDecoration: 'none' } }} /> */}
+        <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
           {i18n.strings.brand.fullName}
-        </Link>
-      </Typography>
+        </Typography>
+      </Link>
       <nav>
         <NavLink href="#about">
           {i18n.strings.header.aboutUs}

@@ -29,7 +29,8 @@ const Home: NextPage = () => {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
-          backgroundImage: `url(/assets/banner.jpg)`,
+          // backgroundImage: `url(/assets/banner.jpg)`,
+          backgroundColor: '#256ce5',
           borderRadius: 0,
         }}
       >

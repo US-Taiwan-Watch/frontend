@@ -14,7 +14,7 @@ import { createStyled } from "@mui/system";
 // Create a theme instance.
 const color = {
   yellow: {
-    100: "#F2B705",
+    100: "#fed90b",
     200: "#F29F05",
     300: "#FAC012",
     400: "#D4A002",
@@ -114,7 +114,7 @@ const _theme: USTWThemeOptions = {
     mode: "dark",
     primary: {
       main: color.yellow[100],
-      dark: color.yellow[200],
+      dark: color.yellow[100],
     },
     secondary: {
       light: color.purple[200],
