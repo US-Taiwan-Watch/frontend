@@ -7,21 +7,37 @@ export const LightBulbIcon = (props: SvgIconProps) => (
 );
 
 import SvgIconFB from "./icon-fb.svg";
+import SvgIconFBBW from "./icon-fb-bw.svg";
 export const IconFB = (props: SvgIconProps) => (
   <SvgIcon component={SvgIconFB} viewBox="0 0 512 512" {...props} />
 );
+export const IconFBBW = (props: SvgIconProps) => (
+  <SvgIcon component={SvgIconFBBW} viewBox="0 0 512 512" {...props} />
+);
 
 import SvgIconIG from "./icon-ig.svg";
+import SvgIconIGBW from "./icon-ig-bw.svg";
 export const IconIG = (props: SvgIconProps) => (
   <SvgIcon component={SvgIconIG} viewBox="0 0 1005 1005" {...props} />
 );
+export const IconIGBW = (props: SvgIconProps) => (
+  <SvgIcon component={SvgIconIGBW} viewBox="0 0 512 512" {...props} />
+);
 
 import SvgIconTwitter from "./icon-tw.svg";
+import SvgIconTwitterBW from "./icon-tw-bw.svg";
 export const IconTwitter = (props: SvgIconProps) => (
   <SvgIcon component={SvgIconTwitter} viewBox="0 0 512 512" {...props} />
 );
+export const IconTwitterBW = (props: SvgIconProps) => (
+  <SvgIcon component={SvgIconTwitterBW} viewBox="0 0 512 512" {...props} />
+);
 
 import SvgIconYT from "./icon-yt.svg";
+import SvgIconYTBW from "./icon-yt-bw.svg";
 export const IconYT = (props: SvgIconProps) => (
   <SvgIcon component={SvgIconYT} viewBox="0 0 512 512" {...props} />
+);
+export const IconYTBW = (props: SvgIconProps) => (
+  <SvgIcon component={SvgIconYTBW} viewBox="0 0 512 512" {...props} />
 );

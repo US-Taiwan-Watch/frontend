@@ -23,9 +23,9 @@ export const Footer: React.FC = () => (
         textAlign: "center"
       }}>
         <Box sx={{ marginRight: 2 }}>
-          <Image src="/assets/logo-long.png" width={200} height={34} />
+          <Image src="/assets/logo-long-white.png" width={200} height={34} />
         </Box>
-        <SocialMediaGroup />
+        <SocialMediaGroup bw={true} />
       </Container>
 
       <Copyright color={"green"} />

@@ -26,7 +26,7 @@ export const Header: React.FC<IHeaderProps> = ({ user, loading }) => {
     <Toolbar sx={{ flexWrap: 'wrap' }}>
       <Link href='/' style={{ textDecoration: 'none' }} scroll={false}
         color="text.primary" sx={{
-          my: 1, mx: 1.5,
+          my: 1,
           flexGrow: 1,
           display: 'flex',
           alignItems: 'center'
@@ -37,7 +37,9 @@ export const Header: React.FC<IHeaderProps> = ({ user, loading }) => {
           {i18n.strings.brand.fullName}
         </Typography>
       </Link>
-      <nav>
+      <nav
+      // style={{ display: 'flex', flexGrow: 1, flexDirection: 'row-reverse' }}
+      >
         <NavLink href="#about">
           {i18n.strings.header.aboutUs}
         </NavLink>
