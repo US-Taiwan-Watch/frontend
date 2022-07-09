@@ -111,8 +111,8 @@ const Home: NextPage = () => {
           We work with blahblah
         </Typography>
         <Grid container spacing={6} alignItems="flex-end" sx={{ py: 3 }}>
-          {Constants.partners.map((item) => (
-            <Grid item key={item.name} xs={6} sm={4} md={3}>
+          {Constants.partners.map((item, i) => (
+            <Grid item key={'partner' + i} xs={6} sm={4} md={3}>
               <Link href={item.link} target="_blank">
                 <img
                   src={item.logo}

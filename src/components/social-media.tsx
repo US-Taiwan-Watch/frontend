@@ -45,7 +45,7 @@ export const socialMedias: SocialMedia[] = [
 export const SocialMediaGroup = (props: SocialMediaIconProps) => (
   <>
     {socialMedias.map(media => (
-      <IconButton aria-label={media.name} href={media.link}>
+      <IconButton aria-label={media.name} href={media.link} key={media.name}>
         <SocialMediaIcon type={media.type} bw={props.bw} />
       </IconButton>
     ))}
