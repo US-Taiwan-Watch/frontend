@@ -3,10 +3,7 @@ import Typography from "@mui/material/Typography";
 import Box, { BoxProps } from "@mui/material/Box";
 import { Link } from "../components/link";
 import { Layout } from "../components/layout";
-import { Button, Card, CardActionArea, CardActions, CardContent, CardHeader, Container, Grid, ImageList, ImageListItem, Paper } from "@mui/material";
-import { theme } from "../styles/theme";
-import { Image } from "@mui/icons-material";
-import { IconFB } from "../styles";
+import { Card, CardActionArea, CardContent, CardHeader, Container, Grid, ImageList, ImageListItem, Paper } from "@mui/material";
 import { SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
 
@@ -59,10 +56,10 @@ const Home: NextPage = () => {
                 pr: { md: 0 },
               }}
             >
-              <Typography component="h1" variant="h4" color="inherit" gutterBottom>
+              <Typography component="h1" variant="h4" gutterBottom>
                 US Taiwan Watch 美國台灣觀測站
               </Typography>
-              <Typography variant="h6" color="inherit" paragraph>
+              <Typography variant="h6" paragraph>
                 需要一個副標
               </Typography>
               {/* <Link variant="subtitle1" href="#">
@@ -86,7 +83,7 @@ const Home: NextPage = () => {
               justifyContent: "center",
               alignItems: "center",
             }}>
-              <Typography variant="h6" color="inherit" paragraph>
+              <Typography variant="h6" paragraph>
                 「US Taiwan Watch 美國台灣觀測站」致力於深化台美關係，透過消弭資訊不對稱，以及提升民眾對於台美事務和國際動態的了解，來降低公民外交的門檻、創造更好的公民外交品質。2022 年觀測站以「拉近距離」作為團隊努力的目標，希望利用成員們在美國的地理優勢，製播更多影音內容，讓台灣觀眾能更貼近美國的社會、文化以及外交現場。
               </Typography>
             </Box>
@@ -101,13 +98,13 @@ const Home: NextPage = () => {
           </Grid>
         </Grid>
       </Section>
-      <Section id="partners" sx={{ backgroundColor: theme.palette.background.paper }}>
+      <Section id="partners" sx={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
         <Typography variant="h5" component="h1" gutterBottom id="partners" sx={{
           paddingBottom: 3,
         }}>
           合作夥伴
         </Typography>
-        <Typography variant="h6" color="inherit" paragraph>
+        <Typography variant="h6" paragraph>
           We work with blahblah
         </Typography>
         <Grid container spacing={6} alignItems="flex-end" sx={{ py: 3 }}>
@@ -176,10 +173,10 @@ const Home: NextPage = () => {
             </Grid>
           ))}
         </Grid>
-        <Typography variant="h6" color="inherit" paragraph>
+        <Typography variant="h6" paragraph>
         </Typography>
       </Section>
-      <Section id="join" sx={{ backgroundColor: theme.palette.background.paper }}>
+      <Section id="join" sx={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
         <Grid container>
           <Grid item md={8} sm={11} xs={11}>
             <Typography variant="h5" component="h1" gutterBottom sx={{
@@ -193,7 +190,7 @@ const Home: NextPage = () => {
               // justifyContent: "center",
               // alignItems: "end",
             }}>
-              <Typography variant="h6" color="inherit" paragraph>
+              <Typography variant="h6" paragraph>
                 文字介紹
               </Typography>
               <Link variant="subtitle1" href={Constants.links.volunteer} target="_blank">
@@ -227,7 +224,7 @@ const Home: NextPage = () => {
               justifyContent: "center",
               // alignItems: "center",
             }}>
-              <Typography variant="h6" color="inherit" paragraph>
+              <Typography variant="h6" paragraph>
                 lalalalalala
               </Typography>
               <Link variant="subtitle1" href={Constants.links.donate} target="_blank">

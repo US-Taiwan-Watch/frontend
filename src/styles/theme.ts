@@ -1,8 +1,11 @@
+import { dark } from "@material-ui/core/styles/createPalette";
+import { getThemeProps } from "@material-ui/styles";
 import {
   createTheme,
   Duration,
   Palette,
   PaletteColor,
+  PaletteOptions,
   responsiveFontSizes,
   Theme,
   ThemeOptions,
@@ -14,7 +17,7 @@ import { createStyled } from "@mui/system";
 // Create a theme instance.
 const color = {
   yellow: {
-    100: "#fed90b",
+    100: "#F2B705",
     200: "#F29F05",
     300: "#FAC012",
     400: "#D4A002",
@@ -99,6 +102,60 @@ interface USTWThemeOptions extends ThemeOptions, USTWThemeColor {
   meetings: MeetingTheme;
 }
 
+const darkPalette: PaletteOptions = {
+  mode: "dark",
+  // text: {
+  //   primary: color.yellow[200],
+  //   secondary: color.yellow[100],
+  // },
+  primary: {
+    light: color.yellow[100],
+    main: color.yellow[200],
+    dark: color.yellow[300],
+  },
+  secondary: {
+    light: color.purple[200],
+    main: color.purple[300],
+    dark: color.purple[400],
+  },
+  info: {
+    light: color.blueGrey[100],
+    main: color.blueGrey[200],
+    dark: color.blueGrey[300],
+  },
+  background: {
+    default: color.blueGrey[900],
+    paper: color.blueGrey[1000],
+  },
+}
+
+const lightPalette: PaletteOptions = {
+  mode: "light",
+  // text: {
+  //   primary: color.blueGrey[200],
+  //   secondary: color.blueGrey[100],
+  // },
+  secondary: {
+    light: color.yellow[100],
+    main: color.yellow[200],
+    dark: color.yellow[300],
+  },
+  primary: {
+    light: color.purple[200],
+    main: color.purple[300],
+    dark: color.purple[400],
+  },
+  info: {
+    light: color.blueGrey[100],
+    main: color.blueGrey[200],
+    dark: color.blueGrey[300],
+  },
+  background: {
+    default: color.white[100],
+    paper: color.white[200],
+  },
+}
+
 const _theme: USTWThemeOptions = {
   color: {
     ...color,
@@ -108,27 +165,6 @@ const _theme: USTWThemeOptions = {
       300: color.blueGrey[800],
       400: color.blueGrey[1500],
       500: color.blueGrey[1200],
-    },
-  },
-  palette: {
-    mode: "dark",
-    primary: {
-      main: color.yellow[100],
-      dark: color.yellow[100],
-    },
-    secondary: {
-      light: color.purple[200],
-      main: color.purple[300],
-      dark: color.purple[400],
-    },
-    info: {
-      light: color.blueGrey[100],
-      main: color.blueGrey[200],
-      dark: color.blueGrey[300],
-    },
-    background: {
-      default: color.blueGrey[900],
-      paper: color.blueGrey[1000],
     },
   },
   typography: {
@@ -157,4 +193,15 @@ const _theme: USTWThemeOptions = {
 };
 
 export const theme = responsiveFontSizes(createTheme(_theme)) as USTWTheme;
+
+export const darkTheme = responsiveFontSizes(createTheme({
+  ..._theme,
+  palette: darkPalette,
+})) as USTWTheme;
+
+export const lightTheme = responsiveFontSizes(createTheme({
+  ..._theme,
+  palette: lightPalette,
+})) as USTWTheme;
+
 export const styled = createStyled<USTWTheme>({ defaultTheme: theme });
