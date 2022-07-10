@@ -1,8 +1,8 @@
-import { IconButton, SvgIconProps } from "@mui/material";
 import { IconFB, IconFBBW, IconIG, IconIGBW, IconTwitter, IconTwitterBW, IconYT, IconYTBW } from "../styles";
 import { Constants } from "../utils/constants";
+import AppleIcon from '@mui/icons-material/Apple';
 
-export type SocialMediaType = 'fb' | 'ig' | 'tw' | 'yt';
+export type SocialMediaType = 'fb' | 'ig' | 'tw' | 'yt' | 'podcast';
 
 type SocialMediaIconProps = {
   bw?: boolean,
@@ -40,17 +40,13 @@ export const socialMedias: SocialMedia[] = [
     link: Constants.links.yt,
     description: '一些描述一些描述一些描述一些描述一些描述一些描述一些描述',
   },
+  {
+    type: 'podcast',
+    name: 'Apple Podcast',
+    link: Constants.links.podcast,
+    description: '一些描述一些描述一些描述一些描述一些描述一些描述一些描述',
+  },
 ]
-
-export const SocialMediaGroup = (props: SocialMediaIconProps) => (
-  <>
-    {socialMedias.map(media => (
-      <IconButton aria-label={media.name} href={media.link} key={media.name}>
-        <SocialMediaIcon type={media.type} bw={props.bw} />
-      </IconButton>
-    ))}
-  </>);
-
 
 export const SocialMediaIcon: React.FC<{ type: SocialMediaType } & SocialMediaIconProps> = ({ type, bw }) => {
   switch (type) {
@@ -62,5 +58,7 @@ export const SocialMediaIcon: React.FC<{ type: SocialMediaType } & SocialMediaIc
       return bw !== true ? <IconTwitter /> : <IconTwitterBW />;
     case 'yt':
       return bw !== true ? <IconYT /> : <IconYTBW />;
+    case 'podcast':
+      return <AppleIcon />;
   }
 }

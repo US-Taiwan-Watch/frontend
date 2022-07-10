@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import Box, { BoxProps } from "@mui/material/Box";
 import { Link } from "../components/link";
 import { Layout } from "../components/layout";
-import { Card, CardActionArea, CardContent, CardHeader, Container, Grid, ImageList, ImageListItem, Paper } from "@mui/material";
+import { Button, Card, CardActionArea, CardContent, CardHeader, Container, Grid, ImageList, ImageListItem, Paper } from "@mui/material";
 import { SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
 
@@ -146,7 +146,7 @@ const Home: NextPage = () => (
             key={media.name}
             xs={12}
             sm={6}
-            md={3}
+            md={4}
           >
             <Card>
               <CardActionArea href={media.link} target="_blank" >
@@ -192,8 +192,8 @@ const Home: NextPage = () => (
             <Typography variant="h6" paragraph>
               文字介紹
             </Typography>
-            <Link variant="subtitle1" href={Constants.links.volunteer} target="_blank">
-              報名成為志工！
+            <Link variant="button" href={Constants.links.volunteer} target="_blank">
+              <Button variant="contained">報名成為志工！</Button>
             </Link>
           </Box>
         </Grid>
@@ -226,8 +226,8 @@ const Home: NextPage = () => (
             <Typography variant="h6" paragraph>
               lalalalalala
             </Typography>
-            <Link variant="subtitle1" href={Constants.links.donate} target="_blank">
-              前往贊助
+            <Link variant="button" href={Constants.links.donate} target="_blank">
+              <Button variant="contained">前往贊助</Button>
             </Link>
           </Box>
         </Grid>
