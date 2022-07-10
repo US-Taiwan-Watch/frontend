@@ -163,6 +163,7 @@ const Home: NextPage = () => (
                 <CardContent>
                   <Typography
                     variant="subtitle1"
+                    color="info.main"
                   >
                     {media.description}
                   </Typography>

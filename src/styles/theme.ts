@@ -119,9 +119,9 @@ const darkPalette: PaletteOptions = {
     dark: color.purple[400],
   },
   info: {
-    light: color.blueGrey[100],
-    main: color.blueGrey[200],
-    dark: color.blueGrey[300],
+    light: color.white[100],
+    main: color.white[200],
+    dark: color.white[300],
   },
   background: {
     default: color.blueGrey[900],
