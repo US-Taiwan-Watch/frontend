@@ -11,7 +11,6 @@ import { I18nProvider } from "../context/i18n";
 import { useInitApolloClient } from "../lib/with-apollo";
 import { ApolloProvider } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
-import { ClientOnly } from "../components/client-only";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -20,18 +19,28 @@ interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
 
+export const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
+
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const client = useInitApolloClient();
+  const [darkMode, setDarkMode] = React.useState(false);
+  const isDarkMode = React.useMemo(
+    () => ({
+      toggleColorMode: () =>
+        setDarkMode((prevMode) => !prevMode),
+    }),
+    [],
+  );
+
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = React.useMemo(
-    () => prefersDarkMode ? darkTheme : lightTheme,
-    [prefersDarkMode],
+    () => darkMode ? darkTheme : lightTheme,
+    [darkMode],
   );
 
   return (
-    // This is for supporting dark mode, however it disables SSR. Might remove it later
-    <ClientOnly>
+    <ColorModeContext.Provider value={isDarkMode}>
       <CacheProvider value={emotionCache}>
         <Head>
           <title>Change title in _app.tsx</title>
@@ -47,6 +56,6 @@ export default function MyApp(props: MyAppProps) {
           </ThemeProvider>
         </ApolloProvider>
       </CacheProvider>
-    </ClientOnly>
+    </ColorModeContext.Provider>
   );
 }

@@ -1,11 +1,14 @@
 import * as React from "react";
 import { IUser } from "../lib/user";
-import { GlobalStyles, Toolbar, Typography } from "@mui/material";
+import { IconButton, Toolbar, Typography, useTheme } from "@mui/material";
 import { useI18n } from "../context/i18n";
 import { LocaleSwitcher } from "./locale-switcher";
 import { showDevContent } from "../utils/gate-keeper";
 import { Link } from "./link";
 import Image from "next/image";
+import { ColorModeContext } from "../pages/_app";
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
 
 export interface IHeaderProps {
   user?: IUser;
@@ -22,6 +25,8 @@ const NavLink: React.FC<{ href: string }> = ({ href, children }) => (
 
 export const Header: React.FC<IHeaderProps> = ({ user, loading }) => {
   const { i18n } = useI18n();
+  const theme = useTheme();
+  const colorMode = React.useContext(ColorModeContext);
   return (
     <Toolbar sx={{ flexWrap: 'wrap' }}>
       <Link href='/' style={{ textDecoration: 'none' }} scroll={false}
@@ -73,6 +78,10 @@ export const Header: React.FC<IHeaderProps> = ({ user, loading }) => {
             <NavLink href="/api/login">Login</NavLink>
           ))}
         <LocaleSwitcher />
+        {/* Enable dark mode switch later after addressing all possible issues */}
+        {/* <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+          {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton> */}
       </nav>
     </Toolbar>
   )
