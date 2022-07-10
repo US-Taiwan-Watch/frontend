@@ -12,7 +12,6 @@ type SocialMedia = {
   type: SocialMediaType,
   name: string,
   link: string,
-  description: string,
 };
 
 export const socialMedias: SocialMedia[] = [
@@ -20,31 +19,26 @@ export const socialMedias: SocialMedia[] = [
     type: 'fb',
     name: 'Facebook',
     link: Constants.links.fb,
-    description: '一些描述一些描述一些描述一些描述一些描述一些描述一些描述',
   },
   {
     type: 'ig',
     name: 'Instagram',
     link: Constants.links.ig,
-    description: '一些描述一些描述一些描述一些描述一些描述一些描述一些描述',
   },
   {
     type: 'tw',
     name: 'Twitter',
     link: Constants.links.twitter,
-    description: '一些描述一些描述一些描述一些描述一些描述一些描述一些描述',
   },
   {
     type: 'yt',
     name: 'YouTube',
     link: Constants.links.yt,
-    description: '一些描述一些描述一些描述一些描述一些描述一些描述一些描述',
   },
   {
     type: 'podcast',
     name: 'Apple Podcast',
     link: Constants.links.podcast,
-    description: '一些描述一些描述一些描述一些描述一些描述一些描述一些描述',
   },
 ]
 

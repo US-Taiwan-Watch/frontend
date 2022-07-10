@@ -41,7 +41,7 @@ export const Header: React.FC<IHeaderProps> = ({ user, loading }) => {
       // style={{ display: 'flex', flexGrow: 1, flexDirection: 'row-reverse' }}
       >
         <NavLink href="#about">
-          {i18n.strings.header.aboutUs}
+          {i18n.strings.header.about}
         </NavLink>
         <NavLink href="#partners">
           合作夥伴
