@@ -19,7 +19,7 @@ interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
 
-export const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
+export const ColorModeContext = React.createContext({ toggleColorMode: () => { /* do nothing. */ } });
 
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
