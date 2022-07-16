@@ -4,23 +4,24 @@ import { IconButton, Toolbar, Typography, useTheme } from "@mui/material";
 import { useI18n } from "../context/i18n";
 import { LocaleSwitcher } from "./locale-switcher";
 import { showDevContent } from "../utils/gate-keeper";
-import { Link } from "./link";
+import { Link, LinkProps } from "./link";
 import Image from "next/image";
 import { ColorModeContext } from "../pages/_app";
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
+import { Constants } from "../utils/constants";
 
 export interface IHeaderProps {
   user?: IUser;
   loading?: boolean;
 }
 
-const NavLink: React.FC<{ href: string }> = ({ href, children }) => (
-  <Link href={href} style={{ textDecoration: 'none' }}
+const NavLink: React.FC<LinkProps> = (props) => (
+  <Link {...props} style={{ textDecoration: 'none' }}
     variant="button"
     color="text.primary" sx={{ my: 1, mx: 1.5 }}>
-    {children}
-  </Link>
+    {props.children}
+  </Link >
 );
 
 export const Header: React.FC<IHeaderProps> = ({ user, loading }) => {
@@ -49,16 +50,19 @@ export const Header: React.FC<IHeaderProps> = ({ user, loading }) => {
           {i18n.strings.header.about}
         </NavLink>
         <NavLink href="#partners">
-          合作夥伴
+          {i18n.strings.header.partners}
         </NavLink>
         <NavLink href="#follow">
-          追蹤我們
+          {i18n.strings.header.follow}
         </NavLink>
         <NavLink href="#join">
-          加入我們
+          {i18n.strings.header.join}
         </NavLink>
         <NavLink href="#donate">
-          支持我們
+          {i18n.strings.header.donate}
+        </NavLink>
+        <NavLink href="#subscribe">
+          {i18n.strings.header.subscribe}
         </NavLink>
         {showDevContent && !loading &&
           (user ? (

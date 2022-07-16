@@ -9,6 +9,7 @@ export default {
     follow: '追蹤我們',
     join: '加入我們',
     donate: '支持我們',
+    subscribe: '訂閱電子報',
   },
   landing: {
     testI18n: "I18n - 中文內容",
@@ -20,6 +21,8 @@ export default {
     donateDesc: 'lalalalalal',
     donateButton: '定期定額捐款（國際）',
     donateButtonTW: '定期定額捐款（台灣）',
+    subscribeDesc: '歡迎訂閱 US Taiwan Watch: 美國台灣觀測站每月電子報。每期內，我們會幫您整理過去幾週發生的大事、以及我們的見解。同時也會讓您知道我們在台灣或美國兩地舉辦的活動。',
+    subscribeButton: '訂閱電子報',
   },
   social: {
     fb: '一些描述一些描述一些描述一些描述一些描述一些描述一些描述',

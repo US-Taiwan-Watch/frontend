@@ -257,6 +257,28 @@ const Home: NextPage = () => {
           </Grid>
         </Grid>
       </Section>
+      <Section id="subscribe" sx={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
+        <Typography variant="h5" component="h1" gutterBottom sx={{
+          paddingBottom: 3,
+        }}>
+          {i18n.strings.header.subscribe}
+        </Typography>
+        <Box sx={{
+          display: "flex",
+          flexDirection: "column",
+          // justifyContent: "center",
+          // alignItems: "end",
+        }}>
+          <Typography variant="h6" paragraph>
+            {i18n.strings.landing.subscribeDesc}
+          </Typography>
+          <Link variant="button" href={Constants.links.volunteer} target="_blank">
+            <Button variant="contained">
+              {i18n.strings.landing.subscribeButton}
+            </Button>
+          </Link>
+        </Box>
+      </Section>
     </Layout >
   );
 };

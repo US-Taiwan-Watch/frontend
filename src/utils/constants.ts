@@ -1,5 +1,6 @@
 export const Constants = {
   links: {
+    email: 'contact@ustw.watch',
     fb: 'https://www.facebook.com/ustaiwanwatch',
     ig: 'https://www.instagram.com/ustaiwanwatch/',
     yt: 'https://www.youtube.com/USTaiwanWatch',
@@ -9,6 +10,7 @@ export const Constants = {
     volunteer: 'https://volunteer.ustw.watch/',
     donate: 'https://donate.ustw.watch/',
     donateTW: 'https://ustaiwanwatch.backme.tw/checkout/1282/9385',
+    newsletter: 'http://eepurl.com/hxqWTj',
   },
   partners: [
     {
