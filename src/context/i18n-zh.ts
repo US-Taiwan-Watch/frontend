@@ -3,7 +3,7 @@ export default {
     fullName: 'US Taiwan Watch 美國台灣觀測站'
   },
   header: {
-    subtitle: '需要一個副標',
+    subtitle: '從海外台美人草根觀點以及國際關係的角度，推廣、促進國人對台美關係',
     about: '關於我們',
     partners: '合作夥伴',
     follow: '追蹤我們',
@@ -14,7 +14,7 @@ export default {
   landing: {
     testI18n: "I18n - 中文內容",
     aboutDesc: '「US Taiwan Watch 美國台灣觀測站」致力於深化台美關係，透過消弭資訊不對稱，以及提升民眾對於台美事務和國際動態的了解，來降低公民外交的門檻、創造更好的公民外交品質。2022 年觀測站以「拉近距離」作為團隊努力的目標，希望利用成員們在美國的地理優勢，製播更多影音內容，讓台灣觀眾能更貼近美國的社會、文化以及外交現場。',
-    partnersDesc: 'We work with blahblah',
+    partnersDesc: '',
     followDesc: '',
     joinDesc: '觀測站的工作都是由一群超有熱忱志工所共同完成，我們非常歡迎對促進台美關係以及想要幫助更多人認識台美相關法案的志工們加入！你擅長中英文的新聞摘要、專題研究、翻譯或者募款與辦活動嗎～？快來這裡填報名表，我們會儘速與你聯繫。',
     joinButton: '報名成為志工！',
