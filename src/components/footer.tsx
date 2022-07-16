@@ -25,7 +25,7 @@ export const Footer: React.FC = () => (
         <Box sx={{ marginRight: 2 }}>
           <Image src="/assets/logo-long-white.png" width={200} height={34} />
         </Box>
-        {socialMedias.filter(media => media.type !== 'podcast').map(media => (
+        {socialMedias.map(media => (
           <IconButton aria-label={media.name} href={media.link} key={media.name}>
             <SocialMediaIcon type={media.type} bw={true} />
           </IconButton>

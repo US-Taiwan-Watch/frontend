@@ -146,7 +146,7 @@ const Home: NextPage = () => {
         }}>
           {i18n.strings.header.follow}
         </Typography>
-        <Grid container spacing={5} alignItems="flex-end">
+        <Grid container spacing={5} alignItems="stretch">
           {socialMedias.map((media) => (
             <Grid
               item
@@ -155,7 +155,7 @@ const Home: NextPage = () => {
               sm={6}
               md={4}
             >
-              <Card>
+              <Card sx={{ height: '100%' }}>
                 <CardActionArea href={media.link} target="_blank" >
                   <CardHeader
                     avatar={
@@ -238,11 +238,21 @@ const Home: NextPage = () => {
               <Typography variant="h6" paragraph>
                 {i18n.strings.landing.donateDesc}
               </Typography>
-              <Link variant="button" href={Constants.links.donate} target="_blank">
-                <Button variant="contained">
-                  {i18n.strings.landing.donateButton}
-                </Button>
-              </Link>
+              <Box sx={{
+                display: "flex",
+                flexDirection: "row",
+              }}>
+                <Link variant="button" href={Constants.links.donate} target="_blank" >
+                  <Button variant="contained">
+                    {i18n.strings.landing.donateButton}
+                  </Button>
+                </Link>
+                <Link variant="button" href={Constants.links.donateTW} target="_blank" sx={{ mx: 1 }}>
+                  <Button variant="contained">
+                    {i18n.strings.landing.donateButtonTW}
+                  </Button>
+                </Link>
+              </Box>
             </Box>
           </Grid>
         </Grid>

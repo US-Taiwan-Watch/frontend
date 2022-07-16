@@ -18,7 +18,8 @@ export default {
     joinDesc: '文字介紹',
     joinButton: '報名成為志工！',
     donateDesc: 'lalalalalal',
-    donateButton: '前往贊助',
+    donateButton: '定期定額捐款（國際）',
+    donateButtonTW: '定期定額捐款（台灣）',
   },
   social: {
     fb: '一些描述一些描述一些描述一些描述一些描述一些描述一些描述',

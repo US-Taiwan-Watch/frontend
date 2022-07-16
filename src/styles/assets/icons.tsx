@@ -41,3 +41,12 @@ export const IconYT = (props: SvgIconProps) => (
 export const IconYTBW = (props: SvgIconProps) => (
   <SvgIcon component={SvgIconYTBW} viewBox="0 0 512 512" {...props} />
 );
+
+import SvgIconSpotify from "./icon-spotify.svg";
+import SvgIconSpotifyBW from "./icon-spotify-bw.svg";
+export const IconSpotify = (props: SvgIconProps) => (
+  <SvgIcon component={SvgIconSpotify} viewBox="0 0 128 128" {...props} />
+);
+export const IconSpotifyBW = (props: SvgIconProps) => (
+  <SvgIcon component={SvgIconSpotifyBW} viewBox="0 0 24 24" {...props} />
+);

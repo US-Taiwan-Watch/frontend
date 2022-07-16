@@ -79,9 +79,9 @@ export const Header: React.FC<IHeaderProps> = ({ user, loading }) => {
           ))}
         <LocaleSwitcher />
         {/* Enable dark mode switch later after addressing all possible issues */}
-        <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+        {/* <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
           {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-        </IconButton>
+        </IconButton> */}
       </nav>
     </Toolbar>
   )

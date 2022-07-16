@@ -1,4 +1,4 @@
-import { IconFB, IconFBBW, IconIG, IconIGBW, IconTwitter, IconTwitterBW, IconYT, IconYTBW } from "../styles";
+import { IconFB, IconFBBW, IconIG, IconIGBW, IconSpotify, IconSpotifyBW, IconTwitter, IconTwitterBW, IconYT, IconYTBW } from "../styles";
 import { Constants } from "../utils/constants";
 import AppleIcon from '@mui/icons-material/Apple';
 
@@ -37,7 +37,7 @@ export const socialMedias: SocialMedia[] = [
   },
   {
     type: 'podcast',
-    name: 'Apple Podcast',
+    name: 'Podcast',
     link: Constants.links.podcast,
   },
 ]
@@ -53,6 +53,6 @@ export const SocialMediaIcon: React.FC<{ type: SocialMediaType } & SocialMediaIc
     case 'yt':
       return bw !== true ? <IconYT /> : <IconYTBW />;
     case 'podcast':
-      return <AppleIcon />;
+      return bw !== true ? <IconSpotify /> : <IconSpotifyBW />;
   }
 }
