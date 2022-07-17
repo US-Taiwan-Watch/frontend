@@ -73,7 +73,7 @@ const Home: NextPage = () => {
       </Paper>
       <Section id="about">
         <Grid container>
-          <Grid item md={8} sm={11} xs={11}>
+          <Grid item md={8} sm={12} xs={12}>
             <Typography variant="h5" component="h1" gutterBottom sx={{
               paddingBottom: 3,
             }}>
@@ -94,7 +94,7 @@ const Home: NextPage = () => {
               </Typography>
             </Box>
           </Grid>
-          <Grid item md={4} sm={1} xs={1} sx={{
+          <Grid item md={4} sm={0} xs={0} sx={{
             px: 10,
             paddingTop: 5,
             justifyContent: "center",
@@ -187,7 +187,7 @@ const Home: NextPage = () => {
       </Section>
       <Section id="join" sx={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
         <Grid container>
-          <Grid item md={8} sm={11} xs={11}>
+          <Grid item md={8} sm={12} xs={12}>
             <Typography variant="h5" component="h1" gutterBottom sx={{
               paddingBottom: 3,
             }}>
@@ -202,14 +202,14 @@ const Home: NextPage = () => {
               <Typography variant="h6" paragraph>
                 {i18n.strings.landing.joinDesc}
               </Typography>
-              <Link variant="button" href={Constants.links.volunteer} target="_blank">
+              <Link variant="button" href={Constants.links.volunteer} target="_blank" sx={{ width: 'fit-content' }}>
                 <Button variant="contained">
                   {i18n.strings.landing.joinButton}
                 </Button>
               </Link>
             </Box>
           </Grid>
-          <Grid item md={4} sm={1} xs={1} sx={{
+          <Grid item md={4} sm={0} xs={0} sx={{
             // paddingTop: 5,
             justifyContent: "center",
             alignItems: "center",
@@ -220,10 +220,10 @@ const Home: NextPage = () => {
       </Section>
       <Section id="donate">
         <Grid container>
-          <Grid item md={3} sm={1} xs={1} sx={{ paddingRight: 3 }}>
+          <Grid item md={3} sm={0} xs={0} sx={{ paddingRight: 3 }}>
             <img src="/assets/donate.png" width="100%" />
           </Grid>
-          <Grid item md={9} sm={11} xs={11}>
+          <Grid item md={9} sm={12} xs={12}>
             <Typography variant="h5" component="h1" gutterBottom sx={{
               paddingBottom: 3,
             }}>
@@ -272,7 +272,7 @@ const Home: NextPage = () => {
           <Typography variant="h6" paragraph>
             {i18n.strings.landing.subscribeDesc}
           </Typography>
-          <Link variant="button" href={Constants.links.volunteer} target="_blank">
+          <Link variant="button" href={Constants.links.newsletter} target="_blank" sx={{ width: 'fit-content' }}>
             <Button variant="contained">
               {i18n.strings.landing.subscribeButton}
             </Button>

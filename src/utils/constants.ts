@@ -9,8 +9,8 @@ export const Constants = {
     // podcast: 'https://podcasts.apple.com/us/podcast/%E7%BE%8E%E5%9C%8B%E5%8F%B0%E7%81%A3%E8%A7%80%E6%B8%AC%E7%AB%99/id1508245836',
     volunteer: 'https://volunteer.ustw.watch/',
     donate: 'https://donate.ustw.watch/',
-    donateTW: 'https://ustaiwanwatch.backme.tw/checkout/1282/9385',
-    newsletter: 'http://eepurl.com/hxqWTj',
+    donateTW: 'https://donatetw.ustw.watch/',
+    newsletter: 'https://subscribe.ustw.watch/',
   },
   partners: [
     {
