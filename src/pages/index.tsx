@@ -119,7 +119,7 @@ const Home: NextPage = () => {
           {i18n.strings.header.partners}
         </Typography>
         <Typography variant="h6" paragraph>
-          {i18n.strings.landing.partnersDesc}
+          {/* {i18n.strings.landing.partnersDesc} */}
         </Typography>
         <Grid container spacing={6} alignItems="flex-end" sx={{ py: 3 }}>
           {Constants.partners.map((item, i) => (
