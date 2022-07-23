@@ -7,6 +7,7 @@ import { Button, Card, CardActionArea, CardContent, CardHeader, Container, Grid,
 import { SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
 import { useI18n } from "../context/i18n";
+import Head from "next/head";
 
 const Section: React.FC<BoxProps> = (props) => (
   <Box {...props} sx={{
@@ -27,6 +28,13 @@ const Home: NextPage = () => {
   const { i18n } = useI18n();
   return (
     <Layout>
+      <Head>
+        <meta property="og:title" content={i18n.strings.brand.fullName} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL} />
+        <meta property="og:image" content="https://static.ustw.watch/public-image/website/preview.png" />
+        <meta property="og:description" content={i18n.strings.landing.aboutDesc} />
+      </Head>
       <Paper
         sx={{
           position: 'relative',
