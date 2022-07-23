@@ -14,44 +14,24 @@ export const Constants = {
   },
   partners: [
     {
-      name: 'ustw',
-      link: '#',
-      logo: '/assets/logo-long-white.png',
+      name: '公民監督國會聯盟 Citizen Congress Watch',
+      link: 'https://ccw.org.tw/',
+      logo: '/assets/ccw-logo.svg',
     },
     {
-      name: 'ustw',
-      link: '#',
-      logo: '/assets/logo-long-white.png',
+      name: '台灣數位外交協會 Taiwan Digital Diplomacy Association',
+      link: 'https://twdd.neticrm.tw/civicrm/contribute/transact?reset=1&id=2&fbclid=IwAR0tqtWenepyx1UhQRVrjgxB1GPx5_cfTG8rRVbm6bcZGp1RoFaEvE5sanM',
+      logo: '/assets/twdd-logo.png',
     },
     {
-      name: 'ustw',
-      link: '#',
-      logo: '/assets/logo-long-white.png',
+      name: '立法院開放國會委員會 Taiwan Open Parliament Multistakeholder Forum',
+      link: 'https://www.ly.gov.tw/Pages/List.aspx?nodeid=55',
+      logo: '/assets/op-msf-logo.png',
     },
     {
-      name: 'ustw',
-      link: '#',
-      logo: '/assets/logo-long.png',
-    },
-    {
-      name: 'ustw',
-      link: '#',
-      logo: '/assets/logo-long.png',
-    },
-    {
-      name: 'ustw',
-      link: '#',
-      logo: '/assets/logo-long.png',
-    },
-    {
-      name: 'ustw',
-      link: '#',
-      logo: '/assets/logo-long.png',
-    },
-    {
-      name: 'ustw',
-      link: '#',
-      logo: '/assets/logo-long.png',
+      name: 'National Democratic Institute',
+      link: 'https://www.ndi.org/',
+      logo: '/assets/NDI_logo.svg',
     },
   ]
 }
