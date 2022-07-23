@@ -164,7 +164,7 @@ const Home: NextPage = () => {
               md={4}
             >
               <Card sx={{ height: '100%' }}>
-                <CardActionArea href={media.link} target="_blank" >
+                <CardActionArea href={media.link} target="_blank" sx={{ height: '100%' }}>
                   <CardHeader
                     avatar={
                       <SocialMediaIcon type={media.type} />
@@ -180,7 +180,7 @@ const Home: NextPage = () => {
                   <CardContent>
                     <Typography
                       variant="subtitle1"
-                      color="info.main"
+                      color="info.dark"
                     >
                       {i18n.strings.social[media.type]}
                     </Typography>
