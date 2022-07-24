@@ -133,7 +133,11 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
         <Typography variant="h6" paragraph>
           {/* {i18n.strings.landing.partnersDesc} */}
         </Typography>
-        <Grid container spacing={6} alignItems="flex-end" sx={{ py: 3 }}>
+        <Grid container spacing={6} alignItems="flex-end" sx={{
+          py: 3,
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
           {Constants.partners.map((item, i) => (
             <Grid item key={'partner' + i} xs={6} sm={4} md={3}>
               <Link href={item.link} target="_blank">
