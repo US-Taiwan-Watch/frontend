@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import Typography from "@mui/material/Typography";
 import Box, { BoxProps } from "@mui/material/Box";
 import { Link } from "../components/link";
@@ -8,6 +8,7 @@ import { SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
 import { useI18n } from "../context/i18n";
 import Head from "next/head";
+import { parseStringPromise } from 'xml2js';
 
 const Section: React.FC<BoxProps> = (props) => (
   <Box {...props} sx={{
@@ -24,7 +25,18 @@ const Section: React.FC<BoxProps> = (props) => (
   </Box>
 )
 
-const Home: NextPage = () => {
+interface NewsLetter {
+  title: string,
+  link: string,
+  pubDate: string,
+}
+
+interface HomeProps {
+  newsLetters: NewsLetter[];
+}
+
+const Home: NextPage<HomeProps> = ({ newsLetters }) => {
+  console.log(newsLetters);
   const { i18n } = useI18n();
   return (
     <Layout>
@@ -290,5 +302,26 @@ const Home: NextPage = () => {
     </Layout >
   );
 };
+
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  const response = await fetch('https://us1.campaign-archive.com/feed?u=5213dd0ea9106d6a472c8d4ed&id=5bff179a75');
+  const text = await response.text();
+  const xml = await parseStringPromise(text);
+  const letters: NewsLetter[] = xml.rss.channel[0].item.map((item: any) => {
+    const match = /<meta property="og:image" content="([^"]*)">/.exec(item.description);
+    return {
+      title: item.title[0],
+      link: item.link[0],
+      pubDate: item.pubDate[0],
+      image: match ? match[1] : null,
+    }
+  });
+  return {
+    props: {
+      newsLetters: letters,
+    },
+    revalidate: 300, // In seconds
+  }
+}
 
 export default Home;
