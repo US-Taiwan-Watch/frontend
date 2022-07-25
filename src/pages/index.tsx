@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import Box, { BoxProps } from "@mui/material/Box";
 import { Link } from "../components/link";
 import { Layout } from "../components/layout";
-import { Button, Card, CardActionArea, CardContent, CardHeader, Container, Grid, ImageList, ImageListItem, Paper, useTheme } from "@mui/material";
+import { Button, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, Container, Grid, ImageList, ImageListItem, Paper, useTheme } from "@mui/material";
 import { SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
 import { useI18n } from "../context/i18n";
@@ -29,6 +29,7 @@ interface NewsLetter {
   title: string,
   link: string,
   pubDate: string,
+  image: string,
 }
 
 interface HomeProps {
@@ -302,6 +303,37 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
             </Button>
           </Link>
         </Box>
+        <Grid container spacing={4}>
+          {newsLetters.slice(0, 3).map((letter, i) => (
+            <Grid item key={i} xs={12} sm={6} md={4}>
+              <Card
+                sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+              >
+                <CardMedia
+                  component="img"
+                  // sx={{
+                  //   // 16:9
+                  //   pt: '56.25%',
+                  // }}
+                  image={letter.image}
+                  alt="random"
+                />
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography gutterBottom variant="h5" component="h2">
+                    {letter.title}
+                  </Typography>
+                  <Typography>
+                    This is a media card. You can use this section to describe the
+                    content.
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Link href={letter.link} target="_blank"><Button size="small">View</Button></Link>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </Section>
     </Layout >
   );
