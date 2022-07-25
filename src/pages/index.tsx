@@ -30,6 +30,7 @@ interface NewsLetter {
   link: string,
   pubDate: string,
   image: string,
+  preview: string,
 }
 
 interface HomeProps {
@@ -37,7 +38,7 @@ interface HomeProps {
 }
 
 const Home: NextPage<HomeProps> = ({ newsLetters }) => {
-  console.log(newsLetters);
+  // console.log(newsLetters);
   const { i18n } = useI18n();
   return (
     <Layout>
@@ -311,10 +312,6 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
               >
                 <CardMedia
                   component="img"
-                  // sx={{
-                  //   // 16:9
-                  //   pt: '56.25%',
-                  // }}
                   image={letter.image}
                   alt="random"
                 />
@@ -323,8 +320,7 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
                     {letter.title}
                   </Typography>
                   <Typography>
-                    This is a media card. You can use this section to describe the
-                    content.
+                    {letter.preview}
                   </Typography>
                 </CardContent>
                 <CardActions>
@@ -344,12 +340,14 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const text = await response.text();
   const xml = await parseStringPromise(text);
   const letters: NewsLetter[] = xml.rss.channel[0].item.map((item: any) => {
-    const match = /<meta property="og:image" content="([^"]*)">/.exec(item.description);
+    const matchImg = /<meta property="og:image" content="([^"]*)">/.exec(item.description);
+    const matchPreview = /<span class="mcnPreviewText" style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden; mso-hide:all;">([^"]*)<\/span>/.exec(item.description);
     return {
       title: item.title[0],
       link: item.link[0],
       pubDate: item.pubDate[0],
-      image: match ? match[1] : null,
+      image: matchImg ? matchImg[1] : null,
+      preview: matchPreview ? matchPreview[1] : null,
     }
   });
   return {
