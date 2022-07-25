@@ -72,9 +72,9 @@ const Home: NextPage = () => {
               <Typography variant="h6" paragraph>
                 {i18n.strings.header.subtitle}
               </Typography>
-              {/* <Link variant="subtitle1" href="#">
-                Learn more
-              </Link> */}
+              <Button variant="contained" color="secondary" href="#donate">
+                {i18n.strings.header.donate}
+              </Button>
             </Box>
           </Grid>
         </Grid>
@@ -121,7 +121,7 @@ const Home: NextPage = () => {
         <Typography variant="h6" paragraph>
           {/* {i18n.strings.landing.partnersDesc} */}
         </Typography>
-        <Grid container spacing={6} alignItems="flex-end" sx={{ py: 3 }}>
+        <Grid container spacing={6} alignItems="center" sx={{ py: 3 }}>
           {Constants.partners.map((item, i) => (
             <Grid item key={'partner' + i} xs={6} sm={4} md={3}>
               <Link href={item.link} target="_blank">
@@ -193,8 +193,44 @@ const Home: NextPage = () => {
         <Typography variant="h6" paragraph>
         </Typography>
       </Section>
-      <Section id="join" sx={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
+      <Section id="subscribe" sx={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
         <Grid container>
+          <Grid item md={9} sm={12} xs={12}>
+            <Typography variant="h5" component="h1" gutterBottom sx={{
+              paddingBottom: 3,
+            }}>
+              {i18n.strings.header.subscribe}
+            </Typography>
+            <Box sx={{
+              display: "flex",
+              flexDirection: "column",
+              // justifyContent: "center",
+              // alignItems: "end",
+            }}>
+              <Typography variant="h6" paragraph>
+                {i18n.strings.landing.subscribeDesc}
+              </Typography>
+              <Link variant="button" href={Constants.links.newsletter} target="_blank" sx={{ width: 'fit-content' }}>
+                <Button variant="contained">
+                  {i18n.strings.landing.subscribeButton}
+                </Button>
+              </Link>
+            </Box>
+          </Grid>
+          <Grid item md={3} sm={0} xs={0} sx={{ paddingRight: 3 }}>
+            <img src="/assets/donate.png" width="100%" />
+          </Grid>
+        </Grid>
+      </Section>
+      <Section id="join" >
+        <Grid container>
+          <Grid item md={4} sm={0} xs={0} sx={{
+            // paddingTop: 5,
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
+            <img src="/assets/raise.png" width="100%" />
+          </Grid>
           <Grid item md={8} sm={12} xs={12}>
             <Typography variant="h5" component="h1" gutterBottom sx={{
               paddingBottom: 3,
@@ -217,74 +253,38 @@ const Home: NextPage = () => {
               </Link>
             </Box>
           </Grid>
-          <Grid item md={4} sm={0} xs={0} sx={{
-            // paddingTop: 5,
-            justifyContent: "center",
-            alignItems: "center",
-          }}>
-            <img src="/assets/raise.png" width="100%" />
-          </Grid>
         </Grid>
       </Section>
-      <Section id="donate">
-        <Grid container>
-          <Grid item md={3} sm={0} xs={0} sx={{ paddingRight: 3 }}>
-            <img src="/assets/donate.png" width="100%" />
-          </Grid>
-          <Grid item md={9} sm={12} xs={12}>
-            <Typography variant="h5" component="h1" gutterBottom sx={{
-              paddingBottom: 3,
-            }}>
-              {i18n.strings.header.donate}
-            </Typography>
-            <Box sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              // alignItems: "center",
-            }}>
-              <Typography variant="h6" paragraph>
-                {i18n.strings.landing.donateDesc}
-              </Typography>
-              <Box sx={{
-                display: "flex",
-                flexDirection: "row",
-              }}>
-                <Link variant="button" href={Constants.links.donate} target="_blank" >
-                  <Button variant="contained">
-                    {i18n.strings.landing.donateButton}
-                  </Button>
-                </Link>
-                <Link variant="button" href={Constants.links.donateTW} target="_blank" sx={{ mx: 1 }}>
-                  <Button variant="contained">
-                    {i18n.strings.landing.donateButtonTW}
-                  </Button>
-                </Link>
-              </Box>
-            </Box>
-          </Grid>
-        </Grid>
-      </Section>
-      <Section id="subscribe" sx={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
+      <Section id="donate" sx={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
         <Typography variant="h5" component="h1" gutterBottom sx={{
           paddingBottom: 3,
         }}>
-          {i18n.strings.header.subscribe}
+          {i18n.strings.header.donate}
         </Typography>
         <Box sx={{
           display: "flex",
           flexDirection: "column",
-          // justifyContent: "center",
-          // alignItems: "end",
+          justifyContent: "center",
+          // alignItems: "center",
         }}>
           <Typography variant="h6" paragraph>
-            {i18n.strings.landing.subscribeDesc}
+            {i18n.strings.landing.donateDesc}
           </Typography>
-          <Link variant="button" href={Constants.links.newsletter} target="_blank" sx={{ width: 'fit-content' }}>
-            <Button variant="contained">
-              {i18n.strings.landing.subscribeButton}
-            </Button>
-          </Link>
+          <Box sx={{
+            display: "flex",
+            flexDirection: "row",
+          }}>
+            <Link variant="button" href={Constants.links.donate} target="_blank" >
+              <Button variant="contained">
+                {i18n.strings.landing.donateButton}
+              </Button>
+            </Link>
+            <Link variant="button" href={Constants.links.donateTW} target="_blank" sx={{ mx: 1 }}>
+              <Button variant="contained">
+                {i18n.strings.landing.donateButtonTW}
+              </Button>
+            </Link>
+          </Box>
         </Box>
       </Section>
     </Layout >
