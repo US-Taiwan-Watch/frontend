@@ -23,6 +23,7 @@ export default {
     donateButtonTW: '定期定額捐款（台灣）',
     subscribeDesc: '歡迎訂閱 US Taiwan Watch: 美國台灣觀測站電子月報。每期內容，我們會幫您整理過去幾週發生的大事、以及我們的見解。同時也會讓您知道我們在台灣或美國兩地舉辦的活動。',
     subscribeButton: '訂閱電子報',
+    pastNewsLettersButton: '看過去電子報',
   },
   social: {
     fb: 'Facebook 是觀測站觀測站最主要的資訊平台，透過新聞報導與深度分析等長篇文章，在破解謠言以及深化台美關係上盡一份心力。',

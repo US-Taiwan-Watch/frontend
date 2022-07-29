@@ -190,6 +190,9 @@ const Home: NextPage = () => {
         buttons={[{
           children: i18n.strings.landing.subscribeButton,
           href: Constants.links.newsletter,
+        }, {
+          children: i18n.strings.landing.pastNewsLettersButton,
+          href: Constants.links.pastNewsletters,
         }]}
       />
       <Section id="join"

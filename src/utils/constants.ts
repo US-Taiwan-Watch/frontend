@@ -11,6 +11,7 @@ export const Constants = {
     donate: 'https://donate.ustw.watch',
     donateTW: 'https://donatetw.ustw.watch',
     newsletter: 'https://subscribe.ustw.watch',
+    pastNewsletters: 'https://us1.campaign-archive.com/home/?u=5213dd0ea9106d6a472c8d4ed&id=5bff179a75',
   },
   partners: [
     {
