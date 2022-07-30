@@ -151,7 +151,44 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
         title={i18n.strings.header.about}
         description={i18n.strings.landing.aboutDesc}
         right={<img src="/assets/watch.png" width="70%" />}
-      />
+      /><Section
+        id="subscribe"
+        title={i18n.strings.header.subscribe}
+        description={i18n.strings.landing.subscribeDesc}
+        buttons={[{
+          children: i18n.strings.landing.subscribeButton,
+          href: Constants.links.newsletter,
+        }, {
+          children: i18n.strings.landing.pastNewsLettersButton,
+          href: Constants.links.pastNewsletters,
+        }]}
+      >
+        <Grid container spacing={4}>
+          {newsLetters.slice(0, 4).map((letter, i) => (
+            <Grid item key={i} xs={12} sm={6} md={3} sx={{ my: 3 }}>
+              <Card
+                sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+              >
+                <CardActionArea href={letter.link} target="_blank" sx={{ height: '100%' }}>
+                  <CardMedia
+                    component="img"
+                    image={letter.image}
+                    alt="random"
+                  />
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography gutterBottom variant="h6" component="h2">
+                      {letter.title}
+                    </Typography>
+                    <Typography>
+                      {letter.preview}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Section>
       <Section id="partners" title={i18n.strings.header.partners}>
         <Grid container spacing={6} alignItems="center" sx={{ py: 3 }}>
           {Constants.partners.map((item, i) => (
@@ -195,46 +232,6 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
           ))}
         </Grid>
       </Section>
-      <Section
-        id="subscribe"
-        title={i18n.strings.header.subscribe}
-        description={i18n.strings.landing.subscribeDesc}
-        right={<img src="/assets/donate.png" width="100%" />}
-        buttons={[{
-          children: i18n.strings.landing.subscribeButton,
-          href: Constants.links.newsletter,
-        }, {
-          children: i18n.strings.landing.pastNewsLettersButton,
-          href: Constants.links.pastNewsletters,
-        }]}
-      >
-        <Grid container spacing={4}>
-          {newsLetters.slice(0, 3).map((letter, i) => (
-            <Grid item key={i} xs={12} sm={6} md={4}>
-              <Card
-                sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-              >
-                <CardMedia
-                  component="img"
-                  image={letter.image}
-                  alt="random"
-                />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    {letter.title}
-                  </Typography>
-                  <Typography>
-                    {letter.preview}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Link href={letter.link} target="_blank"><Button size="small">View</Button></Link>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Section>
       <Section id="join"
         title={i18n.strings.header.join}
         description={i18n.strings.landing.joinDesc}
@@ -247,6 +244,7 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
       <Section id="donate"
         title={i18n.strings.header.donate}
         description={i18n.strings.landing.donateDesc}
+        right={<img src="/assets/donate.png" width="100%" />}
         buttons={[{
           children: i18n.strings.landing.donateButton,
           href: Constants.links.donate,
