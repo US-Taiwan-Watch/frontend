@@ -137,7 +137,7 @@ const lightPalette: PaletteOptions = {
   // },
   secondary: {
     light: color.yellow[100],
-    main: color.yellow[200],
+    main: color.yellow[100],
     dark: color.yellow[300],
   },
   primary: {

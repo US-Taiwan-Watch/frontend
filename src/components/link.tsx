@@ -10,7 +10,7 @@ const Anchor = styled("a")({});
 
 interface NextLinkComposedProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href">,
-    Omit<NextLinkProps, "href" | "as"> {
+  Omit<NextLinkProps, "href" | "as"> {
   to: NextLinkProps["href"];
   linkAs?: NextLinkProps["as"];
   href?: NextLinkProps["href"];
@@ -78,16 +78,16 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 
     const isExternal =
       typeof href === "string" &&
-      (href.indexOf("http") === 0 || href.indexOf("mailto:") === 0);
+      (href.indexOf("http") === 0 || href.indexOf("mailto:") === 0 || href.indexOf('/api/') === 0);
 
     if (isExternal) {
       if (noLinkStyle) {
         return (
-          <Anchor className={className} href={href} ref={ref} {...other} />
+          <Anchor className={className} href={href} ref={ref} {...other} target="_blank" />
         );
       }
 
-      return <MuiLink className={className} href={href} ref={ref} {...other} />;
+      return <MuiLink className={className} href={href} ref={ref} {...other} target="_blank" />;
     }
 
     if (noLinkStyle) {
