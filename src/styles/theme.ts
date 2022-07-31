@@ -125,7 +125,7 @@ const darkPalette: PaletteOptions = {
   },
   background: {
     default: color.blueGrey[900],
-    paper: color.blueGrey[1000],
+    // paper: color.blueGrey[1000],
   },
 }
 
@@ -152,7 +152,7 @@ const lightPalette: PaletteOptions = {
   },
   background: {
     default: color.white[100],
-    paper: color.white[200],
+    // paper: color.white[200],
   },
 }
 
