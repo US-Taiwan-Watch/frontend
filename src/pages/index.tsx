@@ -15,7 +15,6 @@ type SectionProps = {
   description?: string;
   left?: React.ReactNode;
   right?: React.ReactNode;
-  children?: React.ReactNode;
   buttons?: LinkProps[];
 };
 

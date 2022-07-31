@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IUser } from "../lib/user";
+import { IUser, useFetchUser } from "../lib/user";
 import { Box, Button, IconButton, Toolbar, Typography, useTheme } from "@mui/material";
 import { useI18n } from "../context/i18n";
 import { LocaleSwitcher } from "./locale-switcher";
@@ -23,8 +23,9 @@ const NavLink: React.FC<LinkProps> = (props) => (
   </Link >
 );
 
-export const Header: React.FC<IHeaderProps> = ({ user, loading }) => {
+export const Header: React.FC = () => {
   const { i18n } = useI18n();
+  const { user, loading } = useFetchUser();
   const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
   return (
@@ -69,15 +70,7 @@ export const Header: React.FC<IHeaderProps> = ({ user, loading }) => {
         {showDevContent && !loading &&
           (user ? (
             <>
-              <NavLink href="/test/profile">
-                Client-rendered profile
-              </NavLink>
-              <NavLink href="/test/profile-ssr">
-                Server rendered profile (advanced)
-              </NavLink>
-              <NavLink href="/test/graphql-test">
-                GraphQL
-              </NavLink>
+              <NavLink href="/posts">文章</NavLink>
               <NavLink href="/api/logout">Logout</NavLink>
             </>
           ) : (

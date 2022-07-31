@@ -4,16 +4,7 @@ import { Header } from "./header";
 import { Footer } from "./footer";
 import { useI18n } from "../context/i18n";
 
-export interface ILayoutProps {
-  user?: IUser;
-  loading?: boolean;
-}
-
-export const Layout: React.FC<ILayoutProps> = ({
-  user,
-  loading = false,
-  children,
-}) => {
+export const Layout: React.FC = ({ children }) => {
   const { i18n } = useI18n();
   return (
     <>
@@ -22,7 +13,7 @@ export const Layout: React.FC<ILayoutProps> = ({
         <meta property="og:site_name" content={i18n.strings.brand.fullName} />
       </Head>
 
-      <Header user={user} loading={loading} />
+      <Header />
 
       <main>
         <div>{children}</div>

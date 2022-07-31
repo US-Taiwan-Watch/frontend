@@ -4,7 +4,6 @@ import { Box, Grid, Paper } from "@mui/material";
 export type BannerProps = {
   title: string,
   subtitle?: string,
-  children?: React.ReactNode,
 };
 
 export const Banner: React.FC<BannerProps> = (props) => (
