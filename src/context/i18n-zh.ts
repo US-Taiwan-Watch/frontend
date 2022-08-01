@@ -1,6 +1,6 @@
 export default {
   brand: {
-    fullName: 'US Taiwan Watch 美國台灣觀測站'
+    fullName: 'US Taiwan Watch: 美國台灣觀測站'
   },
   header: {
     subtitle: '從海外台美人草根觀點以及國際關係的角度，推廣、促進國人對台美關係的認識',

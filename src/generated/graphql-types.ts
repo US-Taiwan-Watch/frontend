@@ -12,12 +12,15 @@ export type Scalars = {
   Float: number;
 };
 
-export type Bill = {
-  __typename?: 'Bill';
+export type DenormalizedBill = {
+  __typename?: 'DenormalizedBill';
   billNumber: Scalars['Float'];
   billType: Scalars['String'];
   congress: Scalars['Float'];
+  cosponsors?: Maybe<Array<Member>>;
+  cosponsorsCount?: Maybe<Scalars['Int']>;
   introducedDate?: Maybe<Scalars['String']>;
+  sponsor?: Maybe<Member>;
   title: I18NText;
 };
 
@@ -40,9 +43,11 @@ export type Member = {
   cspanId?: Maybe<Scalars['String']>;
   facebookId?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
+  firstName_zh?: Maybe<Scalars['String']>;
   gender?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   lastName?: Maybe<Scalars['String']>;
+  lastName_zh?: Maybe<Scalars['String']>;
   nickname?: Maybe<Scalars['String']>;
   office?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
@@ -57,10 +62,10 @@ export type MemberRole = {
   chamber: Scalars['String'];
   congressNumbers: Array<Scalars['Int']>;
   district?: Maybe<Scalars['Int']>;
-  endDate: Scalars['Float'];
+  endDate: Scalars['String'];
   party: Scalars['String'];
   senatorClass?: Maybe<Scalars['Int']>;
-  startDate: Scalars['Float'];
+  startDate: Scalars['String'];
   state: Scalars['String'];
 };
 
@@ -91,13 +96,13 @@ export type MutationEmitUserEventArgs = {
 export type PaginatedBills = {
   __typename?: 'PaginatedBills';
   hasMore: Scalars['Boolean'];
-  items: Array<Bill>;
+  items: Array<DenormalizedBill>;
   total: Scalars['Int'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  bill?: Maybe<Bill>;
+  bill?: Maybe<DenormalizedBill>;
   bills: PaginatedBills;
   imUser?: Maybe<User>;
   member?: Maybe<Member>;
@@ -118,6 +123,11 @@ export type QueryBillsArgs = {
 
 export type QueryMemberArgs = {
   bioGuideId: Scalars['String'];
+};
+
+
+export type QueryMembersArgs = {
+  bioGuideIds?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type Subscription = {

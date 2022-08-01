@@ -57,6 +57,7 @@ export const I18nProvider = React.memo(({ children }) => {
 
   const setLanguage = (locale: string) => {
     push({ pathname, query }, asPath, { locale });
+    document.cookie = `preferred-language=${locale}`;
   };
 
   const displayI18NText = (i18nText?: I18NText) =>
