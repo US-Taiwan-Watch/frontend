@@ -56,7 +56,7 @@ const Page: NextPageWithApollo<PageProps> = ({ data }) => {
   const { user, loading } = useFetchUser();
 
   return (
-    <Layout user={user} loading={loading}>
+    <Layout>
       <h1>Next.js and Auth0 Example</h1>
 
       {loading && <p>Loading login info...</p>}

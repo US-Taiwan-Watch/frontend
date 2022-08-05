@@ -10,7 +10,7 @@ interface ProfilePageProps {
 }
 
 const ProfilePage: NextPage<ProfilePageProps> = ({ user }) => (
-  <Layout user={user}>
+  <Layout>
     <h1>Profile</h1>
 
     <div>
