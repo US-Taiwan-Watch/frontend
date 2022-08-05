@@ -25,7 +25,7 @@ const Profile: NextPage = () => {
   const { user, loading } = useFetchUser({ required: true });
 
   return (
-    <Layout user={user} loading={loading}>
+    <Layout>
       {loading ? <>Loading...</> : <ProfileCard user={user} />}
     </Layout>
   );

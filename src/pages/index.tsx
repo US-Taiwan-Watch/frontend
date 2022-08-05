@@ -2,21 +2,22 @@ import type { GetStaticProps, NextPage } from "next";
 import Typography from "@mui/material/Typography";
 import { Link, LinkProps } from "../components/link";
 import { Layout } from "../components/layout";
-import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, Container, Grid, Paper } from "@mui/material";
+import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Container, Grid, Paper } from "@mui/material";
 import { SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
 import { useI18n } from "../context/i18n";
 import Head from "next/head";
 import { parseStringPromise } from 'xml2js';
-interface SectionProps {
+import { Banner } from "../components/banner";
+
+type SectionProps = {
   id: string;
   title: string;
   description?: string;
   left?: React.ReactNode;
   right?: React.ReactNode;
-  children?: React.ReactNode;
   buttons?: LinkProps[];
-}
+};
 
 const Section: React.FC<SectionProps> = (props) => (
   <Box id={props.id} className="section" sx={{
@@ -103,50 +104,11 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
         <meta property="og:image" content="https://static.ustw.watch/public-image/website/preview.png" />
         <meta property="og:description" content={i18n.strings.landing.aboutDesc} />
       </Head>
-      <Paper
-        sx={{
-          position: 'relative',
-          color: '#fff',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          backgroundImage: `url(/assets/banner.png)`,
-          borderRadius: 0,
-        }}
-      >
-        {/* Increase the priority of the hero background image */}
-        {<img style={{ display: 'none' }} src='/assets/banner.png' alt='US Taiwan Watch' />}
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
-          }}
-        />
-        <Grid container>
-          <Grid item md={6}>
-            <Box
-              sx={{
-                position: 'relative',
-                p: { xs: 3, md: 6 },
-                pr: { md: 0 },
-              }}
-            >
-              <Typography component="h1" variant="h4" gutterBottom>
-                {i18n.strings.brand.fullName}
-              </Typography>
-              <Typography variant="h6" paragraph>
-                {i18n.strings.header.subtitle}
-              </Typography>
-              <Button variant="contained" color="secondary" href="#donate">
-                {i18n.strings.header.donate}
-              </Button>
-            </Box>
-          </Grid>
-        </Grid>
-      </Paper>
+      <Banner title={i18n.strings.brand.fullName} subtitle={i18n.strings.header.subtitle}>
+        <Button variant="contained" color="secondary" href="#donate">
+          {i18n.strings.header.donate}
+        </Button>
+      </Banner>
       <Section id="about"
         title={i18n.strings.header.about}
         description={i18n.strings.landing.aboutDesc}
