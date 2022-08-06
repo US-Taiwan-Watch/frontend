@@ -7,7 +7,7 @@ export type CardProps = {
   title: string,
   content: string,
   displayDate: string,
-  image: string,
+  image?: string,
 }
 
 const CardItem: React.FC<CardProps> = (props) => {
@@ -17,12 +17,12 @@ const CardItem: React.FC<CardProps> = (props) => {
       <Link href={props.url} sx={{ textDecoration: 'none' }}>
         <CardActionArea>
           <Card sx={{ display: 'flex' }}>
-            <CardMedia
+            {props.image && <CardMedia
               component="img"
               sx={{ height: '100%', width: 180, display: { xs: 'none', sm: 'block' } }}
               image={props.image}
               alt={props.title}
-            />
+            />}
             <CardContent sx={{ flex: 1 }}>
               <Typography component="h2" variant="h5">
                 {props.title}

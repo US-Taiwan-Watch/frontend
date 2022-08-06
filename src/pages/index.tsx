@@ -8,7 +8,7 @@ import { Constants } from "../utils/constants";
 import { useI18n } from "../context/i18n";
 import Head from "next/head";
 import { Banner, CTA } from "../components/banner";
-import { getNewsLetters, NewsLetter } from "../utils/newsletters-utils";
+import { getNewsLetters, NewsLetter } from "./newsletters";
 
 type SectionProps = {
   id: string;
