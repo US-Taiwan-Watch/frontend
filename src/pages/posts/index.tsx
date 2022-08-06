@@ -1,16 +1,8 @@
 import type { GetStaticProps, NextPage } from "next";
-import Typography from "@mui/material/Typography";
-import { Link, LinkProps } from "../../components/link";
 import { Layout } from "../../components/layout";
-import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Container, Grid, Paper } from "@mui/material";
-import { SocialMediaIcon, socialMedias } from "../../components/social-media";
-import { Constants } from "../../utils/constants";
-import { useI18n } from "../../context/i18n";
-import Head from "next/head";
 import { Banner } from "../../components/banner";
-import { useUser } from "@auth0/nextjs-auth0";
-import { useFetchUser } from "../../lib/user";
 import { useRouter } from "next/router";
+import { CardList } from "../../components/card-list";
 
 export type PostProps = {
   slug: string,
@@ -26,55 +18,15 @@ type PostsPageProps = {
   posts: PostProps[],
 }
 
-const PostCard: React.FC<PostProps> = (post) => {
-  const router = useRouter()
-  return (
-    <Grid item xs={12} md={12} sx={{ my: 3 }}>
-      <Link href={`${router.pathname}/${post.slug}`} sx={{ textDecoration: 'none' }}>
-        <CardActionArea>
-          <Card sx={{ display: 'flex' }}>
-            <CardMedia
-              component="img"
-              sx={{ height: '100%', width: 180, display: { xs: 'none', sm: 'block' } }}
-              image={post.image}
-              alt={post.title}
-            />
-            <CardContent sx={{ flex: 1 }}>
-              <Typography component="h2" variant="h5">
-                {post.title}
-              </Typography>
-              <Typography variant="subtitle1" color="text.secondary">
-                {post.publishDate}
-              </Typography>
-              <Typography variant="subtitle1" paragraph>
-                {post.preview}
-              </Typography>
-              <Typography variant="subtitle1" color="primary">
-                Continue reading...
-              </Typography>
-            </CardContent>
-          </Card>
-        </CardActionArea>
-      </Link>
-    </Grid>
-  )
-}
-
 const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
-  const { i18n } = useI18n();
+  const router = useRouter();
   return (
     <Layout>
       <Banner title="所有文章" >
       </Banner>
 
-      <Container>
-        {posts.map(post => (<PostCard key={post.slug} {...post}></PostCard>))}
-      </Container>
-      <style jsx global>{`
-        .section:nth-child(odd) {
-          background-color: rgba(0, 0, 0, 0.2);
-        }
-      `}</style>
+      <CardList cards={posts.map(p => ({ ...p, displayDate: p.publishDate, url: `${router.pathname}/${p.slug}` }))} />
+
     </Layout >
   );
 };
