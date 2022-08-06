@@ -7,8 +7,8 @@ import { SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
 import { useI18n } from "../context/i18n";
 import Head from "next/head";
-import { parseStringPromise } from 'xml2js';
 import { Banner } from "../components/banner";
+import { getNewsLetters, NewsLetter } from "../utils/newsletters-utils";
 
 type SectionProps = {
   id: string;
@@ -80,14 +80,6 @@ const Section: React.FC<SectionProps> = (props) => (
   </Box>
 )
 
-interface NewsLetter {
-  title: string,
-  link: string,
-  pubDate: string,
-  image: string,
-  preview: string,
-}
-
 interface HomeProps {
   newsLetters: NewsLetter[];
 }
@@ -113,44 +105,7 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
         title={i18n.strings.header.about}
         description={i18n.strings.landing.aboutDesc}
         right={<img src="/assets/watch.png" width="70%" />}
-      /><Section
-        id="subscribe"
-        title={i18n.strings.header.subscribe}
-        description={i18n.strings.landing.subscribeDesc}
-        buttons={[{
-          children: i18n.strings.landing.subscribeButton,
-          href: Constants.links.newsletter,
-        }, {
-          children: i18n.strings.landing.pastNewsLettersButton,
-          href: Constants.links.pastNewsletters,
-        }]}
-      >
-        <Grid container spacing={4}>
-          {newsLetters.slice(0, 4).map((letter, i) => (
-            <Grid item key={i} xs={12} sm={6} md={3} sx={{ my: 3 }}>
-              <Card
-                sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-              >
-                <CardActionArea href={letter.link} target="_blank" sx={{ height: '100%' }}>
-                  <CardMedia
-                    component="img"
-                    image={letter.image}
-                    alt="random"
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h6" component="h2">
-                      {letter.title}
-                    </Typography>
-                    <Typography>
-                      {letter.preview}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Section>
+      />
       <Section id="partners" title={i18n.strings.header.partners}>
         <Grid container spacing={6} alignItems="center" sx={{ py: 3 }}>
           {Constants.partners.map((item, i) => (
@@ -194,6 +149,44 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
           ))}
         </Grid>
       </Section>
+      <Section
+        id="subscribe"
+        title={i18n.strings.header.subscribe}
+        description={i18n.strings.landing.subscribeDesc}
+        buttons={[{
+          children: i18n.strings.landing.subscribeButton,
+          href: Constants.links.newsletter,
+        }, {
+          children: i18n.strings.landing.pastNewsLettersButton,
+          href: Constants.links.pastNewsletters,
+        }]}
+      >
+        <Grid container spacing={4}>
+          {newsLetters.slice(0, 4).map((letter, i) => (
+            <Grid item key={i} xs={12} sm={6} md={3} sx={{ my: 3 }}>
+              <Card
+                sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+              >
+                <CardActionArea href={letter.link} target="_blank" sx={{ height: '100%' }}>
+                  <CardMedia
+                    component="img"
+                    image={letter.image}
+                    alt="random"
+                  />
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography gutterBottom variant="h6" component="h2">
+                      {letter.title}
+                    </Typography>
+                    <Typography>
+                      {letter.preview}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Section>
       <Section id="join"
         title={i18n.strings.header.join}
         description={i18n.strings.landing.joinDesc}
@@ -226,20 +219,7 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
 };
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-  const response = await fetch('https://us1.campaign-archive.com/feed?u=5213dd0ea9106d6a472c8d4ed&id=5bff179a75');
-  const text = await response.text();
-  const xml = await parseStringPromise(text);
-  const letters: NewsLetter[] = xml.rss.channel[0].item.map((item: any) => {
-    const matchImg = /<meta property="og:image" content="([^"]*)">/.exec(item.description);
-    const matchPreview = /<span class="mcnPreviewText" style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden; mso-hide:all;">([^"]*)<\/span>/.exec(item.description);
-    return {
-      title: item.title[0],
-      link: item.link[0],
-      pubDate: item.pubDate[0],
-      image: matchImg ? matchImg[1] : null,
-      preview: matchPreview ? matchPreview[1] : null,
-    }
-  });
+  const letters = await getNewsLetters();
   return {
     props: {
       newsLetters: letters,
