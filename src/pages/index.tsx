@@ -7,7 +7,7 @@ import { SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
 import { useI18n } from "../context/i18n";
 import Head from "next/head";
-import { Banner } from "../components/banner";
+import { Banner, CTA } from "../components/banner";
 import { getNewsLetters, NewsLetter } from "../utils/newsletters-utils";
 
 type SectionProps = {
@@ -16,7 +16,7 @@ type SectionProps = {
   description?: string;
   left?: React.ReactNode;
   right?: React.ReactNode;
-  buttons?: LinkProps[];
+  actions?: CTA[];
 };
 
 const Section: React.FC<SectionProps> = (props) => (
@@ -58,10 +58,10 @@ const Section: React.FC<SectionProps> = (props) => (
             display: "flex",
             flexDirection: "row",
           }}>
-            {props.buttons && props.buttons.map((linkProps, i) => (
-              <Link key={i} variant="button" {...linkProps} sx={{ marginLeft: i > 0 ? 1 : 0 }} >
+            {props.actions && props.actions.map((action, i) => (
+              <Link key={i} variant="button" href={action.url} sx={{ marginLeft: i > 0 ? 1 : 0 }} >
                 <Button variant="contained">
-                  {linkProps.children}
+                  {action.text}
                 </Button>
               </Link>
             ))}
@@ -96,11 +96,11 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
         <meta property="og:image" content="https://static.ustw.watch/public-image/website/preview.png" />
         <meta property="og:description" content={i18n.strings.landing.aboutDesc} />
       </Head>
-      <Banner title={i18n.strings.brand.fullName} subtitle={i18n.strings.header.subtitle}>
-        <Button variant="contained" color="secondary" href="#donate">
-          {i18n.strings.header.donate}
-        </Button>
-      </Banner>
+      <Banner
+        title={i18n.strings.brand.fullName}
+        subtitle={i18n.strings.header.subtitle}
+        actions={[{ text: i18n.strings.header.donate, url: '#donate' }]}
+      />
       <Section id="about"
         title={i18n.strings.header.about}
         description={i18n.strings.landing.aboutDesc}
@@ -153,12 +153,12 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
         id="subscribe"
         title={i18n.strings.header.subscribe}
         description={i18n.strings.landing.subscribeDesc}
-        buttons={[{
-          children: i18n.strings.landing.subscribeButton,
-          href: Constants.links.newsletter,
+        actions={[{
+          text: i18n.strings.landing.subscribeButton,
+          url: Constants.links.newsletter,
         }, {
-          children: i18n.strings.landing.pastNewsLettersButton,
-          href: Constants.links.pastNewsletters,
+          text: i18n.strings.landing.pastNewsLettersButton,
+          url: Constants.links.pastNewsletters,
         }]}
       >
         <Grid container spacing={4}>
@@ -191,22 +191,22 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
         title={i18n.strings.header.join}
         description={i18n.strings.landing.joinDesc}
         left={<img src="/assets/raise.png" width="100%" />}
-        buttons={[{
-          children: i18n.strings.landing.joinButton,
-          href: Constants.links.volunteer,
+        actions={[{
+          text: i18n.strings.landing.joinButton,
+          url: Constants.links.volunteer,
         }]}
       />
       <Section id="donate"
         title={i18n.strings.header.donate}
         description={i18n.strings.landing.donateDesc}
         right={<img src="/assets/donate.png" width="100%" />}
-        buttons={[{
-          children: i18n.strings.landing.donateButton,
-          href: Constants.links.donate,
+        actions={[{
+          text: i18n.strings.landing.donateButton,
+          url: Constants.links.donate,
         },
         {
-          children: i18n.strings.landing.donateButtonTW,
-          href: Constants.links.donateTW,
+          text: i18n.strings.landing.donateButtonTW,
+          url: Constants.links.donateTW,
         }]}
       />
       <style jsx global>{`

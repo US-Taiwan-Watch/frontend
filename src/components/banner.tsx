@@ -1,10 +1,17 @@
 import Typography from "@mui/material/Typography";
-import { Box, Grid, Paper } from "@mui/material";
+import { Box, Button, Grid, Paper } from "@mui/material";
+import { Link } from "./link";
 
 export type BannerProps = {
   title: string,
   subtitle?: string,
+  actions?: CTA[],
 };
+
+export type CTA = {
+  text: string,
+  url: string,
+}
 
 export const Banner: React.FC<BannerProps> = (props) => (
   <Paper
@@ -44,9 +51,16 @@ export const Banner: React.FC<BannerProps> = (props) => (
           <Typography variant="h6" paragraph>
             {props.subtitle}
           </Typography>
+          {props.actions && props.actions.map((action, i) => (
+            <Link href={action.url} sx={{ textDecoration: 'none', marginLeft: i > 0 ? 1 : 0 }}>
+              <Button variant="contained" color="secondary">
+                {action.text}
+              </Button>
+            </Link>))
+          }
           {props.children}
         </Box>
       </Grid>
     </Grid>
-  </Paper>
+  </Paper >
 );
