@@ -8,7 +8,7 @@ import { Constants } from "../utils/constants";
 import { useI18n } from "../context/i18n";
 import Head from "next/head";
 import { Banner, CTA } from "../components/banner";
-import { getNewsLetters, NewsLetter } from "./newsletters";
+import { FeaturedNewsLetters, getNewsLetters, NewsLetter } from "./newsletters";
 
 type SectionProps = {
   id: string;
@@ -158,34 +158,10 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
           url: Constants.links.newsletter,
         }, {
           text: i18n.strings.landing.pastNewsLettersButton,
-          url: Constants.links.pastNewsletters,
+          url: '/newsletters',
         }]}
       >
-        <Grid container spacing={4}>
-          {newsLetters.slice(0, 4).map((letter, i) => (
-            <Grid item key={i} xs={12} sm={6} md={3} sx={{ my: 3 }}>
-              <Card
-                sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-              >
-                <CardActionArea href={letter.link} target="_blank" sx={{ height: '100%' }}>
-                  <CardMedia
-                    component="img"
-                    image={letter.image}
-                    alt="random"
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h6" component="h2">
-                      {letter.title}
-                    </Typography>
-                    <Typography>
-                      {letter.preview}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        <FeaturedNewsLetters newsLetters={newsLetters.slice(0, 4)} />
       </Section>
       <Section id="join"
         title={i18n.strings.header.join}

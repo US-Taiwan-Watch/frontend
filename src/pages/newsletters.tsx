@@ -2,9 +2,10 @@ import type { GetStaticProps, NextPage } from "next";
 import { Layout } from "../components/layout";
 import { useI18n } from "../context/i18n";
 import { Banner } from "../components/banner";
-import { CardList } from "../components/card-list";
+import { CardList, FeaturedCards } from "../components/card-list";
 import { Constants } from "../utils/constants";
 import { parseStringPromise } from "xml2js";
+import { Container } from "@material-ui/core";
 
 export type NewsLetter = {
   title: string,
@@ -31,6 +32,16 @@ export const getNewsLetters = async (): Promise<NewsLetter[]> => {
   });
 }
 
+export const FeaturedNewsLetters: React.FC<{ newsLetters: NewsLetter[] }> = ({ newsLetters }) => (
+  <FeaturedCards cards={newsLetters.map(p => ({
+    title: p.title,
+    image: p.image,
+    displayDate: new Date(p.pubDate).toDateString(),
+    url: p.link,
+    content: p.preview
+  }))} />
+)
+
 type NewsLetterPageProps = {
   newsletters: NewsLetter[],
 }
@@ -47,7 +58,10 @@ const NewsLetterPage: NextPage<NewsLetterPageProps> = ({ newsletters }) => {
           url: Constants.links.newsletter,
         }]}
       />
-      <CardList cards={newsletters.map(p => ({
+      <Container>
+        <FeaturedNewsLetters newsLetters={newsletters.slice(0, 4)} />
+      </Container>
+      <CardList cards={newsletters.slice(4).map(p => ({
         title: p.title,
         // image: p.image,
         displayDate: new Date(p.pubDate).toDateString(),

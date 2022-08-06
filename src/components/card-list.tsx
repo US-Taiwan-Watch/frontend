@@ -44,6 +44,34 @@ const CardItem: React.FC<CardProps> = (props) => {
   )
 }
 
+export const FeaturedCards: React.FC<{ cards: CardProps[] }> = ({ cards }) => (
+  <Grid container spacing={4}>
+    {cards.map((card, i) => (
+      <Grid item key={i} xs={12} sm={6} md={3} sx={{ my: 3 }}>
+        <Card
+          sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+        >
+          <CardActionArea href={card.url} target="_blank" sx={{ height: '100%' }}>
+            <CardMedia
+              component="img"
+              image={card.image}
+              alt="random"
+            />
+            <CardContent sx={{ flexGrow: 1 }}>
+              <Typography gutterBottom variant="h6" component="h2">
+                {card.title}
+              </Typography>
+              <Typography>
+                {card.content}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Grid>
+    ))}
+  </Grid>
+);
+
 export const CardList: React.FC<{ cards: CardProps[] }> = ({ cards }) => {
   return (
     <Container>
