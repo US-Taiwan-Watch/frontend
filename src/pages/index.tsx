@@ -145,7 +145,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const letters = await getNewsLetters();
   return {
     props: {
-      newsLetters: letters,
+      newsLetters: letters.slice(0, 4),
     },
     revalidate: 300, // In seconds
   }

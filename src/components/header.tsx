@@ -50,19 +50,22 @@ export const Header: React.FC = () => {
         flexWrap: 'wrap',
         justifyContent: 'right',
       }}>
-        <NavLink href="#about">
+        <NavLink href="/#about">
           {i18n.strings.header.about}
         </NavLink>
-        <NavLink href="#partners">
+        <NavLink href="/#partners">
           {i18n.strings.header.partners}
         </NavLink>
-        <NavLink href="#follow">
+        <NavLink href="/#follow">
           {i18n.strings.header.follow}
         </NavLink>
-        <NavLink href="#subscribe">
+        <NavLink href="/#subscribe">
           {i18n.strings.header.subscribe}
         </NavLink>
-        <NavLink href="#donate">
+        <NavLink href="/#join">
+          {i18n.strings.header.join}
+        </NavLink>
+        <NavLink href="/#donate">
           <Button variant="contained">
             {i18n.strings.header.donate}
           </Button>
