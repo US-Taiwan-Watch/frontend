@@ -2,83 +2,15 @@ import type { GetStaticProps, NextPage } from "next";
 import Typography from "@mui/material/Typography";
 import { Link, LinkProps } from "../components/link";
 import { Layout } from "../components/layout";
-import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Container, Grid, Paper } from "@mui/material";
+import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Container, Grid, IconButton, Paper } from "@mui/material";
 import { SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
 import { useI18n } from "../context/i18n";
 import Head from "next/head";
 import { Banner, CTA } from "../components/banner";
 import { FeaturedNewsLetters, getNewsLetters, NewsLetter } from "./newsletters";
-
-type SectionProps = {
-  id: string;
-  title: string;
-  description?: string;
-  left?: React.ReactNode;
-  right?: React.ReactNode;
-  actions?: CTA[];
-};
-
-const Section: React.FC<SectionProps> = (props) => (
-  <Box id={props.id} className="section" sx={{
-    py: 5,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-  }}>
-    <Container>
-      <Grid container>
-        {props.left && <Grid item md={4} sm={0} xs={0} sx={{
-          display: "flex",
-          paddingRight: 3,
-          justifyContent: "left",
-          alignItems: "center",
-        }}>
-          {props.left}
-        </Grid>}
-        <Grid item md={(props.left || props.right) ? 8 : 12} sm={12} xs={12}>
-          <Typography variant="h5" component="h1" gutterBottom sx={{
-            paddingBottom: 3,
-          }}>
-            {props.title}
-          </Typography>
-          <Box sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}>
-            <Typography variant="h6" paragraph>
-              {props.description}
-            </Typography>
-          </Box>
-          {props.children}
-          <Box sx={{
-            display: "flex",
-            flexDirection: "row",
-          }}>
-            {props.actions && props.actions.map((action, i) => (
-              <Link key={i} variant="button" href={action.url} sx={{ marginLeft: i > 0 ? 1 : 0 }} >
-                <Button variant="contained">
-                  {action.text}
-                </Button>
-              </Link>
-            ))}
-          </Box>
-        </Grid>
-        {props.right && <Grid item md={4} sm={0} xs={0} sx={{
-          display: "flex",
-          paddingLeft: 3,
-          justifyContent: "center",
-          alignItems: "center",
-        }}>
-          {props.right}
-        </Grid>}
-      </Grid>
-    </Container>
-  </Box>
-)
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import { Section } from "../components/section";
 
 interface HomeProps {
   newsLetters: NewsLetter[];
@@ -161,7 +93,22 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
           url: '/newsletters',
         }]}
       >
-        <FeaturedNewsLetters newsLetters={newsLetters.slice(0, 4)} />
+        <Typography variant="h6" component="h2" >
+          {i18n.strings.landing.pastNewsLetters}
+        </Typography>
+        <Box sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
+          <FeaturedNewsLetters newsLetters={newsLetters.slice(0, 3)} noBreak={true} />
+          <Link href="/newsletters" >
+            <IconButton sx={{ marginLeft: 2, py: 10 }}>
+              <KeyboardDoubleArrowRightIcon />
+            </IconButton>
+          </Link>
+        </Box>
       </Section>
       <Section id="join"
         title={i18n.strings.header.join}

@@ -44,10 +44,34 @@ const CardItem: React.FC<CardProps> = (props) => {
   )
 }
 
-export const FeaturedCards: React.FC<{ cards: CardProps[] }> = ({ cards }) => (
+function getGridSize(count: number, size: 'sm' | 'md') {
+  if (size === 'md') {
+    if (count <= 1) { return 12; }
+    if (count <= 2) { return 6; }
+    if (count <= 3) { return 4; }
+    return 3;
+  }
+  if (count <= 1) { return 12; }
+  if (count <= 2) { return 12; }
+  if (count <= 3) { return 12; }
+  return 6;
+}
+
+export const FeaturedCards: React.FC<{ cards: CardProps[], noBreak?: boolean }> = ({ cards, noBreak }) => (
   <Grid container spacing={4}>
     {cards.map((card, i) => (
-      <Grid item key={i} xs={12} sm={6} md={3} sx={{ my: 3 }}>
+      <Grid item key={i}
+        xs={12}
+        sm={getGridSize(cards.length, 'sm')}
+        md={getGridSize(cards.length, 'md')}
+        sx={{
+          my: 3,
+          display: {
+            xs: noBreak && i > 0 ? 'none' : 'block',
+            sm: noBreak && i > 0 ? 'none' : 'block',
+            md: 'block',
+          }
+        }}>
         <Card
           sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
         >

@@ -6,6 +6,8 @@ import { CardList, FeaturedCards } from "../components/card-list";
 import { Constants } from "../utils/constants";
 import { parseStringPromise } from "xml2js";
 import { Container } from "@material-ui/core";
+import { Typography } from "@mui/material";
+import { Section } from "../components/section";
 
 export type NewsLetter = {
   title: string,
@@ -32,14 +34,16 @@ export const getNewsLetters = async (): Promise<NewsLetter[]> => {
   });
 }
 
-export const FeaturedNewsLetters: React.FC<{ newsLetters: NewsLetter[] }> = ({ newsLetters }) => (
+export const FeaturedNewsLetters: React.FC<{ newsLetters: NewsLetter[], noBreak?: boolean }> = ({ newsLetters, noBreak }) => (
   <FeaturedCards cards={newsLetters.map(p => ({
     title: p.title,
     image: p.image,
     displayDate: new Date(p.pubDate).toDateString(),
     url: p.link,
     content: p.preview
-  }))} />
+  }))}
+    noBreak={noBreak}
+  />
 )
 
 type NewsLetterPageProps = {
@@ -58,17 +62,16 @@ const NewsLetterPage: NextPage<NewsLetterPageProps> = ({ newsletters }) => {
           url: Constants.links.newsletter,
         }]}
       />
-      <Container>
-        <FeaturedNewsLetters newsLetters={newsletters.slice(0, 4)} />
-      </Container>
-      <CardList cards={newsletters.slice(4).map(p => ({
-        title: p.title,
-        // image: p.image,
-        displayDate: new Date(p.pubDate).toDateString(),
-        url: p.link,
-        content: p.preview
-      }))} />
-
+      <Section title={i18n.strings.landing.pastNewsLetters}>
+        <FeaturedNewsLetters newsLetters={newsletters.slice(0, 1)} />
+        <CardList cards={newsletters.slice(1).map(p => ({
+          title: p.title,
+          // image: p.image,
+          displayDate: new Date(p.pubDate).toDateString(),
+          url: p.link,
+          content: p.preview
+        }))} />
+      </Section>
     </Layout >
   );
 };

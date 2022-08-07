@@ -23,7 +23,8 @@ export default {
     donateButtonTW: 'Donate (Taiwan) ',
     subscribeDesc: 'We welcome you to subscribe to our monthly newsletter. The newsletter contains our analyses of selected major events that we believe are consequential to U.S.-Taiwan relations. We also announce our upcoming events in this newsletter.',
     subscribeButton: 'Subscribe to our newsletter!',
-    pastNewsLettersButton: 'View past issues',
+    pastNewsLettersButton: 'View more past issues',
+    pastNewsLetters: 'Past issues',
   },
   social: {
     fb: 'Facebook is our primary platform through which we aim to strengthen U.S.-Taiwan relations. On Facebook, we debunk misinformation and common myths by providing latest news and thorough analyses of current events and policies in the U.S. and Taiwan.',
