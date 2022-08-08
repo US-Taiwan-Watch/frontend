@@ -17,7 +17,6 @@ interface HomeProps {
 }
 
 const Home: NextPage<HomeProps> = ({ newsLetters }) => {
-  // console.log(newsLetters);
   const { i18n } = useI18n();
   return (
     <Layout>

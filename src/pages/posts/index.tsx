@@ -31,14 +31,14 @@ const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<PostsPageProps> = async () => {
-  return {
+export const getStaticProps: GetStaticProps<PostsPageProps> = async () => (
+  {
     props: {
       posts: allPosts
     },
     revalidate: 300, // In seconds
   }
-}
+);
 
 export default PostsPage;
 

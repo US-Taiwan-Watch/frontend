@@ -72,14 +72,14 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
   );
 };
 
-export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
-  return {
+export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => (
+  {
     paths: allPosts.map(post => ({
       params: { slug: post.slug }
     })),
     fallback: 'blocking', // can also be true or 'blocking'
   }
-}
+);
 
 export const getStaticProps: GetStaticProps<PostPageProps> = async ({ params }) => {
   if (!params || typeof params.slug !== 'string') {

@@ -85,6 +85,9 @@ export const FeaturedCards: React.FC<{ cards: CardProps[], noBreak?: boolean }> 
               <Typography gutterBottom variant="h6" component="h2">
                 {card.title}
               </Typography>
+              <Typography variant="subtitle1" color="text.secondary" sx={{ paddingBottom: 2 }}>
+                {card.displayDate}
+              </Typography>
               <Typography>
                 {card.content}
               </Typography>
@@ -96,10 +99,8 @@ export const FeaturedCards: React.FC<{ cards: CardProps[], noBreak?: boolean }> 
   </Grid>
 );
 
-export const CardList: React.FC<{ cards: CardProps[] }> = ({ cards }) => {
-  return (
-    <Container>
-      {cards.map(card => (<CardItem key={card.url} {...card} />))}
-    </Container>
-  );
-};
+export const CardList: React.FC<{ cards: CardProps[] }> = ({ cards }) => (
+  <Container>
+    {cards.map(card => (<CardItem key={card.url} {...card} />))}
+  </Container>
+);

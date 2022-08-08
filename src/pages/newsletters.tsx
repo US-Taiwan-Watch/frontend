@@ -38,7 +38,7 @@ export const FeaturedNewsLetters: React.FC<{ newsLetters: NewsLetter[], noBreak?
   <FeaturedCards cards={newsLetters.map(p => ({
     title: p.title,
     image: p.image,
-    displayDate: new Date(p.pubDate).toDateString(),
+    displayDate: new Date(p.pubDate).toLocaleDateString(),
     url: p.link,
     content: p.preview
   }))}
@@ -67,7 +67,7 @@ const NewsLetterPage: NextPage<NewsLetterPageProps> = ({ newsletters }) => {
         <CardList cards={newsletters.slice(1).map(p => ({
           title: p.title,
           // image: p.image,
-          displayDate: new Date(p.pubDate).toDateString(),
+          displayDate: new Date(p.pubDate).toLocaleDateString(),
           url: p.link,
           content: p.preview
         }))} />
@@ -76,13 +76,13 @@ const NewsLetterPage: NextPage<NewsLetterPageProps> = ({ newsletters }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<NewsLetterPageProps> = async () => {
-  return {
+export const getStaticProps: GetStaticProps<NewsLetterPageProps> = async () => (
+  {
     props: {
       newsletters: await getNewsLetters(),
     },
     revalidate: 300, // In seconds
   }
-}
+);
 
 export default NewsLetterPage;
