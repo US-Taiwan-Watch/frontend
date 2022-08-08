@@ -8,6 +8,8 @@ import { parseStringPromise } from "xml2js";
 import { Container } from "@material-ui/core";
 import { Typography } from "@mui/material";
 import { Section } from "../components/section";
+import { useRouter } from "next/router";
+import Head from "next/head";
 
 export type NewsLetter = {
   title: string,
@@ -52,8 +54,16 @@ type NewsLetterPageProps = {
 
 const NewsLetterPage: NextPage<NewsLetterPageProps> = ({ newsletters }) => {
   const { i18n } = useI18n();
+  const { pathname } = useRouter();
   return (
     <Layout>
+      <Head>
+        <title>{i18n.strings.newsletter.title}</title>
+        <meta property="og:title" content={i18n.strings.newsletter.title} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL + pathname} />
+        <meta property="og:description" content={i18n.strings.landing.subscribeDesc} />
+      </Head>
       <Banner
         title={i18n.strings.header.subscribe}
         subtitle={i18n.strings.landing.subscribeDesc}

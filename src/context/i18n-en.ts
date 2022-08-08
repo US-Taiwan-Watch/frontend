@@ -33,6 +33,9 @@ export default {
     yt: 'US Taiwan Watch produced a Youtube series of seven videos while they were in Washington, D.C. In this series, we explored the city of Washington, D.C., and visited Congress, the White House, and Embassy Row. We also interviewed policy analysts and political advocates in think tanks and political organizations such as the Global Taiwan Institute (GTI) and the Taiwan Democratic Progressive Party Mission in the U.S. We have also published our weekly podcast program on the Youtube Channel. We are also working on expanding our video platform to incorporate new programs that will educate our Taiwanese audience about the U.S. political system and atmosphere.',
     podcast: 'Our podcast program, "US Taiwan Watch - Spice Up," shares analyses of current events and policies in the U.S and Taiwan. Since the podcast\'s launch in April 2020, we have produced over a hundered episodes on U.S.-Taiwan relations, often featuring renowned scholars, diplomats, and political workers in Taiwan. On July 14, 2022, we recorded 68K downloads for our podcast program and an average of 6,000 interactions for each episode. We have also expanded our audience from Taiwan and the U.S. to China, Japan, Vietnam, Hong Kong, and Australia.',
   },
+  newsletter: {
+    title: 'Subscribe US Taiwan Watch!'
+  },
   common: {
     cardList: {
       readMore: 'Continue reading...',

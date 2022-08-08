@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { IUser } from "../lib/user";
 import { Header } from "./header";
 import { Footer } from "./footer";
 import { useI18n } from "../context/i18n";
@@ -11,6 +10,7 @@ export const Layout: React.FC = ({ children }) => {
       <Head>
         <title>{i18n.strings.brand.fullName}</title>
         <meta property="og:site_name" content={i18n.strings.brand.fullName} />
+        <meta property="og:image" content="https://static.ustw.watch/public-image/website/preview.png" />
       </Head>
 
       <Header />

@@ -24,7 +24,6 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
         <meta property="og:title" content={i18n.strings.brand.fullName} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL} />
-        <meta property="og:image" content="https://static.ustw.watch/public-image/website/preview.png" />
         <meta property="og:description" content={i18n.strings.landing.aboutDesc} />
       </Head>
       <Banner

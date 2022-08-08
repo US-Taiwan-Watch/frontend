@@ -44,7 +44,6 @@ export default function MyApp(props: MyAppProps) {
     <ColorModeContext.Provider value={isDarkMode}>
       <CacheProvider value={emotionCache}>
         <Head>
-          <title>Change title in _app.tsx</title>
           <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
         <ApolloProvider client={client}>
