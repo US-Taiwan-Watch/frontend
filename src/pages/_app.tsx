@@ -11,6 +11,7 @@ import { I18nProvider } from "../context/i18n";
 import { useInitApolloClient } from "../lib/with-apollo";
 import { ApolloProvider } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
+import { UserRoleContext, UserRoleProvider } from "../context/user-role";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -47,13 +48,15 @@ export default function MyApp(props: MyAppProps) {
           <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
         <ApolloProvider client={client}>
-          <ThemeProvider theme={theme}>
-            <I18nProvider>
-              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-              <CssBaseline />
-              <Component {...pageProps} />
-            </I18nProvider>
-          </ThemeProvider>
+          <UserRoleProvider>
+            <ThemeProvider theme={theme}>
+              <I18nProvider>
+                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                <CssBaseline />
+                <Component {...pageProps} />
+              </I18nProvider>
+            </ThemeProvider>
+          </UserRoleProvider>
         </ApolloProvider>
       </CacheProvider>
     </ColorModeContext.Provider>

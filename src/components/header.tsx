@@ -9,6 +9,7 @@ import Image from "next/image";
 import { ColorModeContext } from "../pages/_app";
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
+import { useUserRole } from "../context/user-role";
 
 export interface IHeaderProps {
   user?: IUser;
@@ -26,6 +27,7 @@ const NavLink: React.FC<LinkProps> = (props) => (
 export const Header: React.FC = () => {
   const { i18n } = useI18n();
   const { user, loading } = useFetchUser();
+  const { isAdmin, isEditor } = useUserRole();
   const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
   return (
@@ -70,15 +72,12 @@ export const Header: React.FC = () => {
             {i18n.strings.header.donate}
           </Button>
         </NavLink>
-        {showDevContent && !loading &&
-          (user ? (
-            <>
-              <NavLink href="/posts">文章</NavLink>
-              <NavLink href="/api/logout">Logout</NavLink>
-            </>
-          ) : (
-            <NavLink href="/api/login">Login</NavLink>
-          ))}
+        {!loading && (isAdmin || isEditor) &&
+          <>
+            <NavLink href="/posts">文章</NavLink>
+            <NavLink href="/api/logout" target="_self">Logout</NavLink>
+          </>
+        }
         <Box sx={{ my: 1 }}>
           <LocaleSwitcher />
         </Box>

@@ -52,7 +52,7 @@ export const Banner: React.FC<BannerProps> = (props) => (
             {props.subtitle}
           </Typography>
           {props.actions && props.actions.map((action, i) => (
-            <Link href={action.url} sx={{ textDecoration: 'none', marginLeft: i > 0 ? 1 : 0 }}>
+            <Link key={i} href={action.url} sx={{ textDecoration: 'none', marginLeft: i > 0 ? 1 : 0 }}>
               <Button variant="contained" color="secondary">
                 {action.text}
               </Button>

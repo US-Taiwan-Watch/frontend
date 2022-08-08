@@ -12,6 +12,12 @@ export type Scalars = {
   Float: number;
 };
 
+export enum Auth0RoleName {
+  Admin = 'Admin',
+  Editor = 'Editor',
+  S2S = 'S2S'
+}
+
 export type DenormalizedBill = {
   __typename?: 'DenormalizedBill';
   billNumber: Scalars['Float'];
@@ -105,8 +111,10 @@ export type Query = {
   bill?: Maybe<DenormalizedBill>;
   bills: PaginatedBills;
   imUser?: Maybe<User>;
+  isAdmin: Scalars['Boolean'];
   member?: Maybe<Member>;
   members: Array<Member>;
+  myRoles?: Maybe<Array<Auth0RoleName>>;
 };
 
 
