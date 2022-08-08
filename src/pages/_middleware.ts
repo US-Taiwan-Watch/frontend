@@ -18,7 +18,7 @@ export function middleware(request: NextRequest) {
     if (acceptLang) {
       langs = [...langs, ...parse(acceptLang).map(lang => lang.code)];
     }
-    let finalLang = 'en'; // default one
+    let finalLang = 'zh'; // default one
     for (const lang of langs) {
       if (['zh', 'en'].includes(lang)) {
         finalLang = lang;

@@ -37,7 +37,7 @@ const getLang = (lang?: string) => {
     if (typeof window !== "undefined") {
       return navigator.language;
     } else {
-      return "en";
+      return "zh";
     }
   }
   return lang;
