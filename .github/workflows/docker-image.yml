@@ -27,7 +27,7 @@ jobs:
       with:
         args: "-X GET '${{ env.ENV_URL }}' --header 'Authorization: Basic ${{ secrets.AZURE_PAT_B64 }}' -o .env"
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{ env.IMG_TAG }}
+      run: docker build . --file Dockerfile --tag ${{ env.HOST }}/${{ secrets.ACR_USER }}/${{ env.IMG_TAG }}
     - name: Login to ACR
       uses: docker/login-action@v2
       with:
