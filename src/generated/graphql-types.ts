@@ -40,9 +40,11 @@ export type Member = {
   cspanId?: Maybe<Scalars['String']>;
   facebookId?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
+  firstName_zh?: Maybe<Scalars['String']>;
   gender?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   lastName?: Maybe<Scalars['String']>;
+  lastName_zh?: Maybe<Scalars['String']>;
   nickname?: Maybe<Scalars['String']>;
   office?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
@@ -57,10 +59,10 @@ export type MemberRole = {
   chamber: Scalars['String'];
   congressNumbers: Array<Scalars['Int']>;
   district?: Maybe<Scalars['Int']>;
-  endDate: Scalars['Float'];
+  endDate: Scalars['String'];
   party: Scalars['String'];
   senatorClass?: Maybe<Scalars['Int']>;
-  startDate: Scalars['Float'];
+  startDate: Scalars['String'];
   state: Scalars['String'];
 };
 
