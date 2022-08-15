@@ -71,13 +71,7 @@ export const BigCard: React.FC = () => (
               }}
             >
               <Stack direction="row" spacing={2}>
-                {bill.tags.map((data) => {
-                  return (
-                    <Chip
-                      label={data}
-                    />
-                  );
-                })}
+                {bill.tags.map((data) => <Chip label={data} />)}
               </Stack>
             </Box>
 
