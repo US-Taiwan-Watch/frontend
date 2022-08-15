@@ -37,7 +37,7 @@ export const UserRoleProvider = React.memo(({ children }) => {
   return <UserRoleContext.Provider value={{
     roles,
     isAdmin: roles.includes(Auth0RoleName.Admin),
-    isEditor: roles.includes(Auth0RoleName.Editor)
+    isEditor: roles.includes(Auth0RoleName.Admin) || roles.includes(Auth0RoleName.Editor)
   }}>
     {children}
   </UserRoleContext.Provider>;
