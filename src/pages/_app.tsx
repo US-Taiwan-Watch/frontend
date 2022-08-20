@@ -12,6 +12,8 @@ import { useInitApolloClient } from "../lib/with-apollo";
 import { ApolloProvider } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
 import { UserRoleContext, UserRoleProvider } from "../context/user-role";
+import { useRouter } from "next/router";
+
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -39,6 +41,23 @@ export default function MyApp(props: MyAppProps) {
     () => darkMode ? darkTheme : lightTheme,
     [darkMode],
   );
+  const router = useRouter();
+  const [loading, setLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleStart = (url: string) => (url !== router.asPath) && setLoading(true);
+    const handleComplete = (_url: string) => setLoading(false);
+
+    router.events.on('routeChangeStart', handleStart)
+    router.events.on('routeChangeComplete', handleComplete)
+    router.events.on('routeChangeError', handleComplete)
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart)
+      router.events.off('routeChangeComplete', handleComplete)
+      router.events.off('routeChangeError', handleComplete)
+    }
+  })
 
   return (
     <ColorModeContext.Provider value={isDarkMode}>
@@ -46,6 +65,8 @@ export default function MyApp(props: MyAppProps) {
         <Head>
           <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
+        {/* Build a better loading page */}
+        {loading ? <div>Loading</div> :
         <ApolloProvider client={client}>
           <UserRoleProvider>
             <ThemeProvider theme={theme}>
@@ -56,7 +77,7 @@ export default function MyApp(props: MyAppProps) {
               </I18nProvider>
             </ThemeProvider>
           </UserRoleProvider>
-        </ApolloProvider>
+          </ApolloProvider>}
       </CacheProvider>
     </ColorModeContext.Provider>
   );
