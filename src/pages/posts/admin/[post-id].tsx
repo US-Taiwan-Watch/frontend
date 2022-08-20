@@ -2,7 +2,7 @@ import type { GetServerSideProps, GetStaticPaths, GetStaticProps, NextPage } fro
 import Typography from "@mui/material/Typography";
 import { Link, LinkProps } from "../../../components/link";
 import { Layout } from "../../../components/layout";
-import { Box, Button, ButtonGroup, Card, CardActionArea, CardContent, CardHeader, CardMedia, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper } from "@mui/material";
+import { Box, Button, ButtonGroup, Card, CardActionArea, CardContent, CardHeader, CardMedia, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Paper, TextareaAutosize, TextField } from "@mui/material";
 import { SocialMediaIcon, socialMedias } from "../../../components/social-media";
 import { Constants } from "../../../utils/constants";
 import { useI18n } from "../../../context/i18n";
@@ -20,7 +20,8 @@ import Error from "next/error";
 import { useApolloClient } from "@apollo/client";
 import { NextPageWithApollo, withApollo } from "../../../lib/with-apollo";
 import { ImUserDocument } from "../../../lib/page-graphql/query-imuser.graphql.interface";
-
+import SettingsIcon from '@mui/icons-material/Settings';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 type PostPageProps = {
   post?: PostProps,
@@ -33,6 +34,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   const [editorValue, setEditorValue] = useState(post.content);
   const [showSaveConfirmation, setShowSaveConfirmation] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -65,9 +67,30 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
     // TODO: publish
   }
   return (
-    <>
-      {/* <Banner title={post.title} subtitle={post.publishDate} /> */}
       <Container>
+      <Dialog fullWidth open={showSettings} onClose={() => setShowSettings(false)}>
+        <DialogTitle>Settings</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="slug"
+            label="Post URL"
+            fullWidth
+            variant="standard"
+            value={post.slug}
+          />
+          Description:
+          <TextareaAutosize
+            placeholder="Empty"
+            style={{ width: "100%" }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button startIcon={<DeleteIcon />}>Delete post</Button>
+          <Button>Close</Button>
+        </DialogActions>
+      </Dialog>
         <Dialog
           open={showSaveConfirmation}
           onClose={() => setShowSaveConfirmation(false)}
@@ -108,6 +131,9 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
             {post.isPublished ? 'Update' : 'Publish'}
           </Button>
           <Typography sx={{ mx: 5 }}>{post.isPublished ? 'Published' : (isSaving ? 'Saving...' : 'Draft')}</Typography>
+        <IconButton onClick={() => setShowSettings(true)}>
+          <SettingsIcon />
+        </IconButton>
         </Box>
         <Box alignItems="center" sx={{ paddingTop: 3, display: 'flex', flexDirection: 'column' }}>
           <Typography component="h2" variant="h5">
@@ -121,7 +147,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
           value={editorValue}
           viewOnly={false}
           onSave={val => setEditorValue(val)} />
-      </Container></>
+    </Container>
   );
 }
 
@@ -135,12 +161,15 @@ const PostPage: NextPageWithApollo<PostPageProps> = ({ post }) => {
 
 PostPage.getInitialProps = async ({ req, query, apolloClient }) => {
   // TODO: query real post 
-  const data = await apolloClient?.query({
+  apolloClient?.query({
     query: ImUserDocument,
     variables: {},
     fetchPolicy: "network-only",
+  }).then(data => {
+    console.log(data);
+  }).catch(err => {
+    console.log(err)
   });
-  console.log(data)
   const allPosts: PostProps[] = Array.from(Array(5)).map((_, i) => ({
     id: `${i}`,
     isPublished: i % 2 === 0,

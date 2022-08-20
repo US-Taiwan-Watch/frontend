@@ -1,49 +1,55 @@
 import type { GetStaticProps, NextPage } from "next";
-import { Layout } from "../../components/layout";
-import { Banner } from "../../components/banner";
+import { Layout } from "../../../components/layout";
+import { Banner } from "../../../components/banner";
 import { useRouter } from "next/router";
-import { CardList } from "../../components/card-list";
-import { useUserRole } from "../../context/user-role";
-import { Link } from "../../components/link";
-import { Button, Typography } from "@mui/material";
-
-export type PostProps = {
-  id: string,
-  slug: string,
-  title: string,
-  tags: string[],
-  preview: string,
-  content: string,
-  publishDate: string,
-  image: string,
-  isPublished: boolean,
-  lastModified: number,
-}
+import { CardList } from "../../../components/card-list";
+import { useUserRole } from "../../../context/user-role";
+import { Link } from "../../../components/link";
+import { Button, ButtonGroup, Typography } from "@mui/material";
+import { PostProps } from "..";
+import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 
 type PostsPageProps = {
   posts: PostProps[],
 }
+
+const columns: GridColDef[] = [
+  { field: 'title', headerName: 'Title', flex: 10, resizable: true },
+  { field: 'status', headerName: 'Status' },
+  {
+    field: 'lastModified', headerName: 'Last Modified', width: 150, valueFormatter: date => {
+      const lastModDate = new Date(date.value);
+      return new Date().toLocaleDateString() === lastModDate.toLocaleDateString() ?
+        lastModDate.toLocaleTimeString() : lastModDate.toLocaleDateString();
+    }
+  },
+  {
+    field: 'actions', headerName: 'Actions', width: 150, sortable: false, renderCell: params => (
+      <ButtonGroup>
+        <Link role="button" href={`admin/${params.id}`} sx={{ textDecoration: 'none' }}>
+          <Button href={`admin/${params.id}`}>Edit</Button>
+        </Link>
+        <Link role="button" href={`${params.row.slug}`} sx={{ textDecoration: 'none' }}>
+          <Button>View</Button>
+        </Link>
+      </ButtonGroup>)
+  }
+];
 
 const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
   const router = useRouter();
   const { isEditor } = useUserRole();
   return (
     <Layout>
-      <Banner title="所有文章" >
+      <Banner title="管理文章" >
       </Banner>
-      {isEditor && <>
-        <Link href={`posts/admin`}>
-          <Button variant="contained">Manage Posts</Button>
-        </Link>
-      </>}
-
-      <CardList cards={posts.map(p => ({
-        ...p,
-        displayDate: p.publishDate,
-        content: p.preview,
-        url: `${router.pathname}/${p.slug}`
+      <DataGrid autoHeight={true} columns={columns} rows={posts.map(p => ({
+        id: p.id,
+        title: p.title,
+        status: p.isPublished ? 'Published' : 'Draft',
+        lastModified: p.lastModified,
+        slug: p.slug,
       }))} />
-
     </Layout >
   );
 };
@@ -68,7 +74,7 @@ export const allPosts = Array.from(Array(5)).map((_, i) => ({
   tags: [],
   preview: 'Lorem ipsum dolor sit amet, quas aliquid imperdiet mea an, vix at putent epicurei. Mel quot admodum docendi in. No vel adhuc neglegentur, essent efficiantur ne est. Cu fabulas qualisque eum, dicta omnes elaboraret mel ea. Graecis repudiare consectetuer no mea.',
   publishDate: new Date().toLocaleDateString(),
-  lastModified: new Date().getTime(),
+  lastModified: new Date().getTime() - Math.random() * 86400000,
   image: 'https://scontent-sjc3-1.xx.fbcdn.net/v/t39.30808-6/295758836_372025898384054_1520161559750890202_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=730e14&_nc_ohc=TPIrSqFi5t4AX-KZLqf&_nc_ht=scontent-sjc3-1.xx&oh=00_AT-qSkr-0_rHVGqGoU4fhqr5b0ZQ0AJW_NJD6l39rksvcg&oe=62EB70C9',
   content: JSON.stringify({
     "id": "62isql",
