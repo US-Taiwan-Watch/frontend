@@ -31,6 +31,17 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
         subtitle={i18n.strings.header.subtitle}
         actions={[{ text: i18n.strings.header.donate, url: '#donate' }]}
       />
+      <Section id="podcast"
+        title="Podcast 最新單集">
+        <iframe src="https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=0084dca4-7a7d-4eb0-80b9-71bf03216f23"
+          style={{
+            "height": "140px",
+            "width": "100%",
+            "border": "none",
+            "borderRadius": "4px",
+            "boxShadow": "0 1px 8px rgba(0, 0, 0, .2)",
+          }} />
+      </Section>
       <Section id="about"
         title={i18n.strings.header.about}
         description={i18n.strings.landing.aboutDesc}
