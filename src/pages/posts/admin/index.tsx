@@ -15,6 +15,8 @@ import Error from "next/error";
 import { ImUserDocument } from "../../../lib/page-graphql/query-imuser.graphql.interface";
 import { PostsDocument } from "../../../lib/page-graphql/query-posts.graphql.interface";
 import { Article } from "../../../../common/models";
+import { useApolloClient } from "@apollo/client";
+import { CreatePostDocument } from "../../../lib/page-graphql/mutation-create-post.graphql.interface";
 
 type PostsPageProps = {
   posts?: Article[],
@@ -49,11 +51,21 @@ const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
   }
   const router = useRouter();
   const { isEditor } = useUserRole();
+  const apolloClient = useApolloClient();
   return (
     <Layout>
       <Banner title="管理文章" >
       </Banner>
-      <IconButton><AddCircleIcon /></IconButton>
+      <IconButton onClick={() => {
+        apolloClient.mutate({
+          mutation: CreatePostDocument,
+          fetchPolicy: "network-only",
+        }).then(res => {
+          if (res.data?.createEmptyArticle?.id) {
+            router.push(`admin/${res.data?.createEmptyArticle?.id}`);
+          }
+        })
+      }}><AddCircleIcon /></IconButton>
       <DataGrid autoHeight={true} columns={columns} rows={posts.map(p => ({
         id: p.id,
         title: p.title,
@@ -66,7 +78,6 @@ const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
 };
 
 PostsPage.getInitialProps = async ({ apolloClient }) => {
-  // TODO: query real post 
   try {
     const data = await apolloClient?.query({
       query: PostsDocument,
