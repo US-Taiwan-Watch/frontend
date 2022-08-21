@@ -12,7 +12,7 @@ import { FeaturedNewsLetters, getNewsLetters, NewsLetter } from "./newsletters";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { Section } from "../components/section";
 import { parseStringPromise } from "xml2js";
-import { getPodcastEpisodes, PodcastEpisode } from "./podcasts";
+import { getPodcastEpisodes, PodcastEpisode } from "./podcast";
 interface HomeProps {
   newsLetters: NewsLetter[];
   podcast: PodcastEpisode;
