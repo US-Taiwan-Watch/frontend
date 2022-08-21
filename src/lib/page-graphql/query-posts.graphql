@@ -1,0 +1,12 @@
+query posts {
+  allArticles {
+    id
+    title
+    content
+    status
+    author
+    pusblishTime
+    imageSource
+    tags
+  }
+}

@@ -1,0 +1,12 @@
+query post($articleId: String!) {
+  article(id: $articleId) {
+    id
+    title
+    content
+    status
+    author
+    pusblishTime
+    imageSource
+    tags
+  }
+}

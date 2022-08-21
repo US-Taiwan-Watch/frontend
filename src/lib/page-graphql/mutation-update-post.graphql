@@ -1,0 +1,12 @@
+mutation UpdateArticleWithId($updateArticleWithIdId: String!, $title: String, $content: String, $status: String, $author: [String!], $imageSource: String, $tags: [String!]) {
+  updateArticleWithId(id: $updateArticleWithIdId, title: $title, content: $content, status: $status, author: $author, imageSource: $imageSource, tags: $tags) {
+    id
+    title
+    content
+    status
+    author
+    pusblishTime
+    imageSource
+    tags
+  }
+}
