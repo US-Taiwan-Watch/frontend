@@ -37,7 +37,7 @@ export const Banner: React.FC<BannerProps> = (props) => (
       }}
     />
     <Grid container>
-      <Grid item md={6}>
+      <Grid item md={11}>
         <Box
           sx={{
             position: 'relative',

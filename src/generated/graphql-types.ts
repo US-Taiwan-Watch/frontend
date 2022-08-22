@@ -12,6 +12,18 @@ export type Scalars = {
   Float: number;
 };
 
+export type Article = {
+  __typename?: 'Article';
+  author?: Maybe<Array<Scalars['String']>>;
+  content?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  imageSource?: Maybe<Scalars['String']>;
+  pusblishTime?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Scalars['String']>>;
+  title?: Maybe<Scalars['String']>;
+};
+
 export enum Auth0RoleName {
   Admin = 'Admin',
   Editor = 'Editor',
@@ -77,15 +89,34 @@ export type MemberRole = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addArticle?: Maybe<Article>;
+  createEmptyArticle?: Maybe<Article>;
   createUser?: Maybe<Scalars['Boolean']>;
+  deleteArticle?: Maybe<Scalars['Boolean']>;
   emitGlobalEvent: Scalars['Boolean'];
   emitUserEvent: Scalars['Boolean'];
+  updateArticleWithId?: Maybe<Article>;
+};
+
+
+export type MutationAddArticleArgs = {
+  author?: InputMaybe<Array<Scalars['String']>>;
+  content?: InputMaybe<Scalars['String']>;
+  imageSource?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<Array<Scalars['String']>>;
+  title?: InputMaybe<Scalars['String']>;
 };
 
 
 export type MutationCreateUserArgs = {
   email: Scalars['String'];
   user_id: Scalars['String'];
+};
+
+
+export type MutationDeleteArticleArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -99,6 +130,17 @@ export type MutationEmitUserEventArgs = {
   userIdx: Array<Scalars['String']>;
 };
 
+
+export type MutationUpdateArticleWithIdArgs = {
+  author?: InputMaybe<Array<Scalars['String']>>;
+  content?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
+  imageSource?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<Array<Scalars['String']>>;
+  title?: InputMaybe<Scalars['String']>;
+};
+
 export type PaginatedBills = {
   __typename?: 'PaginatedBills';
   hasMore: Scalars['Boolean'];
@@ -108,6 +150,9 @@ export type PaginatedBills = {
 
 export type Query = {
   __typename?: 'Query';
+  allArticles: Array<Article>;
+  article?: Maybe<Article>;
+  articles?: Maybe<Array<Article>>;
   bill?: Maybe<DenormalizedBill>;
   bills: PaginatedBills;
   imUser?: Maybe<User>;
@@ -115,6 +160,16 @@ export type Query = {
   member?: Maybe<Member>;
   members: Array<Member>;
   myRoles?: Maybe<Array<Auth0RoleName>>;
+};
+
+
+export type QueryArticleArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryArticlesArgs = {
+  ids: Array<Scalars['String']>;
 };
 
 
