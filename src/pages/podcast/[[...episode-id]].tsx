@@ -2,16 +2,12 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { Layout } from "../../components/layout";
 import { useI18n } from "../../context/i18n";
 import { Banner } from "../../components/banner";
-import { CardList, FeaturedCards } from "../../components/card-list";
-import { Constants } from "../../utils/constants";
 import { parseStringPromise } from "xml2js";
-import { Container } from "@material-ui/core";
-import { Button, ListItem, ListItemButton, ListItemText, Typography } from "@mui/material";
+import { ListItem, ListItemButton, ListItemText } from "@mui/material";
 import { Section } from "../../components/section";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { podcastPlatforms } from "../../components/social-media";
-import { useEffect, useState } from "react";
 import Error from "next/error";
 
 export type PodcastEpisode = {
@@ -31,14 +27,14 @@ export const getPodcastEpisodes = async (): Promise<PodcastEpisode[]> => {
 
 type PodcastPageProps = {
   episodes: PodcastEpisode[],
-  episodeID: string,
 }
 
-const PodcastPage: NextPage<PodcastPageProps> = ({ episodes, }) => {
+const PodcastPage: NextPage<PodcastPageProps> = ({ episodes }) => {
   const { i18n } = useI18n();
   const router = useRouter();
-  const episodeID = router.query['episode-id'];
-  if const episode = episodes.find(e => e.id === episodeID);
+  const episodeID = router.query['episode-id'] ? router.query['episode-id'][0] : episodes[0].id;
+  const isIndex = router.query['episode-id'] ? false : true;
+  const episode = episodes.find(e => e.id === episodeID);
   if (!episode) {
     return <Error statusCode={404} />
   }
@@ -46,7 +42,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ episodes, }) => {
   return (
     <Layout>
       <Head>
-        <title>{`${episode.title} - ${i18n.strings.brand.fullName}`}</title>
+        <title>{`${isIndex ? '觀測站底加辣' : episode.title} - ${i18n.strings.brand.fullName}`}</title>
         <meta property="og:title" content={i18n.strings.newsletter.title} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL + router.pathname} />
@@ -57,10 +53,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ episodes, }) => {
         subtitle={i18n.strings.social.podcast}
         actions={podcastPlatforms.map(p => ({ text: p.name, url: p.link }))}
       />
-      <Section id="podcast"
-        title="播放單集"
-        actions={podcastPlatforms.map(p => ({ text: p.name, url: p.link }))}
-      >
+      <Section id="podcast" title="播放單集" >
         <iframe src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${episodeID}`}
           style={{
             marginBottom: 20,
@@ -74,7 +67,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ episodes, }) => {
           <ListItem key={episode.id} component="div" disablePadding>
             <ListItemButton
               selected={episode.id === episodeID}
-              onClick={() => router.replace(episode.id, undefined, { shallow: true })}>
+              onClick={() => router.push(episode.id, undefined, { shallow: true })}>
               <ListItemText primary={episode.title} />
             </ListItemButton>
           </ListItem>
@@ -98,25 +91,16 @@ export const getStaticProps: GetStaticProps<PodcastPageProps> = async ({ params 
     return { notFound: true };
   }
   const episodeID = params['episode-id'];
-  if (episodeID && !Array.isArray(episodeID)) {
+  const episodes = await getPodcastEpisodes();
+  if (episodeID && episodeID.length !== 1) {
     return { notFound: true };
   }
-  const episodes = await getPodcastEpisodes();
-  if (!episodeID) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: `podcast/${episodes[0].id}`,
-      }
-    };
-  }
-  if (!episodes.find(e => e.id === episodeID[0])) {
+  if (episodeID && !episodes.find(e => e.id === episodeID[0])) {
     return { notFound: true };
   }
   return {
     props: {
       episodes: episodes,
-      episodeID: episodeID[0],
     },
     revalidate: 300, // In seconds
   };

@@ -1,18 +1,18 @@
 import type { GetStaticProps, NextPage } from "next";
 import Typography from "@mui/material/Typography";
-import { Link, LinkProps } from "../components/link";
+import { Link } from "../components/link";
 import { Layout } from "../components/layout";
-import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Container, Grid, IconButton, Paper } from "@mui/material";
+import { Box, Card, CardActionArea, CardContent, CardHeader, Grid, IconButton } from "@mui/material";
 import { podcastPlatforms, SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
 import { useI18n } from "../context/i18n";
 import Head from "next/head";
-import { Banner, CTA } from "../components/banner";
+import { Banner } from "../components/banner";
 import { FeaturedNewsLetters, getNewsLetters, NewsLetter } from "./newsletters";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { Section } from "../components/section";
-import { parseStringPromise } from "xml2js";
-import { getPodcastEpisodes, PodcastEpisode } from "./podcast";
+import { getPodcastEpisodes, PodcastEpisode } from "./podcast/[[...episode-id]]";
+
 interface HomeProps {
   newsLetters: NewsLetter[];
   podcast: PodcastEpisode;
