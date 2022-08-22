@@ -35,7 +35,7 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcast }) => {
       />
       <Section id="podcast"
         title="Podcast 最新單集"
-        actions={podcastPlatforms.map(p => ({ text: p.name, url: p.link }))}
+        actions={[{ text: '更多單集', url: '/podcast' }]}
       >
         <iframe src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${podcast.id}`}
           style={{

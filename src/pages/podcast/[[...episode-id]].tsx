@@ -3,7 +3,7 @@ import { Layout } from "../../components/layout";
 import { useI18n } from "../../context/i18n";
 import { Banner } from "../../components/banner";
 import { parseStringPromise } from "xml2js";
-import { ListItem, ListItemButton, ListItemText } from "@mui/material";
+import { ListItem, ListItemButton, ListItemText, Typography } from "@mui/material";
 import { Section } from "../../components/section";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -13,6 +13,7 @@ import Error from "next/error";
 export type PodcastEpisode = {
   id: string,
   title: string,
+  description: string,
 }
 
 export const getPodcastEpisodes = async (): Promise<PodcastEpisode[]> => {
@@ -22,6 +23,7 @@ export const getPodcastEpisodes = async (): Promise<PodcastEpisode[]> => {
   return xml.rss.channel[0].item.map((item: any) => ({
     id: item.guid[0]['_'],
     title: item.title[0],
+    description: item['content:encoded'][0],
   }));
 }
 
@@ -63,6 +65,9 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ episodes }) => {
             borderRadius: "4px",
             boxShadow: "0 1px 8px rgba(0, 0, 0, .2)",
           }} />
+        <div dangerouslySetInnerHTML={(() => ({ __html: episode.description }))()} />
+      </Section>
+      <Section id="podcast2" title="其他單集" >
         {episodes.map(episode => (
           <ListItem key={episode.id} component="div" disablePadding>
             <ListItemButton
