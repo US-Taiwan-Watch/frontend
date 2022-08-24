@@ -10,6 +10,8 @@ import Head from "next/head";
 import { podcastPlatforms } from "../../components/social-media";
 import Error from "next/error";
 
+const EPISODE_PATH = 'ep';
+
 export type PodcastEpisode = {
   id: string,
   title: string,
@@ -34,7 +36,7 @@ type PodcastPageProps = {
 const PodcastPage: NextPage<PodcastPageProps> = ({ episodes }) => {
   const { i18n } = useI18n();
   const router = useRouter();
-  const episodeID = router.query['episode-id'] ? router.query['episode-id'][0] : episodes[0].id;
+  const episodeID = router.query['episode-id'] ? router.query['episode-id'][1] : episodes[0].id;
   const isIndex = router.query['episode-id'] ? false : true;
   const episode = episodes.find(e => e.id === episodeID);
   if (!episode) {
@@ -53,7 +55,12 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ episodes }) => {
       <Banner
         title={'觀測站底加辣'}
         subtitle={i18n.strings.social.podcast}
-        actions={podcastPlatforms.map(p => ({ text: p.name, url: p.link }))}
+        actions={podcastPlatforms.map(p => ({
+          text: p.name,
+          url: p.link,
+          startIcon: p.icon,
+          buttonProps: { sx: { textTransform: 'none' } },
+        }))}
       />
       <Section id="podcast" title="播放單集" >
         <iframe src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${episodeID}`}
@@ -72,7 +79,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ episodes }) => {
           <ListItem key={episode.id} component="div" disablePadding>
             <ListItemButton
               selected={episode.id === episodeID}
-              onClick={() => router.push(episode.id, undefined, { shallow: true })}>
+              onClick={() => router.push(`${EPISODE_PATH}/${episode.id}`, undefined, { shallow: true })}>
               <ListItemText primary={episode.title} />
             </ListItemButton>
           </ListItem>
@@ -97,10 +104,10 @@ export const getStaticProps: GetStaticProps<PodcastPageProps> = async ({ params 
   }
   const episodeID = params['episode-id'];
   const episodes = await getPodcastEpisodes();
-  if (episodeID && episodeID.length !== 1) {
+  if (episodeID && (episodeID.length !== 2 || episodeID[0] !== EPISODE_PATH)) {
     return { notFound: true };
   }
-  if (episodeID && !episodes.find(e => e.id === episodeID[0])) {
+  if (episodeID && !episodes.find(e => e.id === episodeID[1])) {
     return { notFound: true };
   }
   return {
