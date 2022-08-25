@@ -25,6 +25,8 @@ export default {
     subscribeButton: 'Subscribe to our newsletter!',
     pastNewsLettersButton: 'View more past issues',
     pastNewsLetters: 'Past issues',
+    latestPodcastEpisode: 'Latest Podcast Episode',
+    moreEpisodeButton: 'Mode Episodes',
   },
   social: {
     fb: 'Facebook is our primary platform through which we aim to strengthen U.S.-Taiwan relations. On Facebook, we debunk misinformation and common myths by providing latest news and thorough analyses of current events and policies in the U.S. and Taiwan.',
@@ -35,6 +37,13 @@ export default {
   },
   newsletter: {
     title: 'Subscribe US Taiwan Watch!'
+  },
+  podcast: {
+    fullName: "US Taiwan Watch - Spice Up",
+    name: "US Taiwan Watch - Spice Up",
+    playLatestEpisode: "Play Latest Episode",
+    playEpisode: "Play Episode",
+    otherEpisodes: "Other Episodes",
   },
   common: {
     cardList: {

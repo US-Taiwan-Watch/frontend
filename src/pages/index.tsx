@@ -15,10 +15,10 @@ import { getPodcastEpisodes, PodcastEpisode } from "./podcast/[[...episode-id]]"
 
 interface HomeProps {
   newsLetters: NewsLetter[];
-  podcast: PodcastEpisode;
+  podcasts: PodcastEpisode[];
 }
 
-const Home: NextPage<HomeProps> = ({ newsLetters, podcast }) => {
+const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
   const { i18n } = useI18n();
   return (
     <Layout>
@@ -34,18 +34,26 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcast }) => {
         actions={[{ text: i18n.strings.header.donate, url: '#donate' }]}
       />
       <Section id="podcast"
-        title="Podcast 最新單集"
-        actions={[{ text: '更多單集', url: '/podcast' }]}
+        title={i18n.strings.landing.latestPodcastEpisode}
+        actions={[{ text: i18n.strings.landing.moreEpisodeButton, url: '/podcast' }]}
       >
-        <iframe src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${podcast.id}`}
-          style={{
-            marginBottom: 20,
-            height: "140px",
-            width: "100%",
-            border: "none",
-            borderRadius: "4px",
-            boxShadow: "0 1px 8px rgba(0, 0, 0, .2)",
-          }} />
+        <Grid container>
+          {podcasts.map((podcast, i) => (
+            <Grid item key={i} lg={6} md={12} sm={12} xs={12} px={1} sx={{
+              display: i == 1 ? { lg: 'block', md: 'none', sm: 'none', xs: 'none' } : {},
+            }}>
+              <iframe src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${podcast.id}`}
+                style={{
+                  marginBottom: 20,
+                  height: "140px",
+                  width: "100%",
+                  border: "none",
+                  borderRadius: "4px",
+                  boxShadow: "0 1px 8px rgba(0, 0, 0, .2)",
+                }} />
+            </Grid>
+          ))}
+        </Grid>
       </Section>
       <Section id="about"
         title={i18n.strings.header.about}
@@ -161,7 +169,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   return {
     props: {
       newsLetters: letters.slice(0, 4),
-      podcast: podcasts[0],
+      podcasts: [podcasts[0], podcasts[1]],
     },
     revalidate: 300, // In seconds
   }

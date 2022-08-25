@@ -25,6 +25,8 @@ export default {
     subscribeButton: '訂閱電子報',
     pastNewsLettersButton: '看更多期',
     pastNewsLetters: '已發行期數',
+    latestPodcastEpisode: '最新 Podcast 單集',
+    moreEpisodeButton: '更多單集',
   },
   social: {
     fb: 'Facebook 是觀測站觀測站最主要的資訊平台，透過新聞報導與深度分析等長篇文章，在破解謠言以及深化台美關係上盡一份心力。',
@@ -35,6 +37,13 @@ export default {
   },
   newsletter: {
     title: '訂閱 US Taiwan Watch: 美國台灣觀測站！'
+  },
+  podcast: {
+    fullName: "美國台灣觀測站：觀測站底加辣",
+    name: "觀測站底加辣",
+    playLatestEpisode: "播放最新單集",
+    playEpisode: "播放單集",
+    otherEpisodes: "其他單集",
   },
   common: {
     cardList: {

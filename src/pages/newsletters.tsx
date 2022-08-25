@@ -58,7 +58,7 @@ const NewsLetterPage: NextPage<NewsLetterPageProps> = ({ newsletters }) => {
   return (
     <Layout>
       <Head>
-        <title>{i18n.strings.newsletter.title}</title>
+        <title>{i18n.strings.header.subscribe} - {i18n.strings.brand.fullName}</title>
         <meta property="og:title" content={i18n.strings.newsletter.title} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL + pathname} />

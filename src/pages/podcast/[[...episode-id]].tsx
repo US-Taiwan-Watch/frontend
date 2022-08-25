@@ -42,18 +42,21 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ episodes }) => {
   if (!episode) {
     return <Error statusCode={404} />
   }
+  const title = `${isIndex ? i18n.strings.podcast.name : episode.title} - ${i18n.strings.brand.fullName}`;
+  const desc = isIndex ? i18n.strings.social.podcast : episode.description;
 
   return (
     <Layout>
       <Head>
-        <title>{`${isIndex ? '觀測站底加辣' : episode.title} - ${i18n.strings.brand.fullName}`}</title>
-        <meta property="og:title" content={i18n.strings.newsletter.title} />
+        <title>{title}</title>
+        <meta property="og:title" content={title} />
         <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://static.ustw.watch/public-image/website/podcast.jpg" />
         <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL + router.pathname} />
-        <meta property="og:description" content={i18n.strings.landing.subscribeDesc} />
+        <meta property="og:description" content={desc} />
       </Head>
       <Banner
-        title={'觀測站底加辣'}
+        title={i18n.strings.podcast.fullName}
         subtitle={i18n.strings.social.podcast}
         actions={podcastPlatforms.map(p => ({
           text: p.name,
@@ -62,7 +65,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ episodes }) => {
           buttonProps: { sx: { textTransform: 'none' } },
         }))}
       />
-      <Section id="podcast" title="播放單集" >
+      <Section id="podcast" title={isIndex ? i18n.strings.podcast.playLatestEpisode : i18n.strings.podcast.playEpisode} >
         <iframe src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${episodeID}`}
           style={{
             marginBottom: 20,
@@ -74,7 +77,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ episodes }) => {
           }} />
         <div dangerouslySetInnerHTML={(() => ({ __html: episode.description }))()} />
       </Section>
-      <Section id="podcast2" title="其他單集" >
+      <Section id="podcast2" title={i18n.strings.podcast.otherEpisodes} >
         {episodes.map(episode => (
           <ListItem key={episode.id} component="div" disablePadding>
             <ListItemButton
