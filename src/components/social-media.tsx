@@ -44,6 +44,11 @@ export const socialMedias: SocialMedia[] = [
 
 export const podcastPlatforms = [
   {
+    name: 'SoundOn',
+    icon: <img src="/assets/logo-soundon.jpg" style={{ height: "20px", borderRadius: "50%" }} />,
+    link: "https://player.soundon.fm/p/6cdfccc6-7c47-4c35-8352-7f634b1b6f71"
+  },
+  {
     name: 'Spotify',
     icon: <IconSpotify />,
     link: "https://open.spotify.com/show/5CnwG4Tfr7YaQ42FETAI5t?si=S_h7O6X6QLOnkUpr03ZGNA&nd=1"
@@ -52,11 +57,6 @@ export const podcastPlatforms = [
     name: 'Apple Podcasts',
     icon: <IconApplePodcasts />,
     link: "https://podcasts.apple.com/us/podcast/%E7%BE%8E%E5%9C%8B%E5%8F%B0%E7%81%A3%E8%A7%80%E6%B8%AC%E7%AB%99/id1508245836"
-  },
-  {
-    name: 'SoundOn',
-    icon: <img src="/assets/logo-soundon.jpg" style={{ height: "20px", borderRadius: "50%" }} />,
-    link: "https://player.soundon.fm/p/6cdfccc6-7c47-4c35-8352-7f634b1b6f71"
   },
 ];
 

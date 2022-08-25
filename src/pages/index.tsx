@@ -27,6 +27,7 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
         <meta property="og:type" content="website" />
         <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL} />
         <meta property="og:description" content={i18n.strings.landing.aboutDesc} />
+        <meta property="og:image" content={Constants.ogImage} />
       </Head>
       <Banner
         title={i18n.strings.brand.fullName}

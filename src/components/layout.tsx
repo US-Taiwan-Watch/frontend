@@ -10,7 +10,6 @@ export const Layout: React.FC = ({ children }) => {
       <Head>
         <title>{i18n.strings.brand.fullName}</title>
         <meta property="og:site_name" content={i18n.strings.brand.fullName} />
-        <meta property="og:image" content="https://static.ustw.watch/public-image/website/preview.png" />
       </Head>
 
       <Header />
