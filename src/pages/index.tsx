@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import { Link } from "../components/link";
 import { Layout } from "../components/layout";
 import { Box, Card, CardActionArea, CardContent, CardHeader, Grid, IconButton } from "@mui/material";
-import { SocialMediaIcon, socialMedias } from "../components/social-media";
+import { podcastPlatforms, SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
 import { useI18n } from "../context/i18n";
 import Head from "next/head";
@@ -11,12 +11,14 @@ import { Banner } from "../components/banner";
 import { FeaturedNewsLetters, getNewsLetters, NewsLetter } from "./newsletters";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { Section } from "../components/section";
+import { getPodcastEpisodes, PodcastEpisode } from "./podcast/[[...episode-id]]";
 
 interface HomeProps {
   newsLetters: NewsLetter[];
+  podcasts: PodcastEpisode[];
 }
 
-const Home: NextPage<HomeProps> = ({ newsLetters }) => {
+const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
   const { i18n } = useI18n();
   return (
     <Layout>
@@ -37,6 +39,58 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
         description={i18n.strings.landing.aboutDesc}
         right={<img src="/assets/watch.png" width="70%" />}
       />
+      <Section id="podcast"
+        title={i18n.strings.landing.latestPodcastEpisode}
+        description={i18n.strings.social.podcast}
+        actions={[{ text: i18n.strings.landing.moreEpisodeButton, url: '/podcast' }]}
+      >
+        <Grid container>
+          {podcasts.map((podcast, i) => (
+            <Grid item key={i} lg={6} md={12} sm={12} xs={12} px={1} sx={{
+              display: i == 1 ? { lg: 'block', md: 'none', sm: 'none', xs: 'none' } : {},
+            }}>
+              <iframe src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${podcast.id}`}
+                style={{
+                  marginBottom: 20,
+                  height: "140px",
+                  width: "100%",
+                  border: "none",
+                  borderRadius: "4px",
+                  boxShadow: "0 1px 8px rgba(0, 0, 0, .2)",
+                }} />
+            </Grid>
+          ))}
+        </Grid>
+      </Section>
+      <Section
+        id="subscribe"
+        title={i18n.strings.header.subscribe}
+        description={i18n.strings.landing.subscribeDesc}
+        actions={[{
+          text: i18n.strings.landing.subscribeButton,
+          url: Constants.links.newsletter,
+        }, {
+          text: i18n.strings.landing.pastNewsLettersButton,
+          url: '/newsletters',
+        }]}
+      >
+        <Typography variant="h6" component="h2" >
+          {i18n.strings.landing.pastNewsLetters}
+        </Typography>
+        <Box sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
+          <FeaturedNewsLetters newsLetters={newsLetters.slice(0, 3)} noBreak={true} />
+          <Link href="/newsletters" >
+            <IconButton sx={{ marginLeft: 2, py: 10 }}>
+              <KeyboardDoubleArrowRightIcon />
+            </IconButton>
+          </Link>
+        </Box>
+      </Section>
       <Section id="partners" title={i18n.strings.header.partners}>
         <Grid container spacing={6} alignItems="center" sx={{ py: 3 }}>
           {Constants.partners.map((item, i) => (
@@ -80,35 +134,6 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
           ))}
         </Grid>
       </Section>
-      <Section
-        id="subscribe"
-        title={i18n.strings.header.subscribe}
-        description={i18n.strings.landing.subscribeDesc}
-        actions={[{
-          text: i18n.strings.landing.subscribeButton,
-          url: Constants.links.newsletter,
-        }, {
-          text: i18n.strings.landing.pastNewsLettersButton,
-          url: '/newsletters',
-        }]}
-      >
-        <Typography variant="h6" component="h2" >
-          {i18n.strings.landing.pastNewsLetters}
-        </Typography>
-        <Box sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-        }}>
-          <FeaturedNewsLetters newsLetters={newsLetters.slice(0, 3)} noBreak={true} />
-          <Link href="/newsletters" >
-            <IconButton sx={{ marginLeft: 2, py: 10 }}>
-              <KeyboardDoubleArrowRightIcon />
-            </IconButton>
-          </Link>
-        </Box>
-      </Section>
       <Section id="join"
         title={i18n.strings.header.join}
         description={i18n.strings.landing.joinDesc}
@@ -142,9 +167,11 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const letters = await getNewsLetters();
+  const podcasts = await getPodcastEpisodes();
   return {
     props: {
       newsLetters: letters.slice(0, 4),
+      podcasts: [podcasts[0], podcasts[1]],
     },
     revalidate: 300, // In seconds
   }
