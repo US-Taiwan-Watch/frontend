@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import { Link } from "../components/link";
 import { Layout } from "../components/layout";
 import { Box, Card, CardActionArea, CardContent, CardHeader, Grid, IconButton } from "@mui/material";
-import { podcastPlatforms, SocialMediaIcon, socialMedias } from "../components/social-media";
+import { SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
 import { useI18n } from "../context/i18n";
 import Head from "next/head";
@@ -11,14 +11,12 @@ import { Banner } from "../components/banner";
 import { FeaturedNewsLetters, getNewsLetters, NewsLetter } from "./newsletters";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { Section } from "../components/section";
-import { getPodcastEpisodes, PodcastEpisode } from "./podcast/[[...episode-id]]";
 
 interface HomeProps {
   newsLetters: NewsLetter[];
-  podcasts: PodcastEpisode[];
 }
 
-const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
+const Home: NextPage<HomeProps> = ({ newsLetters }) => {
   const { i18n } = useI18n();
   return (
     <Layout>
@@ -33,28 +31,6 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
         subtitle={i18n.strings.header.subtitle}
         actions={[{ text: i18n.strings.header.donate, url: '#donate' }]}
       />
-      <Section id="podcast"
-        title={i18n.strings.landing.latestPodcastEpisode}
-        actions={[{ text: i18n.strings.landing.moreEpisodeButton, url: '/podcast' }]}
-      >
-        <Grid container>
-          {podcasts.map((podcast, i) => (
-            <Grid item key={i} lg={6} md={12} sm={12} xs={12} px={1} sx={{
-              display: i == 1 ? { lg: 'block', md: 'none', sm: 'none', xs: 'none' } : {},
-            }}>
-              <iframe src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${podcast.id}`}
-                style={{
-                  marginBottom: 20,
-                  height: "140px",
-                  width: "100%",
-                  border: "none",
-                  borderRadius: "4px",
-                  boxShadow: "0 1px 8px rgba(0, 0, 0, .2)",
-                }} />
-            </Grid>
-          ))}
-        </Grid>
-      </Section>
       <Section id="about"
         title={i18n.strings.header.about}
         description={i18n.strings.landing.aboutDesc}
@@ -165,11 +141,9 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const letters = await getNewsLetters();
-  const podcasts = await getPodcastEpisodes();
   return {
     props: {
       newsLetters: letters.slice(0, 4),
-      podcasts: [podcasts[0], podcasts[1]],
     },
     revalidate: 300, // In seconds
   }
