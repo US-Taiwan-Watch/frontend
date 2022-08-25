@@ -34,8 +34,14 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
         subtitle={i18n.strings.header.subtitle}
         actions={[{ text: i18n.strings.header.donate, url: '#donate' }]}
       />
+      <Section id="about"
+        title={i18n.strings.header.about}
+        description={i18n.strings.landing.aboutDesc}
+        right={<img src="/assets/watch.png" width="70%" />}
+      />
       <Section id="podcast"
         title={i18n.strings.landing.latestPodcastEpisode}
+        description={i18n.strings.social.podcast}
         actions={[{ text: i18n.strings.landing.moreEpisodeButton, url: '/podcast' }]}
       >
         <Grid container>
@@ -56,11 +62,35 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
           ))}
         </Grid>
       </Section>
-      <Section id="about"
-        title={i18n.strings.header.about}
-        description={i18n.strings.landing.aboutDesc}
-        right={<img src="/assets/watch.png" width="70%" />}
-      />
+      <Section
+        id="subscribe"
+        title={i18n.strings.header.subscribe}
+        description={i18n.strings.landing.subscribeDesc}
+        actions={[{
+          text: i18n.strings.landing.subscribeButton,
+          url: Constants.links.newsletter,
+        }, {
+          text: i18n.strings.landing.pastNewsLettersButton,
+          url: '/newsletters',
+        }]}
+      >
+        <Typography variant="h6" component="h2" >
+          {i18n.strings.landing.pastNewsLetters}
+        </Typography>
+        <Box sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
+          <FeaturedNewsLetters newsLetters={newsLetters.slice(0, 3)} noBreak={true} />
+          <Link href="/newsletters" >
+            <IconButton sx={{ marginLeft: 2, py: 10 }}>
+              <KeyboardDoubleArrowRightIcon />
+            </IconButton>
+          </Link>
+        </Box>
+      </Section>
       <Section id="partners" title={i18n.strings.header.partners}>
         <Grid container spacing={6} alignItems="center" sx={{ py: 3 }}>
           {Constants.partners.map((item, i) => (
@@ -103,35 +133,6 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
             </Grid>
           ))}
         </Grid>
-      </Section>
-      <Section
-        id="subscribe"
-        title={i18n.strings.header.subscribe}
-        description={i18n.strings.landing.subscribeDesc}
-        actions={[{
-          text: i18n.strings.landing.subscribeButton,
-          url: Constants.links.newsletter,
-        }, {
-          text: i18n.strings.landing.pastNewsLettersButton,
-          url: '/newsletters',
-        }]}
-      >
-        <Typography variant="h6" component="h2" >
-          {i18n.strings.landing.pastNewsLetters}
-        </Typography>
-        <Box sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-        }}>
-          <FeaturedNewsLetters newsLetters={newsLetters.slice(0, 3)} noBreak={true} />
-          <Link href="/newsletters" >
-            <IconButton sx={{ marginLeft: 2, py: 10 }}>
-              <KeyboardDoubleArrowRightIcon />
-            </IconButton>
-          </Link>
-        </Box>
       </Section>
       <Section id="join"
         title={i18n.strings.header.join}
