@@ -16,6 +16,7 @@ export type PodcastEpisode = {
   id: string,
   title: string,
   description: string,
+  encodedDesc: string,
 }
 
 export const getPodcastEpisodes = async (): Promise<PodcastEpisode[]> => {
@@ -25,7 +26,8 @@ export const getPodcastEpisodes = async (): Promise<PodcastEpisode[]> => {
   return xml.rss.channel[0].item.map((item: any) => ({
     id: item.guid[0]['_'],
     title: item.title[0],
-    description: item['content:encoded'][0],
+    description: item.description[0],
+    encodedDesc: item['content:encoded'][0],
   }));
 }
 
@@ -54,6 +56,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ episodes }) => {
         <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL + router.asPath} />
         <meta property="og:description" content={desc} />
         <meta property="og:image" content="https://static.ustw.watch/public-image/website/podcast.jpg" />
+        <meta property="og:image:alt" content={title} />
       </Head>
       <Banner
         title={i18n.strings.podcast.fullName}
@@ -75,7 +78,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ episodes }) => {
             borderRadius: "4px",
             boxShadow: "0 1px 8px rgba(0, 0, 0, .2)",
           }} />
-        <div dangerouslySetInnerHTML={(() => ({ __html: episode.description }))()} />
+        <div dangerouslySetInnerHTML={(() => ({ __html: episode.encodedDesc }))()} />
       </Section>
       <Section id="podcast2" title={i18n.strings.podcast.otherEpisodes} >
         {episodes.map(episode => (
