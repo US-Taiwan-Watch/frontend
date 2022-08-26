@@ -39,6 +39,17 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
         description={i18n.strings.landing.aboutDesc}
         right={<img src="/assets/watch.png" width="70%" />}
       />
+      <Section id="partners" title={i18n.strings.header.partners}>
+        <Grid container spacing={6} alignItems="center" sx={{ py: 3 }}>
+          {Constants.partners.map((item, i) => (
+            <Grid item key={'partner' + i} xs={6} sm={4} md={3}>
+              <Link href={item.link} target="_blank">
+                <img src={item.logo} alt={item.name} width="100%" />
+              </Link>
+            </Grid>
+          ))}
+        </Grid>
+      </Section>
       <Section id="podcast"
         title={i18n.strings.landing.latestPodcastEpisode}
         description={i18n.strings.social.podcast}
@@ -90,17 +101,6 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
             </IconButton>
           </Link>
         </Box>
-      </Section>
-      <Section id="partners" title={i18n.strings.header.partners}>
-        <Grid container spacing={6} alignItems="center" sx={{ py: 3 }}>
-          {Constants.partners.map((item, i) => (
-            <Grid item key={'partner' + i} xs={6} sm={4} md={3}>
-              <Link href={item.link} target="_blank">
-                <img src={item.logo} alt={item.name} width="100%" />
-              </Link>
-            </Grid>
-          ))}
-        </Grid>
       </Section>
       <Section id="follow" title={i18n.strings.header.follow}>
         <Grid container spacing={5} alignItems="stretch">

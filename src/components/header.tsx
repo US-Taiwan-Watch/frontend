@@ -10,6 +10,7 @@ import { ColorModeContext } from "../pages/_app";
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import { useUserRole } from "../context/user-role";
+import { useRouter } from "next/router";
 
 export interface IHeaderProps {
   user?: IUser;
@@ -26,10 +27,13 @@ const NavLink: React.FC<LinkProps> = (props) => (
 
 export const Header: React.FC = () => {
   const { i18n } = useI18n();
-  const { user, loading } = useFetchUser();
+  const { loading } = useFetchUser();
+  const { pathname } = useRouter();
   const { isAdmin, isEditor } = useUserRole();
   const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
+  const isHome = pathname === '/';
+
   return (
     <Toolbar sx={{ flexWrap: 'wrap', alignItems: 'center' }}>
       <Box sx={{
@@ -55,18 +59,25 @@ export const Header: React.FC = () => {
         <NavLink href="/#about">
           {i18n.strings.header.about}
         </NavLink>
+        {isHome && <>
         <NavLink href="/#partners">
-          {i18n.strings.header.partners}
+            {i18n.strings.header.partners}
+          </NavLink>
+        </>}
+        <NavLink href={isHome ? "/#podcast" : '/podcast'}>
+          {i18n.strings.header.podcast}
         </NavLink>
-        <NavLink href="/#follow">
-          {i18n.strings.header.follow}
-        </NavLink>
-        <NavLink href="/#subscribe">
+        <NavLink href={isHome ? "/#subscribe" : '/newsletters'}>
           {i18n.strings.header.subscribe}
         </NavLink>
+        {isHome && <>
+        <NavLink href="/#follow">
+          {i18n.strings.header.follow}
+          </NavLink>
         <NavLink href="/#join">
           {i18n.strings.header.join}
-        </NavLink>
+          </NavLink>
+        </>}
         <NavLink href="/#donate">
           <Button variant="contained">
             {i18n.strings.header.donate}

@@ -10,6 +10,7 @@ export default {
     join: 'Join Us',
     donate: 'Support Us',
     subscribe: 'Subscribe',
+    podcast: 'Podcast',
   },
   landing: {
     testI18n: "I18n - 中文內容",

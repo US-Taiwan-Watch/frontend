@@ -53,7 +53,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ episodes }) => {
         <title>{title}</title>
         <meta property="og:title" content={title} />
         <meta property="og:type" content={isIndex ? 'music.album' : 'music.song'} />
-        <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL + router.asPath} />
+        <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL + router.asPath.replace(/[#|?].*$/, '')} />
         <meta property="og:description" content={desc} />
         <meta property="og:image" content="https://static.ustw.watch/public-image/website/podcast.jpg" />
         <meta property="og:image:alt" content={title} />
