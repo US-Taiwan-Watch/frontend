@@ -15,7 +15,7 @@ import { UserRoleProvider } from "../context/user-role";
 import { LicenseInfo } from "@mui/x-license-pro";
 
 // Material UI X-Pro license  
-const licenseKey = process.env.MUI_X_LICENSE_KEY;
+const licenseKey = process.env.NEXT_PUBLIC_MUI_X_LICENSE_KEY;
 if (licenseKey) {
   LicenseInfo.setLicenseKey(licenseKey);
 }
