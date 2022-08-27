@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme: USTWTheme) =>
   createStyles({
     root: {
       padding: theme.spacing(2),
-      "& a": {
-        color: theme.color.white[200],
-      },
+      // "& a": {
+      //   color: theme.color.white[200],
+      // },
       "& blockquote": {
         marginTop: "0px !important",
         marginBottom: "0px !important",
@@ -48,9 +48,9 @@ const useStyles = makeStyles((theme: USTWTheme) =>
         fontWeight: "normal",
       },
     },
-    withBorder: {
-      border: `1px solid ${theme.color.white[100]}`,
-    },
+    // withBorder: {
+    //   border: `1px solid ${theme.color.white[100]}`,
+    // },
     drawer: {
       "&, & > *": {
         zIndex: `1201 !important`,

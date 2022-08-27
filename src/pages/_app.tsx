@@ -1,10 +1,9 @@
 import * as React from "react";
 import Head from "next/head";
 import { AppProps } from "next/app";
-import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider, EmotionCache } from "@emotion/react";
-import { darkTheme, lightTheme } from "../styles/theme";
+import { darkPalette, lightPalette } from "../styles/theme";
 import { createEmotionCache } from "../utils/create-emotion-cache";
 import "../styles/global.scss";
 import { I18nProvider } from "../context/i18n";
@@ -14,6 +13,37 @@ import { useMediaQuery } from "@mui/material";
 import { UserRoleProvider } from "../context/user-role";
 import { LicenseInfo } from "@mui/x-license-pro";
 import { useRouter } from "next/router";
+import { createGenerateClassName } from '@material-ui/core/styles';
+import { createMuiTheme as createThemeV4 } from '@material-ui/core/styles';
+import { createTheme as createThemeV5 } from '@mui/material/styles';
+import { ThemeProvider as ThemeProviderV5 } from '@mui/material/styles';
+import { ThemeProvider as ThemeProviderV4, StylesProvider } from '@material-ui/core/styles';
+
+// Fix the glitches on react-page according to: https://react-page.github.io/beta/docs/#/quick-start?id=using-material-ui-4-in-parallel
+const themeV4Light = createThemeV4({
+  palette: lightPalette,
+});
+
+const themeV4Dark = createThemeV4({
+  palette: darkPalette,
+});
+
+const themeV5Light = createThemeV5({
+  palette: themeV4Light.palette,
+});
+
+const themeV5Dark = createThemeV5({
+  palette: themeV4Dark.palette,
+});
+
+const generateClassName = createGenerateClassName({
+  // By enabling this option, if you have non-MUI elements (e.g. `<div />`)
+  // using MUI classes (e.g. `.MuiButton`) they will lose styles.
+  // Make sure to convert them to use `styled()` or `<Box />` first.
+  disableGlobal: true,
+  // Class names will receive this seed to avoid name collisions.
+  seed: 'mui-jss',
+});
 
 // Material UI X-Pro license  
 const licenseKey = process.env.NEXT_PUBLIC_MUI_X_LICENSE_KEY;
@@ -43,8 +73,12 @@ export default function MyApp(props: MyAppProps) {
   );
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const theme = React.useMemo(
-    () => darkMode ? darkTheme : lightTheme,
+  const themeV4 = React.useMemo(
+    () => darkMode ? themeV4Dark : themeV4Light,
+    [darkMode],
+  );
+  const themeV5 = React.useMemo(
+    () => darkMode ? themeV5Dark : themeV5Light,
     [darkMode],
   );
   const router = useRouter();
@@ -75,13 +109,17 @@ export default function MyApp(props: MyAppProps) {
         {loading ? <div>Loading</div> :
           <ApolloProvider client={client}>
             <UserRoleProvider>
-              <ThemeProvider theme={theme}>
-                <I18nProvider>
-                  {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                  <CssBaseline />
-                  <Component {...pageProps} />
-                </I18nProvider>
-              </ThemeProvider>
+              <StylesProvider generateClassName={generateClassName}>
+                <ThemeProviderV4 theme={themeV4}>
+                  <ThemeProviderV5 theme={themeV5}>
+                    <I18nProvider>
+                      {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                      <CssBaseline />
+                      <Component {...pageProps} />
+                    </I18nProvider>
+                  </ThemeProviderV5>
+                </ThemeProviderV4>
+              </StylesProvider>
             </UserRoleProvider>
           </ApolloProvider>}
       </CacheProvider>

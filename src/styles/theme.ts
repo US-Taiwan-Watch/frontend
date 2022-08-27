@@ -102,7 +102,7 @@ interface USTWThemeOptions extends ThemeOptions, USTWThemeColor {
   meetings: MeetingTheme;
 }
 
-const darkPalette: PaletteOptions = {
+export const darkPalette: PaletteOptions = {
   mode: "dark",
   // text: {
   //   primary: color.yellow[200],
@@ -129,7 +129,7 @@ const darkPalette: PaletteOptions = {
   },
 }
 
-const lightPalette: PaletteOptions = {
+export const lightPalette: PaletteOptions = {
   mode: "light",
   // text: {
   //   primary: color.blueGrey[200],
