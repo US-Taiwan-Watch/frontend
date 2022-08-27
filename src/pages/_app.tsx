@@ -11,9 +11,15 @@ import { I18nProvider } from "../context/i18n";
 import { useInitApolloClient } from "../lib/with-apollo";
 import { ApolloProvider } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
-import { UserRoleContext, UserRoleProvider } from "../context/user-role";
+import { UserRoleProvider } from "../context/user-role";
+import { LicenseInfo } from "@mui/x-license-pro";
 import { useRouter } from "next/router";
 
+// Material UI X-Pro license  
+const licenseKey = process.env.MUI_X_LICENSE_KEY;
+if (licenseKey) {
+  LicenseInfo.setLicenseKey(licenseKey);
+}
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -67,16 +73,16 @@ export default function MyApp(props: MyAppProps) {
         </Head>
         {/* Build a better loading page */}
         {loading ? <div>Loading</div> :
-        <ApolloProvider client={client}>
-          <UserRoleProvider>
-            <ThemeProvider theme={theme}>
-              <I18nProvider>
-                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                <CssBaseline />
-                <Component {...pageProps} />
-              </I18nProvider>
-            </ThemeProvider>
-          </UserRoleProvider>
+          <ApolloProvider client={client}>
+            <UserRoleProvider>
+              <ThemeProvider theme={theme}>
+                <I18nProvider>
+                  {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                  <CssBaseline />
+                  <Component {...pageProps} />
+                </I18nProvider>
+              </ThemeProvider>
+            </UserRoleProvider>
           </ApolloProvider>}
       </CacheProvider>
     </ColorModeContext.Provider>
