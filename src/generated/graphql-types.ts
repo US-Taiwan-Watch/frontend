@@ -14,12 +14,16 @@ export type Scalars = {
 
 export type Article = {
   __typename?: 'Article';
-  author?: Maybe<Array<Scalars['String']>>;
+  authors?: Maybe<Array<Scalars['String']>>;
   content?: Maybe<Scalars['String']>;
+  createdTime?: Maybe<Scalars['Float']>;
   id: Scalars['String'];
   imageSource?: Maybe<Scalars['String']>;
-  pusblishTime?: Maybe<Scalars['String']>;
-  status?: Maybe<Scalars['String']>;
+  isPublished?: Maybe<Scalars['Boolean']>;
+  lastModifiedTime?: Maybe<Scalars['Float']>;
+  preview?: Maybe<Scalars['String']>;
+  pusblishTime?: Maybe<Scalars['Float']>;
+  slug?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Scalars['String']>>;
   title?: Maybe<Scalars['String']>;
 };
@@ -100,10 +104,12 @@ export type Mutation = {
 
 
 export type MutationAddArticleArgs = {
-  author?: InputMaybe<Array<Scalars['String']>>;
+  authors?: InputMaybe<Array<Scalars['String']>>;
   content?: InputMaybe<Scalars['String']>;
   imageSource?: InputMaybe<Scalars['String']>;
-  status?: InputMaybe<Scalars['String']>;
+  isPublished?: InputMaybe<Scalars['Boolean']>;
+  preview?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
   title?: InputMaybe<Scalars['String']>;
 };
@@ -132,11 +138,13 @@ export type MutationEmitUserEventArgs = {
 
 
 export type MutationUpdateArticleWithIdArgs = {
-  author?: InputMaybe<Array<Scalars['String']>>;
+  authors?: InputMaybe<Array<Scalars['String']>>;
   content?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
   imageSource?: InputMaybe<Scalars['String']>;
-  status?: InputMaybe<Scalars['String']>;
+  isPublished?: InputMaybe<Scalars['Boolean']>;
+  preview?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
   title?: InputMaybe<Scalars['String']>;
 };
