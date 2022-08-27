@@ -16,7 +16,7 @@ import { LicenseInfo } from "@mui/x-license-pro";
 import { useRouter } from "next/router";
 
 // Material UI X-Pro license  
-const licenseKey = process.env.MUI_X_LICENSE_KEY;
+const licenseKey = process.env.NEXT_PUBLIC_MUI_X_LICENSE_KEY;
 if (licenseKey) {
   LicenseInfo.setLicenseKey(licenseKey);
 }
