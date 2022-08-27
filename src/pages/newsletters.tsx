@@ -64,6 +64,7 @@ const NewsLetterPage: NextPage<NewsLetterPageProps> = ({ newsletters }) => {
         <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL + pathname} />
         <meta property="og:description" content={i18n.strings.landing.subscribeDesc} />
         <meta property="og:image" content={Constants.ogImage} />
+        <meta property="og:image:alt" content={i18n.strings.brand.fullName} />
       </Head>
       <Banner
         title={i18n.strings.header.subscribe}
