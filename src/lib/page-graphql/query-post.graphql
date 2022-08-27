@@ -1,11 +1,15 @@
-query post($articleId: String!) {
+query Article($articleId: String!) {
   article(id: $articleId) {
     id
     title
     content
-    status
-    author
+    slug
+    preview
+    isPublished
+    authors
     pusblishTime
+    createdTime
+    lastModifiedTime
     imageSource
     tags
   }

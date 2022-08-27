@@ -23,7 +23,7 @@ import { ImUserDocument } from "../../../lib/page-graphql/query-imuser.graphql.i
 import SettingsIcon from '@mui/icons-material/Settings';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Article } from "../../../../common/models";
-import { PostDocument } from "../../../lib/page-graphql/query-post.graphql.interface";
+import { ArticleDocument } from "../../../lib/page-graphql/query-post.graphql.interface";
 import { UpdateArticleWithIdDocument } from "../../../lib/page-graphql/mutation-update-post.graphql.interface";
 
 type PostPageProps = {
@@ -51,7 +51,7 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
     setIsSaving(true);
     apolloClient.mutate({
       mutation: UpdateArticleWithIdDocument,
-      variables: { updateArticleWithIdId: post.id, ...savedPost },
+      variables: { updateArticleWithIdId: post.id, ...updatedPost },
       fetchPolicy: "network-only",
     }).then(res => {
       if (res.data?.updateArticleWithId?.id === post.id) {
@@ -60,35 +60,32 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
     }).catch(err => {
       console.error("Failed to save")
     }).finally(() => setIsSaving(false));
-
   }
 
   const publishPost = () => {
     // TODO: publish
   }
+
   return (
     <Container>
       <Dialog fullWidth open={showSettings} onClose={() => setShowSettings(false)}>
         <DialogTitle>Settings</DialogTitle>
         <DialogContent>
           <TextField
-            autoFocus
-            margin="dense"
-            id="slug"
+            autoFocus fullWidth margin="dense" variant="standard"
             label="Post URL"
-            fullWidth
-            variant="standard"
-          // value={post.slug}
+            value={updatedPost.slug}
+            onChange={e => setUpdatedPost({ ...updatedPost, slug: e.target.value })}
           />
           Description:
-          <TextareaAutosize
-            placeholder="Empty"
-            style={{ width: "100%" }}
+          <TextareaAutosize style={{ width: "100%" }}
+            value={updatedPost.preview}
+            onChange={e => setUpdatedPost({ ...updatedPost, preview: e.target.value })}
           />
         </DialogContent>
         <DialogActions>
           <Button startIcon={<DeleteIcon />}>Delete post</Button>
-          <Button>Close</Button>
+          <Button onClick={() => setShowSettings(false)}>Close</Button>
         </DialogActions>
       </Dialog>
       <Dialog
@@ -102,7 +99,7 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {post.status === 'Publish' ?
+            {post.isPublished ?
               'This post is already published! Saving it will update the published post!' :
               'Are you sure to publish it?'}
           </DialogContentText>
@@ -111,7 +108,7 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
           <Button onClick={() => setShowSaveConfirmation(false)} autoFocus>Cancel</Button>
           <Button onClick={() => {
             setShowSaveConfirmation(false);
-            if (post.status !== 'Publish') {
+            if (!post.isPublished) {
               publishPost();
             }
             else {
@@ -127,10 +124,10 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
         paddingTop: 3, display: 'flex', flexDirection: 'row', '& > *': { mx: 1.5 },
       }}>
         <Button variant="outlined" onClick={() => router.back()}>Back</Button>
-        <Button variant="contained" disabled={post.status === 'Publish' && !updated} onClick={() => setShowSaveConfirmation(true)}>
-          {post.status === 'Publish' ? 'Update' : 'Publish'}
+        <Button variant="contained" disabled={post.isPublished && !updated} onClick={() => setShowSaveConfirmation(true)}>
+          {post.isPublished ? 'Update' : 'Publish'}
         </Button>
-        <Typography sx={{ mx: 5 }}>{post.status === 'Publish' ? 'Published' : (isSaving ? 'Saving...' : 'Draft')}</Typography>
+        <Typography sx={{ mx: 5 }}>{post.isPublished ? 'Published' : (isSaving ? 'Saving...' : 'Draft')}</Typography>
         <IconButton onClick={() => setShowSettings(true)}>
           <SettingsIcon />
         </IconButton>
@@ -168,7 +165,7 @@ PostPage.getInitialProps = async ({ req, query, apolloClient }) => {
   // TODO: query real post
   try {
     const res = await apolloClient?.query({
-      query: PostDocument,
+      query: ArticleDocument,
       variables: { articleId: query['post-id'] as string },
       fetchPolicy: "network-only",
     });
@@ -179,9 +176,13 @@ PostPage.getInitialProps = async ({ req, query, apolloClient }) => {
     return {
       post: {
         id: post.id,
-        title: post.title || '(Untitled)',
+        title: post.title || `(Untitled ${new Date(post.createdTime || 0).toLocaleString()})`,
         content: post.content || '',
-        // status: post.status || '',
+        isPublished: post.isPublished || false,
+        lastModifiedTime: post.lastModifiedTime || 0,
+        createdTime: post.createdTime || 0,
+        slug: post.slug || '',
+        preview: post.preview || '',
       }
     };
   } catch (err) {

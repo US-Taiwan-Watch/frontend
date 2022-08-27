@@ -7,31 +7,33 @@ import { useUserRole } from "../../../context/user-role";
 import { Link } from "../../../components/link";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import { PostProps } from "..";
-import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { IconButton } from "@material-ui/core";
 import { NextPageWithApollo, withApollo } from "../../../lib/with-apollo";
 import Error from "next/error";
 import { ImUserDocument } from "../../../lib/page-graphql/query-imuser.graphql.interface";
-import { PostsDocument } from "../../../lib/page-graphql/query-posts.graphql.interface";
+import { AllArticlesDocument } from "../../../lib/page-graphql/query-posts.graphql.interface";
 import { Article } from "../../../../common/models";
 import { useApolloClient } from "@apollo/client";
 import { CreatePostDocument } from "../../../lib/page-graphql/mutation-create-post.graphql.interface";
+import { useState } from "react";
+import { DataGridPro, GridColDef, GridSortModel, GridValueFormatterParams } from "@mui/x-data-grid-pro";
 
 type PostsPageProps = {
   posts?: Article[],
 }
 
+function dateFormatter(params: GridValueFormatterParams<number>): string {
+  const date = new Date(params.value);
+  return new Date().toLocaleDateString() === date.toLocaleDateString() ?
+    date.toLocaleTimeString() : date.toLocaleDateString();
+}
+
 const columns: GridColDef[] = [
   { field: 'title', headerName: 'Title', flex: 10, resizable: true },
-  { field: 'status', headerName: 'Status' },
-  {
-    field: 'lastModified', headerName: 'Last Modified', width: 150, valueFormatter: date => {
-      const lastModDate = new Date(date.value);
-      return new Date().toLocaleDateString() === lastModDate.toLocaleDateString() ?
-        lastModDate.toLocaleTimeString() : lastModDate.toLocaleDateString();
-    }
-  },
+  { field: 'isPublished', headerName: 'Status', valueFormatter: param => param.value === true ? 'Published' : 'Draft' },
+  { field: 'createdTime', headerName: 'Created', width: 150, valueFormatter: dateFormatter, },
+  { field: 'lastModifiedTime', headerName: 'Last Modified', width: 150, valueFormatter: dateFormatter, },
   {
     field: 'actions', headerName: 'Actions', width: 150, sortable: false, renderCell: params => (
       <ButtonGroup>
@@ -52,6 +54,12 @@ const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
   const router = useRouter();
   const { isEditor } = useUserRole();
   const apolloClient = useApolloClient();
+  const [sortModel, setSortModel] = useState<GridSortModel>([
+    {
+      field: 'lastModifiedTime',
+      sort: 'desc',
+    },
+  ]);
   return (
     <Layout>
       <Banner title="管理文章" >
@@ -65,14 +73,12 @@ const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
             router.push(`admin/${res.data?.createEmptyArticle?.id}`);
           }
         })
-      }}><AddCircleIcon /></IconButton>
-      <DataGrid autoHeight={true} columns={columns} rows={posts.map(p => ({
-        id: p.id,
-        title: p.title,
-        status: p.status,
-        // lastModified: p.lastModified,
-        // slug: p.slug,
-      }))} />
+      }}>
+        <AddCircleIcon />
+      </IconButton>
+      <DataGridPro autoHeight={true} columns={columns} rows={posts}
+        sortModel={sortModel}
+        onSortModelChange={(model) => setSortModel(model)} />
     </Layout >
   );
 };
@@ -80,7 +86,7 @@ const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
 PostsPage.getInitialProps = async ({ apolloClient }) => {
   try {
     const data = await apolloClient?.query({
-      query: PostsDocument,
+      query: AllArticlesDocument,
       fetchPolicy: "network-only",
     });
     return {
@@ -88,7 +94,10 @@ PostsPage.getInitialProps = async ({ apolloClient }) => {
         id: post.id,
         title: post.title || '(Untitled)',
         content: post.content || '',
-        // status: post.status || '',
+        isPublished: post.isPublished || false,
+        lastModifiedTime: post.lastModifiedTime || 0,
+        createdTime: post.createdTime || 0,
+        slug: post.slug || '',
       }))
     };
   } catch (err) {

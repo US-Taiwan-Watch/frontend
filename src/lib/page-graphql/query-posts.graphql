@@ -1,11 +1,15 @@
-query posts {
+query AllArticles {
   allArticles {
     id
     title
     content
-    status
-    author
+    slug
+    preview
+    isPublished
+    authors
     pusblishTime
+    createdTime
+    lastModifiedTime
     imageSource
     tags
   }
