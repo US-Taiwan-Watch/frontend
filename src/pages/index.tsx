@@ -1,22 +1,24 @@
 import type { GetStaticProps, NextPage } from "next";
 import Typography from "@mui/material/Typography";
-import { Link, LinkProps } from "../components/link";
+import { Link } from "../components/link";
 import { Layout } from "../components/layout";
-import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Container, Grid, IconButton, Paper } from "@mui/material";
-import { SocialMediaIcon, socialMedias } from "../components/social-media";
+import { Box, Card, CardActionArea, CardContent, CardHeader, Grid, IconButton } from "@mui/material";
+import { podcastPlatforms, SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
 import { useI18n } from "../context/i18n";
 import Head from "next/head";
-import { Banner, CTA } from "../components/banner";
+import { Banner } from "../components/banner";
 import { FeaturedNewsLetters, getNewsLetters, NewsLetter } from "./newsletters";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { Section } from "../components/section";
+import { getPodcastEpisodes, PodcastEpisode } from "./podcast/[[...episode-id]]";
 
 interface HomeProps {
   newsLetters: NewsLetter[];
+  podcasts: PodcastEpisode[];
 }
 
-const Home: NextPage<HomeProps> = ({ newsLetters }) => {
+const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
   const { i18n } = useI18n();
   return (
     <Layout>
@@ -25,6 +27,8 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
         <meta property="og:type" content="website" />
         <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL} />
         <meta property="og:description" content={i18n.strings.landing.aboutDesc} />
+        <meta property="og:image" content={Constants.ogImage} />
+        <meta property="og:image:alt" content={i18n.strings.brand.fullName} />
       </Head>
       <Banner
         title={i18n.strings.brand.fullName}
@@ -47,34 +51,25 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
           ))}
         </Grid>
       </Section>
-      <Section id="follow" title={i18n.strings.header.follow}>
-        <Grid container spacing={5} alignItems="stretch">
-          {socialMedias.map((media) => (
-            <Grid item key={media.name} xs={12} sm={6} md={4}>
-              <Card sx={{ height: '100%' }}>
-                <CardActionArea href={media.link} target="_blank" sx={{ height: '100%' }}>
-                  <CardHeader
-                    avatar={
-                      <SocialMediaIcon type={media.type} />
-                    }
-                    title={media.name}
-                    titleTypographyProps={{
-                      variant: "h6",
-                    }}
-                    subheaderTypographyProps={{
-                      align: 'center',
-                    }}
-                  />
-                  <CardContent>
-                    <Typography
-                      variant="subtitle1"
-                      color="info.dark"
-                    >
-                      {i18n.strings.social[media.type]}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
+      <Section id="podcast"
+        title={i18n.strings.landing.latestPodcastEpisode}
+        description={i18n.strings.social.podcast}
+        actions={[{ text: i18n.strings.landing.moreEpisodeButton, url: '/podcast' }]}
+      >
+        <Grid container>
+          {podcasts.map((podcast, i) => (
+            <Grid item key={i} lg={6} md={12} sm={12} xs={12} px={1} sx={{
+              display: i == 1 ? { lg: 'block', md: 'none', sm: 'none', xs: 'none' } : {},
+            }}>
+              <iframe src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${podcast.id}`}
+                style={{
+                  marginBottom: 20,
+                  height: "140px",
+                  width: "100%",
+                  border: "none",
+                  borderRadius: "4px",
+                  boxShadow: "0 1px 8px rgba(0, 0, 0, .2)",
+                }} />
             </Grid>
           ))}
         </Grid>
@@ -107,6 +102,38 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
             </IconButton>
           </Link>
         </Box>
+      </Section>
+      <Section id="follow" title={i18n.strings.header.follow}>
+        <Grid container spacing={5} alignItems="stretch">
+          {socialMedias.map((media) => (
+            <Grid item key={media.name} xs={12} sm={6} md={4}>
+              <Card sx={{ height: '100%' }}>
+                <CardActionArea href={media.link} target="_blank" sx={{ height: '100%' }}>
+                  <CardHeader
+                    avatar={
+                      <SocialMediaIcon type={media.type} />
+                    }
+                    title={media.name}
+                    titleTypographyProps={{
+                      variant: "h6",
+                    }}
+                    subheaderTypographyProps={{
+                      align: 'center',
+                    }}
+                  />
+                  <CardContent>
+                    <Typography
+                      variant="subtitle1"
+                      color="info.dark"
+                    >
+                      {i18n.strings.social[media.type]}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </Section>
       <Section id="join"
         title={i18n.strings.header.join}
@@ -141,9 +168,11 @@ const Home: NextPage<HomeProps> = ({ newsLetters }) => {
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const letters = await getNewsLetters();
+  const podcasts = await getPodcastEpisodes();
   return {
     props: {
       newsLetters: letters.slice(0, 4),
+      podcasts: [podcasts[0], podcasts[1]],
     },
     revalidate: 300, // In seconds
   }

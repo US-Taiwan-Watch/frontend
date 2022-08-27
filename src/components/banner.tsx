@@ -1,6 +1,8 @@
 import Typography from "@mui/material/Typography";
-import { Box, Button, Grid, Paper } from "@mui/material";
+import { Box, Button, ButtonProps, Grid, Paper } from "@mui/material";
 import { Link } from "./link";
+import { IconApplePodcasts, IconSpotify } from "../styles";
+import { ReactNode } from "react";
 
 export type BannerProps = {
   title: string,
@@ -9,7 +11,9 @@ export type BannerProps = {
 };
 
 export type CTA = {
-  text: string,
+  buttonProps?: ButtonProps,
+  text?: string,
+  startIcon?: ReactNode,
   url: string,
 }
 
@@ -37,7 +41,7 @@ export const Banner: React.FC<BannerProps> = (props) => (
       }}
     />
     <Grid container>
-      <Grid item md={6}>
+      <Grid item md={11}>
         <Box
           sx={{
             position: 'relative',
@@ -52,12 +56,13 @@ export const Banner: React.FC<BannerProps> = (props) => (
             {props.subtitle}
           </Typography>
           {props.actions && props.actions.map((action, i) => (
-            <Link key={i} href={action.url} sx={{ textDecoration: 'none', marginLeft: i > 0 ? 1 : 0 }}>
-              <Button variant="contained" color="secondary">
-                {action.text}
-              </Button>
-            </Link>))
-          }
+            <Box key={i} sx={{ display: 'inline-block' }} marginRight={1} marginTop={1} >
+              <Link key={i} href={action.url} sx={{ textDecoration: 'none' }}>
+                <Button variant="contained" color="secondary" startIcon={action.startIcon} {...action.buttonProps}>
+                  {action.text}
+                </Button>
+              </Link>
+            </Box>))}
           {props.children}
         </Box>
       </Grid>

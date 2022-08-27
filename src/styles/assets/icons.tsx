@@ -50,3 +50,8 @@ export const IconSpotify = (props: SvgIconProps) => (
 export const IconSpotifyBW = (props: SvgIconProps) => (
   <SvgIcon component={SvgIconSpotifyBW} viewBox="0 0 24 24" {...props} />
 );
+
+import SvgIconApplePodcasts from "./icon-apple-podcasts.svg";
+export const IconApplePodcasts = (props: SvgIconProps) => (
+  <SvgIcon component={SvgIconApplePodcasts} viewBox="0 0 300 300" {...props} />
+);
