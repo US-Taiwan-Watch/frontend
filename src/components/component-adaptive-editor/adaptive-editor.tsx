@@ -142,8 +142,8 @@ export const AdaptiveEditor = React.memo<AdaptiveEditorProps>(
     ];
 
     const uiTranslator = React.useCallback(
-      (label: string) => {
-        if (language[label] !== undefined) {
+      (label?: string | null) => {
+        if (label && language[label] !== undefined) {
           return language[label];
         }
         return `${label}(to translate)`;

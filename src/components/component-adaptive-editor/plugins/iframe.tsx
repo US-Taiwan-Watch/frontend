@@ -57,7 +57,7 @@ const ControlHTMLInputField = connectField<TextFieldProps>(
   }
 );
 
-export const iframePlugin: CellPlugin<IFramePluginProps> = {
+export const iframePlugin: CellPlugin<{ encodedHtml: string, src: string, width: string, height: string }> = {
   id: "plugin-iframe",
   title: "i18n_iframe_title",
   description: "i18n_iframe_desc",
