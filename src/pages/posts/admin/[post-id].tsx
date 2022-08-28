@@ -31,6 +31,7 @@ type PostPageProps = {
 }
 
 const Post: React.FC<{ post: Article }> = ({ post }) => {
+  const user = useFetchUser({ required: true });
   const router = useRouter();
   const [showSaveConfirmation, setShowSaveConfirmation] = useState(false);
   const [isSaving, setIsSaving] = useState(false);

@@ -18,6 +18,7 @@ import { useApolloClient } from "@apollo/client";
 import { CreatePostDocument } from "../../../lib/page-graphql/mutation-create-post.graphql.interface";
 import { useState } from "react";
 import { DataGridPro, GridColDef, GridSortModel, GridValueFormatterParams } from "@mui/x-data-grid-pro";
+import { useFetchUser } from "../../../lib/user";
 
 type PostsPageProps = {
   posts?: Article[],
@@ -48,6 +49,7 @@ const columns: GridColDef[] = [
 ];
 
 const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
+  const user = useFetchUser({ required: true });
   if (!posts) {
     return <Error statusCode={404} />
   }
