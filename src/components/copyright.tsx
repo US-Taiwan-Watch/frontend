@@ -11,7 +11,7 @@ const StyledRoot = styled(Box)<CopyrightProps>(({ theme, color }) => ({
   color,
   "&::after": {
     content: '""',
-    color: theme.color.yellow[100],
+    color: theme.palette.secondary.light,
   },
 }));
 

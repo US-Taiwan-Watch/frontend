@@ -898,7 +898,7 @@
 @-webkit-keyframes reactPageCellResizeableAnimate {
   0% {
     background-color: rgba(255, 255, 255, 0.26);
-    background-color: var(--minWhite);
+    background-color: var(--minBlack);
     top: 45%;
     bottom: 45%;
   }
@@ -918,7 +918,7 @@
 @keyframes reactPageCellResizeableAnimate {
   0% {
     background-color: rgba(255, 255, 255, 0.26);
-    background-color: var(--minWhite);
+    background-color: var(--minBlack);
     top: 45%;
     bottom: 45%;
   }
@@ -1007,7 +1007,7 @@
   font-size: 52px;
   font-family: monospace;
   line-height: 52px;
-  background-color: var(--minWhite);
+  background-color: var(--minBlack);
   color: white;
   width: 52px;
   text-align: center;
@@ -1015,7 +1015,7 @@
 }
 .react-page-editable .react-page-cell-insert-new:hover,
 .react-page-editable .react-page-cell-insert-new.hover {
-  background: var(--minWhite);
+  background: var(--minBlack);
   border: 1px solid rgba(255, 255, 255, 0.54);
   border: 1px solid var(--lightWhite);
 }
@@ -1056,7 +1056,7 @@
   width: 2rem;
   height: 2rem;
   cursor: move;
-  background: var(--minWhite);
+  background: var(--minBlack);
   content: "";
   z-index: 500;
 }
@@ -1220,7 +1220,7 @@
   > div
   > div
   > .react-page-cell-draggable-overlay {
-  background: var(--minWhite);
+  background: var(--minBlack);
   border: 1px solid rgba(255, 255, 255, 0.54);
   border: 1px solid var(--lightWhite);
   background-blend-mode: screen;
@@ -1361,7 +1361,7 @@
   max-height: 128px;
   background-color: #e0e0e0;
   background-color: var(--grey300);
-  border: 1px solid var(--minWhite);
+  border: 1px solid var(--minBlack);
 }
 .react-page-cell-droppable-is-over-inline-left:before {
   left: 0;

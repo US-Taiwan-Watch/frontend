@@ -48,9 +48,9 @@ const useStyles = makeStyles((theme: USTWTheme) =>
         fontWeight: "normal",
       },
     },
-    // withBorder: {
-    //   border: `1px solid ${theme.color.white[100]}`,
-    // },
+    withBorder: {
+      // border: `1px solid ${theme.color.white[100]}`,
+    },
     drawer: {
       "&, & > *": {
         zIndex: `1201 !important`,
