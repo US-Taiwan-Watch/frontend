@@ -25,6 +25,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Article } from "../../../../common/models";
 import { ArticleDocument } from "../../../lib/page-graphql/query-post.graphql.interface";
 import { UpdateArticleWithIdDocument } from "../../../lib/page-graphql/mutation-update-post.graphql.interface";
+import LoadingButton from '@mui/lab/LoadingButton';
 
 type PostPageProps = {
   post?: Article,
@@ -32,10 +33,23 @@ type PostPageProps = {
 
 let timeout: NodeJS.Timeout | null = null;
 
+enum Action {
+  PUBLISH = 'Publish',
+  UNPUBLISH = 'Unpublish',
+  UPDATE = 'Update',
+}
+
+const confirmationMessage = {
+  [Action.PUBLISH]: 'You sure to publish?',
+  [Action.UNPUBLISH]: 'You sure to unpublish?',
+  [Action.UPDATE]: 'You sure to update?',
+}
+
 const Post: React.FC<{ post: Article }> = ({ post }) => {
   const user = useFetchUser({ required: true });
   const router = useRouter();
-  const [showSaveConfirmation, setShowSaveConfirmation] = useState(false);
+  const [confirmingAction, setConfirmingAction] = useState<Action | null>(null);
+  const [actioning, setActioning] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const apolloClient = useApolloClient();
@@ -53,9 +67,25 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
 
   const updated = updatedPost !== savedPost;
 
+  const confirmAction = () => {
+    setActioning(true);
+    // TODO: other action based on action
+    const actionResult = savePost();
+
+    actionResult.then(success => {
+      setActioning(false);
+      if (success) {
+        setConfirmingAction(null);
+        return;
+      }
+      // TODO: handle action error
+    })
+    // router.back();
+  }
+
   const savePost = () => {
     setIsSaving(true);
-    apolloClient.mutate({
+    return apolloClient.mutate({
       mutation: UpdateArticleWithIdDocument,
       variables: { updateArticleWithIdId: post.id, ...updatedPost },
       fetchPolicy: "network-only",
@@ -63,8 +93,10 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
       if (res.data?.updateArticleWithId?.id === post.id) {
         setSavedPost(updatedPost);
       }
+      return true;
     }).catch(err => {
       console.error("Failed to save")
+      return false;
     }).finally(() => setIsSaving(false));
   }
 
@@ -95,8 +127,8 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
         </DialogActions>
       </Dialog>
       <Dialog
-        open={showSaveConfirmation}
-        onClose={() => setShowSaveConfirmation(false)}
+        open={confirmingAction !== null}
+        onClose={() => setConfirmingAction(null)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -105,33 +137,23 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {post.isPublished ?
-              'This post is already published! Saving it will update the published post!' :
-              'Are you sure to publish it?'}
+            {confirmingAction && confirmationMessage[confirmingAction]}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowSaveConfirmation(false)} autoFocus>Cancel</Button>
-          <Button onClick={() => {
-            setShowSaveConfirmation(false);
-            if (!post.isPublished) {
-              publishPost();
-            }
-            else {
-              savePost();
-            }
-            router.back();
-          }}>
-            Save
-          </Button>
+          <Button onClick={() => setConfirmingAction(null)} autoFocus>Cancel</Button>
+          <LoadingButton onClick={confirmAction} loading={actioning} loadingPosition="start">{confirmingAction}</LoadingButton>
         </DialogActions>
       </Dialog>
       <Box sx={{
         paddingTop: 3, display: 'flex', flexDirection: 'row', '& > *': { mx: 1.5 },
       }}>
         <Button variant="outlined" onClick={() => router.back()}>Back</Button>
-        <Button variant="contained" disabled={post.isPublished && !updated} onClick={() => setShowSaveConfirmation(true)}>
-          {post.isPublished ? 'Update' : 'Publish'}
+        <Button variant="contained" disabled={post.isPublished} onClick={() => setConfirmingAction(Action.PUBLISH)}>
+          Publish
+        </Button>
+        <Button variant="contained" disabled={!post.isPublished || !updated} onClick={() => setConfirmingAction(Action.UPDATE)}>
+          Update
         </Button>
         <Typography sx={{ mx: 5 }}>{post.isPublished ? 'Published' : (isSaving ? 'Saving...' : 'Draft')}</Typography>
         <IconButton onClick={() => setShowSettings(true)}>
