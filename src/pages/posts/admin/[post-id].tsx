@@ -1,25 +1,12 @@
-import type { GetServerSideProps, GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Typography from "@mui/material/Typography";
-import { Link, LinkProps } from "../../../components/link";
-import { Layout } from "../../../components/layout";
-import { Box, Button, ButtonGroup, Card, CardActionArea, CardContent, CardHeader, CardMedia, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Paper, TextareaAutosize, TextField } from "@mui/material";
-import { SocialMediaIcon, socialMedias } from "../../../components/social-media";
-import { Constants } from "../../../utils/constants";
-import { useI18n } from "../../../context/i18n";
-import Head from "next/head";
-import { Banner } from "../../../components/banner";
-import { useUser } from "@auth0/nextjs-auth0";
-import { IUser, useFetchUser } from "../../../lib/user";
-import { PostProps } from "..";
+import { Backdrop, Box, Button, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, TextareaAutosize, TextField } from "@mui/material";
+import { useFetchUser } from "../../../lib/user";
 import { AdaptiveEditor } from "../../../components/component-adaptive-editor";
-import { useUserRole } from "../../../context/user-role";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { CoPresent } from "@mui/icons-material";
 import Error from "next/error";
 import { useApolloClient } from "@apollo/client";
 import { NextPageWithApollo, withApollo } from "../../../lib/with-apollo";
-import { ImUserDocument } from "../../../lib/page-graphql/query-imuser.graphql.interface";
 import SettingsIcon from '@mui/icons-material/Settings';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Article } from "../../../../common/models";
@@ -39,73 +26,115 @@ enum Action {
   UPDATE = 'Update',
 }
 
+enum State {
+  DRAFT = 'Draft',
+  PUBLISHED = 'Published',
+}
+
+type StateTransition = {
+  currentState: State,
+  action: Action,
+  newState: State,
+}
+
+const stateTransitions: StateTransition[] = [
+  { currentState: State.DRAFT, action: Action.PUBLISH, newState: State.PUBLISHED },
+  { currentState: State.PUBLISHED, action: Action.UNPUBLISH, newState: State.DRAFT },
+  { currentState: State.PUBLISHED, action: Action.UPDATE, newState: State.PUBLISHED },
+];
+
+function getNextState(state: State, action: Action) {
+  return stateTransitions.find(t => t.currentState === state && t.action === action)?.newState;
+}
+
+function getActions(state: State) {
+  return stateTransitions.filter(t => t.currentState === state).map(t => t.action);
+}
+
 const confirmationMessage = {
   [Action.PUBLISH]: 'You sure to publish?',
   [Action.UNPUBLISH]: 'You sure to unpublish?',
   [Action.UPDATE]: 'You sure to update?',
 }
 
+const shallowEqual = (obj1: { [key: string]: any }, obj2: { [key: string]: any }) =>
+  Object.keys(obj1).length === Object.keys(obj2).length &&
+  Object.keys(obj1).every(key => obj1[key] === obj2[key]);
+
 const Post: React.FC<{ post: Article }> = ({ post }) => {
   const user = useFetchUser({ required: true });
   const router = useRouter();
-  const [confirmingAction, setConfirmingAction] = useState<Action | null>(null);
-  const [actioning, setActioning] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   const apolloClient = useApolloClient();
+  const [confirmingAction, setConfirmingAction] = useState<Action | null>(null);
+  const [isActioning, setIsActioning] = useState(false);
+  const [isAutoSaving, setIsAutoSaving] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [savedPost, setSavedPost] = useState(post);
   const [updatedPost, setUpdatedPost] = useState(post);
 
   useEffect(() => {
-    if (updatedPost !== savedPost) {
+    if (state === State.DRAFT && updated && !isActioning) {
       if (timeout) {
         clearTimeout(timeout);
       }
-      timeout = setTimeout(savePost, 500);
+      timeout = setTimeout(() => {
+        setIsAutoSaving(true);
+        savePost(updatedPost).then(suc => setIsAutoSaving(false));
+      }, 500);
     }
-  }, [updatedPost, savedPost]);
+  }, [updatedPost]);
 
-  const updated = updatedPost !== savedPost;
+  const state = savedPost.isPublished ? State.PUBLISHED : State.DRAFT;
+  const updated = !shallowEqual(updatedPost, savedPost);
+  const actions = getActions(state);
 
   const confirmAction = () => {
-    setActioning(true);
-    // TODO: other action based on action
-    const actionResult = savePost();
-
-    actionResult.then(success => {
-      setActioning(false);
+    setIsActioning(true);
+    let updatedPostWithState = updatedPost;
+    // FIXME: should unpublish also update the post?
+    const nextState = confirmingAction && getNextState(state, confirmingAction);
+    if (nextState) {
+      updatedPostWithState.isPublished = nextState === State.PUBLISHED;
+    }
+    savePost(updatedPostWithState).then(success => {
+      setIsActioning(false);
       if (success) {
         setConfirmingAction(null);
+        setIsActioning(false);
+        router.back();
         return;
       }
       // TODO: handle action error
     })
-    // router.back();
   }
 
-  const savePost = () => {
-    setIsSaving(true);
+  const savePost = (postToSave: Article) => {
+    // return new Promise(r => setTimeout(r, 5000)).then(w => true);
     return apolloClient.mutate({
       mutation: UpdateArticleWithIdDocument,
-      variables: { updateArticleWithIdId: post.id, ...updatedPost },
+      variables: { updateArticleWithIdId: postToSave.id, ...postToSave },
       fetchPolicy: "network-only",
     }).then(res => {
-      if (res.data?.updateArticleWithId?.id === post.id) {
-        setSavedPost(updatedPost);
+      if (res.data?.updateArticleWithId?.id !== postToSave.id) {
+        return false;
       }
+      setUpdatedPost(postToSave);
+      setSavedPost(postToSave);
       return true;
     }).catch(err => {
       console.error("Failed to save")
       return false;
-    }).finally(() => setIsSaving(false));
-  }
-
-  const publishPost = () => {
-    // TODO: publish
+    });
   }
 
   return (
     <Container>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isActioning}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Dialog fullWidth open={showSettings} onClose={() => setShowSettings(false)}>
         <DialogTitle>Settings</DialogTitle>
         <DialogContent>
@@ -141,21 +170,24 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setConfirmingAction(null)} autoFocus>Cancel</Button>
-          <LoadingButton onClick={confirmAction} loading={actioning} loadingPosition="start">{confirmingAction}</LoadingButton>
+          <Button onClick={() => setConfirmingAction(null)} autoFocus disabled={isActioning}>Cancel</Button>
+          <LoadingButton onClick={confirmAction} loading={isActioning} loadingPosition="start">{confirmingAction}</LoadingButton>
         </DialogActions>
       </Dialog>
       <Box sx={{
         paddingTop: 3, display: 'flex', flexDirection: 'row', '& > *': { mx: 1.5 },
       }}>
         <Button variant="outlined" onClick={() => router.back()}>Back</Button>
-        <Button variant="contained" disabled={post.isPublished} onClick={() => setConfirmingAction(Action.PUBLISH)}>
+        <Button variant="contained" disabled={!actions.includes(Action.PUBLISH)} onClick={() => setConfirmingAction(Action.PUBLISH)}>
           Publish
         </Button>
-        <Button variant="contained" disabled={!post.isPublished || !updated} onClick={() => setConfirmingAction(Action.UPDATE)}>
+        <Button variant="contained" disabled={!actions.includes(Action.UNPUBLISH)} onClick={() => setConfirmingAction(Action.UNPUBLISH)}>
+          Unpublish
+        </Button>
+        <Button variant="contained" disabled={!actions.includes(Action.UPDATE) || !updated} onClick={() => setConfirmingAction(Action.UPDATE)}>
           Update
         </Button>
-        <Typography sx={{ mx: 5 }}>{post.isPublished ? 'Published' : (isSaving ? 'Saving...' : 'Draft')}</Typography>
+        <Typography sx={{ mx: 5 }}>{post.isPublished ? 'Published' : (isAutoSaving ? 'Saving...' : 'Draft')}</Typography>
         <IconButton onClick={() => setShowSettings(true)}>
           <SettingsIcon />
         </IconButton>
