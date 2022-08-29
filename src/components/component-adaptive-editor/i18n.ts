@@ -107,7 +107,7 @@ export const ZhLanguage: EditorLanguage = {
   Bold: "粗體",
   Underline: "底線",
   OR: "或",
-  "Existing image UR": "圖片連結",
+  "Existing image URL": "圖片連結",
   "Link to open upon image click": "網頁連結",
   "Open link in new window": "點擊圖片開啟網頁",
   "Write here...": "請在此打字...",

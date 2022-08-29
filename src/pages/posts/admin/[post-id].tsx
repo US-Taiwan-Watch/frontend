@@ -30,6 +30,8 @@ type PostPageProps = {
   post?: Article,
 }
 
+let timeout: NodeJS.Timeout | null = null;
+
 const Post: React.FC<{ post: Article }> = ({ post }) => {
   const user = useFetchUser({ required: true });
   const router = useRouter();
@@ -42,7 +44,10 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
 
   useEffect(() => {
     if (updatedPost !== savedPost) {
-      savePost();
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      timeout = setTimeout(savePost, 500);
     }
   }, [updatedPost, savedPost]);
 
