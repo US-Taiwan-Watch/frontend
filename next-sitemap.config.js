@@ -3,9 +3,9 @@
 module.exports = {
   siteUrl: process.env.NEXT_PUBLIC_BASE_URL,
   generateRobotsTxt: true,
-  // outDir: '.next/server/pages',
   autoLastmod: false,
   changefreq: undefined,
+  generateRobotsTxt: false,
   alternateRefs: [
     {
       href: `${process.env.NEXT_PUBLIC_BASE_URL}/en`,
