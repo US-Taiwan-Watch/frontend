@@ -50,9 +50,6 @@ const columns: GridColDef[] = [
 
 const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
   const user = useFetchUser({ required: true });
-  if (!posts) {
-    return <Error statusCode={404} />
-  }
   const router = useRouter();
   const { isEditor } = useUserRole();
   const apolloClient = useApolloClient();
@@ -62,6 +59,9 @@ const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
       sort: 'desc',
     },
   ]);
+  if (!posts) {
+    return <Error statusCode={404} />
+  }
   return (
     <Layout>
       <Banner title="管理文章" >

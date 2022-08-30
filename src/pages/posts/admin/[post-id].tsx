@@ -90,7 +90,7 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
 
   const confirmAction = () => {
     setIsActioning(true);
-    let updatedPostWithState = updatedPost;
+    const updatedPostWithState = updatedPost;
     // FIXME: should unpublish also update the post?
     const nextState = confirmingAction && getNextState(state, confirmingAction);
     if (nextState) {
@@ -108,9 +108,9 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
     })
   }
 
-  const savePost = (postToSave: Article) => {
+  const savePost = (postToSave: Article) => 
     // return new Promise(r => setTimeout(r, 5000)).then(w => true);
-    return apolloClient.mutate({
+     apolloClient.mutate({
       mutation: UpdateArticleWithIdDocument,
       variables: { updateArticleWithIdId: postToSave.id, ...postToSave },
       fetchPolicy: "network-only",
@@ -124,8 +124,8 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
     }).catch(err => {
       console.error("Failed to save")
       return false;
-    });
-  }
+    })
+  
 
   return (
     <Container>
