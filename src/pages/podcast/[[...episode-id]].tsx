@@ -53,24 +53,31 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
   const router = useRouter();
   const [episode, setEpisode] = useState(currentEpisode);
   const [completedEpisodes, setCompletedEpisodes] = useState<PodcastEpisode[]>([]);
+  console.log('episode');
+  console.log(episode);
 
   // The commented out codes should work according to https://nextjs.org/docs/routing/shallow-routing
   // It's probably a bug now useEffect is fired every time and completedEpisodes is always empty at the beginning
   // Routing should not reset the state. Revisit this later as it's ideal not to load every time
 
-  // useEffect(() => {
-  //   getPodcastEpisodes().then(eps => {
-  //     setCompletedEpisodes(eps);
-  //   });
-  // }, []);
+  useEffect(() => {
+    console.log('useEffect []')
+    // getPodcastEpisodes().then(eps => {
+    //   setCompletedEpisodes(eps);
+    // });
+  }, []);
 
   useEffect(() => {
+    console.log('useEffect router')
     const episodeID = router.query['episode-id'] ? router.query['episode-id'][1] : partialEpisodes[0].id;
     // const ep = completedEpisodes.find(e => e.id === episodeID);
     // if (ep) {
     //   setEpisode(ep);
     // }
+    console.log('episodeID: ' + episodeID);
     episodeID && getPodcastEpisodes().then(eps => {
+      console.log('eps');
+      console.log(eps);
       const ep = eps.find(e => e.id == episodeID);
       if (ep) {
         setEpisode(ep);
