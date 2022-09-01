@@ -11,7 +11,7 @@ import { Banner } from "../components/banner";
 import { FeaturedNewsLetters, getNewsLetters, NewsLetter } from "./newsletters";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { Section } from "../components/section";
-import { getPodcastEpisodes, PodcastEpisode } from "./podcast/[[...episode-id]]";
+import { getPodcastEpisodes, PodcastEpisode } from "./api/podcast-episodes";
 
 interface HomeProps {
   newsLetters: NewsLetter[];
