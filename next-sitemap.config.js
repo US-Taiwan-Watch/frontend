@@ -15,6 +15,10 @@ module.exports = {
       hreflang: 'zh',
     },
   ],
+  additionalPaths: async config => {
+    const paths = ['/podcast'];
+    return Promise.all(paths.map(path => config.transform(config, path)));
+  },
   transform: async (config, path) => {
     const includePaths = [
       {rule: /^\/$/, priority: 1},
