@@ -20,7 +20,7 @@ module.exports = {
       {rule: /^\/$/, priority: 1},
       {rule: /^\/newsletters$/, priority: 0.9},
       {rule: /^\/podcast$/, priority: 0.9},
-      {rule: /^\/podcast(\/.*)?$/},
+      // {rule: /^\/podcast(\/.*)?$/}, what's wrong?
     ];
     const pathWithPrio = includePaths.find(iPath => iPath.rule.test(path));
     if (!pathWithPrio) {
