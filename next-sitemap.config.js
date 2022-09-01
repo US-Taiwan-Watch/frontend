@@ -5,7 +5,6 @@ module.exports = {
   generateRobotsTxt: true,
   autoLastmod: false,
   changefreq: undefined,
-  generateRobotsTxt: false,
   alternateRefs: [
     {
       href: `${process.env.NEXT_PUBLIC_BASE_URL}/en`,
