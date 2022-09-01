@@ -22,14 +22,6 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
   const { i18n } = useI18n();
   return (
     <Layout>
-      <Head>
-        <meta property="og:title" content={i18n.strings.brand.fullName} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL} />
-        <meta property="og:description" content={i18n.strings.landing.aboutDesc} />
-        <meta property="og:image" content={Constants.ogImage} />
-        <meta property="og:image:alt" content={i18n.strings.brand.fullName} />
-      </Head>
       <Banner
         title={i18n.strings.brand.fullName}
         subtitle={i18n.strings.header.subtitle}

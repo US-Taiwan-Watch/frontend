@@ -35,5 +35,4 @@ export const Constants = {
       logo: '/assets/NDI_logo.svg',
     },
   ],
-  ogImage: 'https://static.ustw.watch/public-image/website/preview.png',
 }

@@ -48,16 +48,8 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ episodes }) => {
   const desc = isIndex ? i18n.strings.social.podcast : episode.description;
 
   return (
-    <Layout>
-      <Head>
-        <title>{title}</title>
-        <meta property="og:title" content={title} />
-        <meta property="og:type" content={isIndex ? 'music.album' : 'music.song'} />
-        <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL + router.asPath.replace(/[#|?].*$/, '')} />
-        <meta property="og:description" content={desc} />
-        <meta property="og:image" content="https://static.ustw.watch/public-image/website/podcast.jpg" />
-        <meta property="og:image:alt" content={title} />
-      </Head>
+    <Layout title={title} type={isIndex ? 'music.album' : 'music.song'} description={desc}
+      image="https://static.ustw.watch/public-image/website/podcast.jpg" imageAlt={title}>
       <Banner
         title={i18n.strings.podcast.fullName}
         subtitle={i18n.strings.social.podcast}

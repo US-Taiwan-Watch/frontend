@@ -56,16 +56,8 @@ const NewsLetterPage: NextPage<NewsLetterPageProps> = ({ newsletters }) => {
   const { i18n } = useI18n();
   const { pathname } = useRouter();
   return (
-    <Layout>
-      <Head>
-        <title>{i18n.strings.header.subscribe} - {i18n.strings.brand.fullName}</title>
-        <meta property="og:title" content={i18n.strings.newsletter.title} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL + pathname} />
-        <meta property="og:description" content={i18n.strings.landing.subscribeDesc} />
-        <meta property="og:image" content={Constants.ogImage} />
-        <meta property="og:image:alt" content={i18n.strings.brand.fullName} />
-      </Head>
+    <Layout title={`${i18n.strings.header.subscribe} - ${i18n.strings.brand.fullName}`}
+      description={i18n.strings.landing.subscribeDesc}>
       <Banner
         title={i18n.strings.header.subscribe}
         subtitle={i18n.strings.landing.subscribeDesc}
