@@ -15,10 +15,8 @@ export type LayoutProps = {
 export const Layout: React.FC<LayoutProps> = (props) => {
   const { i18n } = useI18n();
   const { asPath } = useRouter();
-  console.log(process.env.NEXT_PUBLIC_BASE_URL + asPath.replace(/[#|?].*$/, ''))
   const title = props.title || i18n.strings.brand.fullName;
   const description = props.description || i18n.strings.landing.aboutDesc;
-
   return (
     <>
       <Head>
