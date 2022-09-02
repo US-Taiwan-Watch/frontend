@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { podcastPlatforms } from "../../components/social-media";
 import { useEffect, useState } from "react";
 import { getPodcastEpisodes, PodcastEpisode } from "../api/podcast-episodes";
+import { getStaticPathsWithLocale } from "../../utils/page-utils";
 
 const EPISODE_PATH = 'ep';
 
@@ -62,6 +63,10 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
     });
   }, [router.query['episode-id']]);
 
+  if (!episode) {
+    return <>loading</>;
+  }
+
   const isIndex = router.query['episode-id'] ? false : true;
   const title = `${isIndex ? i18n.strings.podcast.name : episode.title} - ${i18n.strings.brand.fullName}`;
   const desc = isIndex ? i18n.strings.social.podcast : episode.description;
@@ -109,16 +114,13 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
   );
 };
 
-export const getStaticPaths: GetStaticPaths<{ 'episode-id': string[] }> = async () => (
-  {
-    paths: (await getPodcastEpisodes()).map(episode => ({
-      params: { 'episode-id': ['ep', episode.id] }
-    })).concat({
-      params: { 'episode-id': [] }
-    }),
-    fallback: 'blocking', // can also be true or 'blocking'
-  }
-);
+export const getStaticPaths: GetStaticPaths<{ 'episode-id': string[] }> = async ({ locales }) => ({
+    paths: getStaticPathsWithLocale(
+      (await getPodcastEpisodes()).map(ep => [EPISODE_PATH, ep.id]).concat([]).map(p => ({
+        params: { 'episode-id': p },
+      })), locales),
+    fallback: true,
+  })
 
 export const getStaticProps: GetStaticProps<PodcastPageProps> = async ({ params }) => {
   if (!params) {
