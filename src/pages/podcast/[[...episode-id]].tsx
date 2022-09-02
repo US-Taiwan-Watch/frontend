@@ -112,7 +112,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
 export const getStaticPaths: GetStaticPaths<{ 'episode-id': string[] }> = async () => (
   {
     paths: (await getPodcastEpisodes()).map(episode => ({
-      params: { 'episode-id': [episode.id] }
+      params: { 'episode-id': ['ep', episode.id] }
     })).concat({
       params: { 'episode-id': [] }
     }),

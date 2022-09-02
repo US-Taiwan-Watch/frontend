@@ -1,5 +1,4 @@
 /** @type {import('next-sitemap').IConfig} */
-
 module.exports = {
   siteUrl: process.env.NEXT_PUBLIC_BASE_URL,
   generateRobotsTxt: true,
@@ -17,10 +16,10 @@ module.exports = {
   ],
   transform: async (config, path) => {
     const includePaths = [
-      {rule: /^\/$/, priority: 1},
-      {rule: /^\/newsletters$/, priority: 0.9},
-      {rule: /^\/podcast$/, priority: 0.9},
-      // {rule: /^\/podcast(\/.*)?$/}, what's wrong?
+      { rule: /^\/$/, priority: 1 },
+      { rule: /^\/newsletters$/, priority: 0.9 },
+      { rule: /^\/podcast$/, priority: 0.9 },
+      { rule: /^\/podcast(\/.*)?$/ },
     ];
     const pathWithPrio = includePaths.find(iPath => iPath.rule.test(path));
     if (!pathWithPrio) {
