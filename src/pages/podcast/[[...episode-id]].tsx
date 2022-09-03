@@ -44,8 +44,9 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
     setCompletedEpisodes(list);
   }
 
+  const episodeID = router.query['episode-id'] ? router.query['episode-id'][1] : (partialEpisodes && partialEpisodes[0].id);
+
   useEffect(() => {
-    const episodeID = router.query['episode-id'] ? router.query['episode-id'][1] : (partialEpisodes && partialEpisodes[0].id);
     const episodesInSession = sessionStorage.getItem('podcast-episodes');
     if (episodesInSession) {
       const { episodes, expiry } = JSON.parse(episodesInSession);
@@ -62,7 +63,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
         episodes: eps
       }));
     });
-  }, [router.query['episode-id'], partialEpisodes]);
+  }, [episodeID, partialEpisodes]);
 
   if (!episode) {
     return <Loading />;
@@ -86,7 +87,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
         }))}
       />
       <Section id="podcast" title={isIndex ? i18n.strings.podcast.playLatestEpisode : i18n.strings.podcast.playEpisode} >
-        <iframe src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${episode.id}`}
+        <iframe src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${episodeID}`}
           style={{
             marginBottom: 20,
             height: "140px",
