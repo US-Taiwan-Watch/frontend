@@ -108,9 +108,9 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
             }}>
             <ListItem key={ep.id} component="div" disablePadding>
               <ListItemButton selected={ep.id === episode.id}>
-              <ListItemText primary={ep.title} />
-            </ListItemButton>
-          </ListItem>
+                <ListItemText primary={ep.title} />
+              </ListItemButton>
+            </ListItem>
           </Link>
         ))}
       </Section>
@@ -119,12 +119,12 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
 };
 
 export const getStaticPaths: GetStaticPaths<{ 'episode-id': string[] }> = async ({ locales }) => ({
-    paths: getStaticPathsWithLocale(
-      (await getPodcastEpisodes()).map(ep => [EPISODE_PATH, ep.id]).concat([]).map(p => ({
-        params: { 'episode-id': p },
-      })), locales),
-    fallback: true,
-  })
+  paths: getStaticPathsWithLocale(
+    (await getPodcastEpisodes()).map(ep => [EPISODE_PATH, ep.id]).concat([[]]).map(p => ({
+      params: { 'episode-id': p },
+    })), locales),
+  fallback: true,
+})
 
 export const getStaticProps: GetStaticProps<PodcastPageProps> = async ({ params }) => {
   if (!params) {
@@ -135,7 +135,7 @@ export const getStaticProps: GetStaticProps<PodcastPageProps> = async ({ params 
   let episode;
   if (!episodeIdParam) {
     episode = episodes[0];
-  } 
+  }
   else if (!Array.isArray(episodeIdParam) || episodeIdParam.length !== 2 || episodeIdParam[0] !== EPISODE_PATH) {
     return { notFound: true }
   }
