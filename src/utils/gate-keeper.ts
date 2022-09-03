@@ -1,5 +1,3 @@
-// This should be false while you are delveloping some new feature.
-// Set it to true if you are working on something to be released.
-const hideDev = false;
+export const isDev = process.env.NODE_ENV === 'development';
 
-export const showDevContent = process.env.NODE_ENV === 'development' && !hideDev;
+export const isLocal = isDev || !!process.env.NEXT_PUBLIC_BASE_URL?.includes('localhost');

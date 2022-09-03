@@ -3,6 +3,8 @@ import { Header } from "./header";
 import { Footer } from "./footer";
 import { useI18n } from "../context/i18n";
 import { useRouter } from "next/router";
+import Script from "next/script";
+import { isLocal } from "../utils/gate-keeper";
 
 export type LayoutProps = {
   title?: string,
@@ -19,6 +21,17 @@ export const Layout: React.FC<LayoutProps> = (props) => {
   const description = props.description || i18n.strings.landing.aboutDesc;
   return (
     <>
+      {!isLocal && <>
+        <Script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`} />
+        <Script strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}');
+          `}
+        </Script>
+      </>}
       <Head>
         <meta property="og:site_name" content={i18n.strings.brand.fullName} />
         <title>{title}</title>
@@ -40,15 +53,15 @@ export const Layout: React.FC<LayoutProps> = (props) => {
       <Footer />
 
       <style jsx global>{`
-      body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-    `}</style>
+        body {
+          margin: 0;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        }
+        html {
+          scroll-behavior: smooth;
+        }
+      `}</style>
     </>
   );
 };
