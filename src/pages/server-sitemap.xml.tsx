@@ -8,7 +8,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const fields: ISitemapField[] = epPaths.map(path => ({
     loc: `${process.env.NEXT_PUBLIC_BASE_URL}${path}`,
-    priority: 7,
+    priority: 0.7,
     alternateRefs: [
       {
         href: `${process.env.NEXT_PUBLIC_BASE_URL}/en${path}`,
