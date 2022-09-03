@@ -41,29 +41,28 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
     if (ep) {
       setEpisode(ep);
     }
+    setCompletedEpisodes(list);
   }
 
   useEffect(() => {
-    const episodeID = router.query['episode-id'] ? router.query['episode-id'][1] : partialEpisodes[0].id;
+    const episodeID = router.query['episode-id'] ? router.query['episode-id'][1] : (partialEpisodes && partialEpisodes[0].id);
     const episodesInSession = sessionStorage.getItem('podcast-episodes');
     if (episodesInSession) {
       const { episodes, expiry } = JSON.parse(episodesInSession);
       // Session valid, use the data in session storage
       if (new Date().getTime() < expiry) {
         setEpisodeifFoundInList(episodeID, episodes);
-        setCompletedEpisodes(episodes);
         return;
       }
     }
     episodeID && fetch('/api/podcast-episodes').then(res => res.json()).then((eps: PodcastEpisode[]) => {
       setEpisodeifFoundInList(episodeID, eps);
-      setCompletedEpisodes(eps);
       sessionStorage.setItem('podcast-episodes', JSON.stringify({
         expiry: new Date().getTime() + 300 * 1000,
         episodes: eps
       }));
     });
-  }, [router.query['episode-id']]);
+  }, [router.query['episode-id'], partialEpisodes]);
 
   if (!episode) {
     return <Loading />;
@@ -100,13 +99,13 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
       </Section>
       <Section id="podcast2" title={i18n.strings.podcast.otherEpisodes} >
         {(completedEpisodes.length > 0 ? completedEpisodes : partialEpisodes).map(ep => (
-          <Link href={`${EPISODE_PATH}/${ep.id}`} sx={{ textDecoration: 'none' }} color="text.primary"
+          <Link key={ep.id} href={`/podcast/${EPISODE_PATH}/${ep.id}`} sx={{ textDecoration: 'none' }} color="text.primary"
             onClick={e => {
               e.preventDefault();
               router.push(`${EPISODE_PATH}/${ep.id}`, undefined, { shallow: true });
               window.scrollTo(0, 0);
             }}>
-            <ListItem key={ep.id} component="div" disablePadding>
+            <ListItem component="div" disablePadding>
               <ListItemButton selected={ep.id === episode.id}>
                 <ListItemText primary={ep.title} />
               </ListItemButton>
@@ -120,7 +119,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
 
 export const getStaticPaths: GetStaticPaths<{ 'episode-id': string[] }> = async ({ locales }) => ({
   paths: getStaticPathsWithLocale(
-    (await getPodcastEpisodes()).map(ep => [EPISODE_PATH, ep.id]).concat([[]]).map(p => ({
+    (await getPodcastEpisodes()).map(ep => [EPISODE_PATH, ep.id]).slice(0, 10).concat([[]]).map(p => ({
       params: { 'episode-id': p },
     })), locales),
   fallback: true,

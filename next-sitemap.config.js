@@ -14,12 +14,16 @@ module.exports = {
       hreflang: 'zh',
     },
   ],
+  robotsTxtOptions: {
+    additionalSitemaps: [
+      `${process.env.NEXT_PUBLIC_BASE_URL}/server-sitemap.xml`,
+    ],
+  },
   transform: async (config, path) => {
     const includePaths = [
       { rule: /^\/$/, priority: 1 },
       { rule: /^\/newsletters$/, priority: 0.9 },
       { rule: /^\/podcast$/, priority: 0.9 },
-      { rule: /^\/podcast(\/.*)?$/ },
     ];
     const pathWithPrio = includePaths.find(iPath => iPath.rule.test(path));
     if (!pathWithPrio) {
