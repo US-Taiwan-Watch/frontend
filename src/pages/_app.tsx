@@ -18,6 +18,7 @@ import { createMuiTheme as createThemeV4 } from '@material-ui/core/styles';
 import { createTheme as createThemeV5 } from '@mui/material/styles';
 import { ThemeProvider as ThemeProviderV5 } from '@mui/material/styles';
 import { ThemeProvider as ThemeProviderV4, StylesProvider } from '@material-ui/core/styles';
+import { Loading } from "../components/loading";
 
 // Fix the glitches on react-page according to: https://react-page.github.io/beta/docs/#/quick-start?id=using-material-ui-4-in-parallel
 const themeV4Light = createThemeV4({
@@ -106,7 +107,7 @@ export default function MyApp(props: MyAppProps) {
           <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
         {/* Build a better loading page */}
-        {loading ? <div>Loading</div> :
+        {loading ? <Loading /> :
           <ApolloProvider client={client}>
             <UserRoleProvider>
               <StylesProvider generateClassName={generateClassName}>

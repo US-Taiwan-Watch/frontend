@@ -10,6 +10,8 @@ import { podcastPlatforms } from "../../components/social-media";
 import { useEffect, useState } from "react";
 import { getPodcastEpisodes, PodcastEpisode } from "../api/podcast-episodes";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
+import { Loading } from "../../components/loading";
+import { Link } from "../../components/link";
 
 const EPISODE_PATH = 'ep';
 
@@ -64,7 +66,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
   }, [router.query['episode-id']]);
 
   if (!episode) {
-    return <>loading</>;
+    return <Loading />;
   }
 
   const isIndex = router.query['episode-id'] ? false : true;
@@ -98,16 +100,18 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
       </Section>
       <Section id="podcast2" title={i18n.strings.podcast.otherEpisodes} >
         {(completedEpisodes.length > 0 ? completedEpisodes : partialEpisodes).map(ep => (
-          <ListItem key={ep.id} component="div" disablePadding>
-            <ListItemButton
-              selected={ep.id === episode.id}
-              onClick={() => {
-                router.push(`${EPISODE_PATH}/${ep.id}`, undefined, { shallow: true });
-                window.scrollTo(0, 0);
-              }}>
+          <Link href={`${EPISODE_PATH}/${ep.id}`} sx={{ textDecoration: 'none' }} color="text.primary"
+            onClick={e => {
+              e.preventDefault();
+              router.push(`${EPISODE_PATH}/${ep.id}`, undefined, { shallow: true });
+              window.scrollTo(0, 0);
+            }}>
+            <ListItem key={ep.id} component="div" disablePadding>
+              <ListItemButton selected={ep.id === episode.id}>
               <ListItemText primary={ep.title} />
             </ListItemButton>
           </ListItem>
+          </Link>
         ))}
       </Section>
     </Layout >
