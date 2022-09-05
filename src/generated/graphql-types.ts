@@ -117,6 +117,9 @@ export type MutationAddArticleArgs = {
 
 export type MutationCreateUserArgs = {
   email: Scalars['String'];
+  name?: InputMaybe<Scalars['String']>;
+  nickname?: InputMaybe<Scalars['String']>;
+  picture?: InputMaybe<Scalars['String']>;
   user_id: Scalars['String'];
 };
 
@@ -216,4 +219,7 @@ export type User = {
   __typename?: 'User';
   email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  nickname?: Maybe<Scalars['String']>;
+  picture?: Maybe<Scalars['String']>;
 };

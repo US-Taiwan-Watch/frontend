@@ -1,5 +1,5 @@
 import Typography from "@mui/material/Typography";
-import { Backdrop, Box, Button, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, TextareaAutosize, TextField } from "@mui/material";
+import { Backdrop, Box, Button, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Input, TextareaAutosize, TextField } from "@mui/material";
 import { useFetchUser } from "../../../lib/user";
 import { AdaptiveEditor } from "../../../components/component-adaptive-editor";
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ import { Article } from "../../../../common/models";
 import { ArticleDocument } from "../../../lib/page-graphql/query-post.graphql.interface";
 import { UpdateArticleWithIdDocument } from "../../../lib/page-graphql/mutation-update-post.graphql.interface";
 import LoadingButton from '@mui/lab/LoadingButton';
+import { urlObjectKeys } from "next/dist/shared/lib/utils";
 
 type PostPageProps = {
   post?: Article,
@@ -108,9 +109,9 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
     })
   }
 
-  const savePost = (postToSave: Article) => 
+  const savePost = (postToSave: Article) =>
     // return new Promise(r => setTimeout(r, 5000)).then(w => true);
-     apolloClient.mutate({
+    apolloClient.mutate({
       mutation: UpdateArticleWithIdDocument,
       variables: { updateArticleWithIdId: postToSave.id, ...postToSave },
       fetchPolicy: "network-only",
@@ -125,7 +126,7 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
       console.error("Failed to save")
       return false;
     })
-  
+
 
   return (
     <Container>
@@ -149,6 +150,25 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
             value={updatedPost.preview}
             onChange={e => setUpdatedPost({ ...updatedPost, preview: e.target.value })}
           />
+          Cover image
+          <img src={updatedPost.imageSource || ''} />
+          <input type="file" accept="image/png, image/jpeg" onChange={e => {
+            if (!e.target.files) {
+              return;
+            }
+            let formData = new FormData();
+            formData.append("image", e.target.files[0]);
+            fetch(`${process.env.NEXT_PUBLIC_GRAPHQL_HTTP_HOST}/upload/post-image`,
+              { method: "POST", body: formData }
+            ).then(res => {
+              if (res.status === 200) {
+                return res.text();
+              }
+              throw res.text();
+            }).then(url => {
+              setUpdatedPost({ ...updatedPost, imageSource: url });
+            }).catch(err => console.log(err))
+          }} />
         </DialogContent>
         <DialogActions>
           <Button startIcon={<DeleteIcon />}>Delete post</Button>
@@ -243,6 +263,7 @@ PostPage.getInitialProps = async ({ req, query, apolloClient }) => {
         createdTime: post.createdTime || 0,
         slug: post.slug || '',
         preview: post.preview || '',
+        imageSource: post.imageSource || '',
       }
     };
   } catch (err) {
