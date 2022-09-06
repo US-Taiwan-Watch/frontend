@@ -10,7 +10,7 @@ export type CardProps = {
   image?: string,
 }
 
-const CardItem: React.FC<CardProps> = (props) => {
+export const CardItem: React.FC<CardProps> = (props) => {
   const { i18n } = useI18n();
   return (
     <Grid item xs={12} md={12} sx={{ my: 3 }}>

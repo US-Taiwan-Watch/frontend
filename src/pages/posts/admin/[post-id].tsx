@@ -14,6 +14,7 @@ import { ArticleDocument } from "../../../lib/page-graphql/query-post.graphql.in
 import { UpdateArticleWithIdDocument } from "../../../lib/page-graphql/mutation-update-post.graphql.interface";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { urlObjectKeys } from "next/dist/shared/lib/utils";
+import { CardItem } from "../../../components/card-list";
 
 type PostPageProps = {
   post?: Article,
@@ -72,6 +73,7 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [savedPost, setSavedPost] = useState(post);
   const [updatedPost, setUpdatedPost] = useState(post);
+  const [uploadingCoverImage, setUploadingCoverImage] = useState(false);
 
   useEffect(() => {
     if (state === State.DRAFT && updated && !isActioning) {
@@ -136,39 +138,61 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Dialog fullWidth open={showSettings} onClose={() => setShowSettings(false)}>
+      <Dialog fullScreen open={showSettings} onClose={() => setShowSettings(false)}>
         <DialogTitle>Settings</DialogTitle>
         <DialogContent>
+          <Typography variant="subtitle2">
+            Preview
+          </Typography>
+          <CardItem url={`/posts/${updatedPost.slug}`}
+            title={updatedPost.title || ''}
+            content={updatedPost.preview || ''}
+            displayDate=''
+            image={updatedPost.imageSource} />
+
+          <input
+            id="raised-button-file" hidden type="file" accept="image/png, image/jpeg"
+            onChange={e => {
+              if (!e.target.files) {
+                return;
+              }
+              let formData = new FormData();
+              formData.append("image", e.target.files[0]);
+              setUploadingCoverImage(true);
+              fetch(`${process.env.NEXT_PUBLIC_GRAPHQL_HTTP_HOST}/upload/post-image`,
+                { method: "POST", body: formData }
+              ).then(res => {
+                if (res.status === 200) {
+                  return res.text();
+                }
+                throw res.text();
+              }).then(url => {
+                setUpdatedPost({ ...updatedPost, imageSource: url });
+              }).catch(err => {
+                // TODO: handle action error
+              }).finally(() => setUploadingCoverImage(false))
+            }} />
+          <label htmlFor="raised-button-file">
+            <LoadingButton component="span" variant="contained" loading={uploadingCoverImage}>
+              Upload Cover Image
+            </LoadingButton>
+          </label>
+          <Button onClick={() => setUpdatedPost({ ...updatedPost, imageSource: undefined })}>
+            Remove Cover Image
+          </Button>
           <TextField
             autoFocus fullWidth margin="dense" variant="standard"
             label="Post URL"
             value={updatedPost.slug}
             onChange={e => setUpdatedPost({ ...updatedPost, slug: e.target.value })}
           />
-          Description:
-          <TextareaAutosize style={{ width: "100%" }}
+          <TextField
+            fullWidth margin="dense" variant="standard"
+            multiline
+            label="Description"
             value={updatedPost.preview}
             onChange={e => setUpdatedPost({ ...updatedPost, preview: e.target.value })}
           />
-          Cover image
-          <img src={updatedPost.imageSource || ''} />
-          <input type="file" accept="image/png, image/jpeg" onChange={e => {
-            if (!e.target.files) {
-              return;
-            }
-            let formData = new FormData();
-            formData.append("image", e.target.files[0]);
-            fetch(`${process.env.NEXT_PUBLIC_GRAPHQL_HTTP_HOST}/upload/post-image`,
-              { method: "POST", body: formData }
-            ).then(res => {
-              if (res.status === 200) {
-                return res.text();
-              }
-              throw res.text();
-            }).then(url => {
-              setUpdatedPost({ ...updatedPost, imageSource: url });
-            }).catch(err => console.log(err))
-          }} />
         </DialogContent>
         <DialogActions>
           <Button startIcon={<DeleteIcon />}>Delete post</Button>

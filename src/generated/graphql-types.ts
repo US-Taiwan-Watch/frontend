@@ -95,7 +95,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addArticle?: Maybe<Article>;
   createEmptyArticle?: Maybe<Article>;
-  createUser?: Maybe<Scalars['Boolean']>;
+  createOrUpdateUser?: Maybe<Scalars['Boolean']>;
   deleteArticle?: Maybe<Scalars['Boolean']>;
   emitGlobalEvent: Scalars['Boolean'];
   emitUserEvent: Scalars['Boolean'];
@@ -115,7 +115,7 @@ export type MutationAddArticleArgs = {
 };
 
 
-export type MutationCreateUserArgs = {
+export type MutationCreateOrUpdateUserArgs = {
   email: Scalars['String'];
   name?: InputMaybe<Scalars['String']>;
   nickname?: InputMaybe<Scalars['String']>;
