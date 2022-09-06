@@ -2,8 +2,7 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { Layout } from "../../components/layout";
 import { useI18n } from "../../context/i18n";
 import { Banner } from "../../components/banner";
-import { parseStringPromise } from "xml2js";
-import { ListItem, ListItemButton, ListItemText } from "@mui/material";
+import { ListItem, ListItemButton, ListItemText, Typography } from "@mui/material";
 import { Section } from "../../components/section";
 import { useRouter } from "next/router";
 import { podcastPlatforms } from "../../components/social-media";
@@ -96,6 +95,9 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
             borderRadius: "4px",
             boxShadow: "0 1px 8px rgba(0, 0, 0, .2)",
           }} />
+        <Typography variant="subtitle2" paragraph>
+          {episode.pubDate && new Date(episode.pubDate).toLocaleDateString()}
+        </Typography>
         <div dangerouslySetInnerHTML={(() => ({ __html: episode.encodedDesc }))()} />
       </Section>
       <Section id="podcast2" title={i18n.strings.podcast.otherEpisodes} >

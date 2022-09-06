@@ -6,6 +6,7 @@ export type PodcastEpisode = {
   title: string,
   description: string,
   encodedDesc: string,
+  pubDate: number,
 }
 
 export default async function handler(
@@ -24,5 +25,6 @@ export const getPodcastEpisodes = async (): Promise<PodcastEpisode[]> => {
     title: item.title[0],
     description: item.description[0],
     encodedDesc: item['content:encoded'][0],
+    pubDate: new Date(item['pubDate'][0]).getTime(),
   }));
 }
