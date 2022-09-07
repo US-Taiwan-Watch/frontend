@@ -15,6 +15,7 @@ import { UpdateArticleWithIdDocument } from "../../../lib/page-graphql/mutation-
 import LoadingButton from '@mui/lab/LoadingButton';
 import { urlObjectKeys } from "next/dist/shared/lib/utils";
 import { CardItem } from "../../../components/card-list";
+import { uploadPostImage } from "../../../utils/image-upload-utils";
 
 type PostPageProps = {
   post?: Article,
@@ -155,20 +156,15 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
               if (!e.target.files) {
                 return;
               }
-              let formData = new FormData();
-              formData.append("image", e.target.files[0]);
               setUploadingCoverImage(true);
-              const res = await fetch(`${process.env.NEXT_PUBLIC_GRAPHQL_HTTP_HOST}/upload/post-image`,
-                { method: "POST", body: formData }
-              );
-              const text = await res.text();
-              if (res.status === 200) {
+              try {
+                const text = await uploadPostImage(e.target.files[0]);
                 setUpdatedPost({ ...updatedPost, imageSource: text });
-              }
-              else {
+              } catch (err) {
                 // TODO: handle action error
+              } finally {
+                setUploadingCoverImage(false);
               }
-              setUploadingCoverImage(false);
             }} />
           <label htmlFor="raised-button-file">
             <LoadingButton component="span" variant="contained" loading={uploadingCoverImage}>
