@@ -80,9 +80,10 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
       if (timeout) {
         clearTimeout(timeout);
       }
-      timeout = setTimeout(() => {
+      timeout = setTimeout(async () => {
         setIsAutoSaving(true);
-        savePost(updatedPost).then(suc => setIsAutoSaving(false));
+        await savePost(updatedPost);
+        setIsAutoSaving(false);
       }, 500);
     }
   }, [updatedPost]);
@@ -91,7 +92,7 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
   const updated = !shallowEqual(updatedPost, savedPost);
   const actions = getActions(state);
 
-  const confirmAction = () => {
+  const confirmAction = async () => {
     setIsActioning(true);
     const updatedPostWithState = updatedPost;
     // FIXME: should unpublish also update the post?
@@ -99,35 +100,33 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
     if (nextState) {
       updatedPostWithState.isPublished = nextState === State.PUBLISHED;
     }
-    savePost(updatedPostWithState).then(success => {
-      setIsActioning(false);
-      if (success) {
-        setConfirmingAction(null);
-        setIsActioning(false);
-        router.back();
-        return;
-      }
-      // TODO: handle action error
-    })
+    const success = await savePost(updatedPostWithState);
+    if (!success) {
+      // handle error
+    }
+    setConfirmingAction(null);
+    setIsActioning(false);
+    router.back();
   }
 
-  const savePost = (postToSave: Article) =>
-    // return new Promise(r => setTimeout(r, 5000)).then(w => true);
-    apolloClient.mutate({
+  const savePost = async (postToSave: Article) => {
+    try {
+      const res = await apolloClient.mutate({
       mutation: UpdateArticleWithIdDocument,
       variables: { updateArticleWithIdId: postToSave.id, ...postToSave },
       fetchPolicy: "network-only",
-    }).then(res => {
+      });
       if (res.data?.updateArticleWithId?.id !== postToSave.id) {
         return false;
       }
       setUpdatedPost(postToSave);
       setSavedPost(postToSave);
       return true;
-    }).catch(err => {
+    } catch (err) {
       console.error("Failed to save")
       return false;
-    })
+    }
+  };
 
 
   return (
@@ -152,25 +151,24 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
 
           <input
             id="raised-button-file" hidden type="file" accept="image/png, image/jpeg"
-            onChange={e => {
+            onChange={async e => {
               if (!e.target.files) {
                 return;
               }
               let formData = new FormData();
               formData.append("image", e.target.files[0]);
               setUploadingCoverImage(true);
-              fetch(`${process.env.NEXT_PUBLIC_GRAPHQL_HTTP_HOST}/upload/post-image`,
+              const res = await fetch(`${process.env.NEXT_PUBLIC_GRAPHQL_HTTP_HOST}/upload/post-image`,
                 { method: "POST", body: formData }
-              ).then(res => {
-                if (res.status === 200) {
-                  return res.text();
-                }
-                throw res.text();
-              }).then(url => {
-                setUpdatedPost({ ...updatedPost, imageSource: url });
-              }).catch(err => {
+              );
+              const text = await res.text();
+              if (res.status === 200) {
+                setUpdatedPost({ ...updatedPost, imageSource: text });
+              }
+              else {
                 // TODO: handle action error
-              }).finally(() => setUploadingCoverImage(false))
+              }
+              setUploadingCoverImage(false);
             }} />
           <label htmlFor="raised-button-file">
             <LoadingButton component="span" variant="contained" loading={uploadingCoverImage}>
