@@ -1,0 +1,16 @@
+query PublishedPost($slug: String!) {
+  articleBySlug(slug: $slug) {
+    id
+    title
+    content
+    slug
+    preview
+    isPublished
+    authors
+    pusblishTime
+    createdTime
+    lastModifiedTime
+    imageSource
+    tags
+  }
+}

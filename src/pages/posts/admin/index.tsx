@@ -1,17 +1,13 @@
-import type { GetStaticProps, NextPage } from "next";
 import { Layout } from "../../../components/layout";
 import { Banner } from "../../../components/banner";
 import { useRouter } from "next/router";
-import { CardList } from "../../../components/card-list";
 import { useUserRole } from "../../../context/user-role";
 import { Link } from "../../../components/link";
-import { Button, ButtonGroup, Typography } from "@mui/material";
-import { PostProps } from "..";
+import { Button, ButtonGroup } from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { IconButton } from "@material-ui/core";
 import { NextPageWithApollo, withApollo } from "../../../lib/with-apollo";
 import Error from "next/error";
-import { ImUserDocument } from "../../../lib/page-graphql/query-imuser.graphql.interface";
 import { AllArticlesDocument } from "../../../lib/page-graphql/query-posts.graphql.interface";
 import { Article } from "../../../../common/models";
 import { useApolloClient } from "@apollo/client";

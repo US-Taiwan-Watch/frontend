@@ -11,6 +11,7 @@ import React from "react";
 import { createApolloClient, requestAccessToken } from "./apollo-client";
 import { getS2SToken } from "./ustw-api-s2s";
 import { auth0 } from "./auth0";
+import { PHASE_PRODUCTION_BUILD } from 'next/constants';
 
 // On the client, we store the Apollo Client in the following variable.
 // This prevents the client from reinitializing between page transitions.
@@ -83,14 +84,15 @@ export const getHeaders = async (
  * @param  {NormalizedCacheObject} initialState
  * @param  {NextPageContext} ctx
  */
-const initApolloClient = (
+export const initApolloClient = (
   headers?: any,
   initialState?: NormalizedCacheObject,
   authLink?: ApolloLink
 ) => {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
-  if (typeof window === "undefined") {
+  // but allow using the same client in build time
+  if (typeof window === "undefined" && process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
     return createApolloClient(headers, initialState);
   }
 
