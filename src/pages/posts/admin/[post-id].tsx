@@ -105,6 +105,7 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
     if (!success) {
       // handle error
     }
+    setUpdatedPost(updatedPostWithState);
     setConfirmingAction(null);
     setIsActioning(false);
     router.back();
@@ -120,7 +121,6 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
       if (res.data?.updateArticleWithId?.id !== postToSave.id) {
         return false;
       }
-      setUpdatedPost(postToSave);
       setSavedPost(postToSave);
       return true;
     } catch (err) {
@@ -178,6 +178,7 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
             autoFocus fullWidth margin="dense" variant="standard"
             label="Post URL"
             value={updatedPost.slug}
+            placeholder={updatedPost.id}
             onChange={e => setUpdatedPost({ ...updatedPost, slug: e.target.value })}
           />
           <TextField
