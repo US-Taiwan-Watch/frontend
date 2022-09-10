@@ -17,7 +17,7 @@ export type LayoutProps = {
 export const Layout: React.FC<LayoutProps> = (props) => {
   const { i18n } = useI18n();
   const { asPath } = useRouter();
-  const title = props.title || i18n.strings.brand.fullName;
+  const title = props.title ? `${props.title} - ${i18n.strings.brand.fullName}` : i18n.strings.brand.fullName;
   const description = props.description || i18n.strings.landing.aboutDesc;
   return (
     <>
@@ -40,7 +40,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
         <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL + asPath.replace(/[#|?].*$/, '')} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={props.image || 'https://static.ustw.watch/public-image/website/preview.png'} />
-        <meta property="og:image:alt" content={props.imageAlt || i18n.strings.brand.fullName} />
+        <meta property="og:image:alt" content={props.imageAlt || title} />
         <meta name="description" content={description} />
       </Head>
 

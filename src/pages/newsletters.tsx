@@ -56,7 +56,7 @@ const NewsLetterPage: NextPage<NewsLetterPageProps> = ({ newsletters }) => {
   const { i18n } = useI18n();
   const { pathname } = useRouter();
   return (
-    <Layout title={`${i18n.strings.header.subscribe} - ${i18n.strings.brand.fullName}`}
+    <Layout title={i18n.strings.header.subscribe}
       description={i18n.strings.landing.subscribeDesc}>
       <Banner
         title={i18n.strings.header.subscribe}

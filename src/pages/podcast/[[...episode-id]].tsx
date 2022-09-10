@@ -69,12 +69,11 @@ const PodcastPage: NextPage<PodcastPageProps> = ({ partialEpisodes, currentEpiso
   }
 
   const isIndex = router.query['episode-id'] ? false : true;
-  const title = `${isIndex ? i18n.strings.podcast.name : episode.title} - ${i18n.strings.brand.fullName}`;
   const desc = isIndex ? i18n.strings.social.podcast : episode.description;
 
   return (
-    <Layout title={title} type={isIndex ? 'music.album' : 'music.song'} description={desc}
-      image="https://static.ustw.watch/public-image/website/podcast.jpg" imageAlt={title}>
+    <Layout title={isIndex ? i18n.strings.podcast.name : episode.title} type={isIndex ? 'music.album' : 'music.song'} description={desc}
+      image="https://static.ustw.watch/public-image/website/podcast.jpg">
       <Banner
         title={i18n.strings.podcast.fullName}
         subtitle={i18n.strings.social.podcast}
