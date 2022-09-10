@@ -1,69 +1,35 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Typography from "@mui/material/Typography";
-import { Link, LinkProps } from "../../components/link";
+import { Link } from "../../components/link";
 import { Layout } from "../../components/layout";
-import { Box, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Container, Grid, Paper } from "@mui/material";
-import { SocialMediaIcon, socialMedias } from "../../components/social-media";
-import { Constants } from "../../utils/constants";
-import { useI18n } from "../../context/i18n";
-import Head from "next/head";
+import { Box, Button, Container } from "@mui/material";
 import { Banner } from "../../components/banner";
-import { useUser } from "@auth0/nextjs-auth0";
-import { useFetchUser } from "../../lib/user";
-import { allPosts, PostProps } from ".";
+import { getPublishedPosts } from ".";
 import { AdaptiveEditor } from "../../components/component-adaptive-editor";
 import { useUserRole } from "../../context/user-role";
-import { useEffect, useState } from "react";
+import { Article } from "../../generated/graphql-types";
+import { PublishedPostDocument } from "../../lib/page-graphql/query-post-by-slug.graphql.interface";
+import { Loading } from "../../components/loading";
+import { getStaticPathsWithLocale } from "../../utils/page-utils";
+import { initApolloClient } from "../../lib/with-apollo";
+import { PHASE_PRODUCTION_BUILD } from "next/constants";
 
 type PostPageProps = {
-  post: PostProps,
+  post?: Article,
 }
-
-const Post: React.FC<{ post: PostProps }> = ({ post }) => (
-  <Grid item xs={12} md={12} sx={{ my: 3 }}>
-    <CardActionArea component="a" href="#">
-      <Card sx={{ display: 'flex' }}>
-        <CardMedia
-          component="img"
-          sx={{ height: '100%', width: 180, display: { xs: 'none', sm: 'block' } }}
-          image={post.image}
-          alt={post.title}
-        />
-        <CardContent sx={{ flex: 1 }}>
-          <Typography component="h2" variant="h5">
-            {post.title}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            {post.publishDate}
-          </Typography>
-          <Typography variant="subtitle1" paragraph>
-            {post.preview}
-          </Typography>
-          <Typography variant="subtitle1" color="primary">
-            Continue reading...
-          </Typography>
-        </CardContent>
-      </Card>
-    </CardActionArea>
-  </Grid>
-)
 
 const PostPage: NextPage<PostPageProps> = ({ post }) => {
   const { isEditor } = useUserRole();
-  const [editorValue, setEditorValue] = useState(post.content);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem(`saved/${post.id}`);
-      if (saved) {
-        setEditorValue(saved);
-      }
-    }
-  }, []);
+  if (!post) {
+    return <Loading />;
+  }
+
+  const pubDate = post.createdTime !== undefined ? new Date(post.createdTime as number).toLocaleDateString() : undefined;
 
   return (
     <Layout>
-      <Banner title={post.title} subtitle={post.publishDate} />
+      <Banner title={post.title || ''} subtitle={pubDate} />
       <Container>
         {isEditor && <>
           <Link href={`admin/${post.id}`}>
@@ -77,36 +43,50 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
             {post.title}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
-            {post.publishDate}
+            {pubDate}
           </Typography>
         </Box>
-        <AdaptiveEditor value={editorValue} viewOnly={true} />
+        <AdaptiveEditor value={post.content || ''} viewOnly={true} />
       </Container>
     </Layout >
   );
 };
 
-export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => (
+export const getStaticPaths: GetStaticPaths<{ slug: string }> = async ({ locales }) => (
   {
-    paths: allPosts.map(post => ({
-      params: { slug: post.slug }
-    })),
-    fallback: 'blocking', // can also be true or 'blocking'
+    paths: getStaticPathsWithLocale((await getPublishedPosts()).map(post => ({
+      params: { slug: post.slug as string }
+    })), locales),
+    fallback: true,
   }
 );
 
 export const getStaticProps: GetStaticProps<PostPageProps> = async ({ params }) => {
-  if (!params || typeof params.slug !== 'string') {
+  if (typeof params?.slug !== 'string') {
     return { notFound: true };
   }
-  const post = allPosts.find(p => p.slug === params.slug);
+  let post: Article | null | undefined;
+  // In build time, query all posts (it will be cached) to avoid querying every post one by one
+  if (process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD) {
+    const posts = await getPublishedPosts();
+    post = posts.find(p => p.slug === params.slug);
+  }
+  else {
+    const apolloClient = initApolloClient();
+    const data = await apolloClient.query({
+      query: PublishedPostDocument,
+      variables: { slug: params.slug },
+      fetchPolicy: 'network-only',
+    });
+    post = data.data.articleBySlug;
+  }
   if (!post) {
     return { notFound: true };
   }
   return {
     props: { post },
     revalidate: 300, // In seconds
-  }
+  };
 }
 
 export default PostPage;

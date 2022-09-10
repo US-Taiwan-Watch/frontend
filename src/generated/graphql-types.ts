@@ -95,7 +95,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addArticle?: Maybe<Article>;
   createEmptyArticle?: Maybe<Article>;
-  createUser?: Maybe<Scalars['Boolean']>;
+  createOrUpdateUser?: Maybe<Scalars['Boolean']>;
   deleteArticle?: Maybe<Scalars['Boolean']>;
   emitGlobalEvent: Scalars['Boolean'];
   emitUserEvent: Scalars['Boolean'];
@@ -115,8 +115,11 @@ export type MutationAddArticleArgs = {
 };
 
 
-export type MutationCreateUserArgs = {
+export type MutationCreateOrUpdateUserArgs = {
   email: Scalars['String'];
+  name?: InputMaybe<Scalars['String']>;
+  nickname?: InputMaybe<Scalars['String']>;
+  picture?: InputMaybe<Scalars['String']>;
   user_id: Scalars['String'];
 };
 
@@ -160,6 +163,7 @@ export type Query = {
   __typename?: 'Query';
   allArticles: Array<Article>;
   article?: Maybe<Article>;
+  articleBySlug?: Maybe<Article>;
   articles?: Maybe<Array<Article>>;
   bill?: Maybe<DenormalizedBill>;
   bills: PaginatedBills;
@@ -173,6 +177,11 @@ export type Query = {
 
 export type QueryArticleArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryArticleBySlugArgs = {
+  slug: Scalars['String'];
 };
 
 

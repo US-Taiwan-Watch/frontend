@@ -19,6 +19,7 @@ import { v4 as uuidv4 } from "uuid";
 import clsx from "clsx";
 import { useApolloClient } from "@apollo/client";
 import { makeStyles, createStyles } from "@mui/styles";
+import { uploadPostImage } from "../../utils/image-upload-utils";
 
 const useStyles = makeStyles((theme: USTWTheme) =>
   createStyles({
@@ -112,19 +113,9 @@ export const AdaptiveEditor = React.memo<AdaptiveEditorProps>(
     const uploadImage: (url: string) => ImageUploadType =
       (defaultUrl) => (file, reportProgress) =>
         new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          // reader.onload = async () => {
-          //   const response = await gqlAddImage(
-          //     reader.result as string,
-          //     uuidv4(),
-          //     client
-          //   );
-          //   resolve({ url: response.data.addImage });
-          // };
-          reader.onerror = (error) => {
-            reject(error);
-          };
+          uploadPostImage(file)
+            .then(url => resolve({ url }))
+            .catch(err => reject(err));
         });
 
     const cellPlugins = [

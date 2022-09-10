@@ -1,5 +1,5 @@
 import Typography from "@mui/material/Typography";
-import { Backdrop, Box, Button, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, TextareaAutosize, TextField } from "@mui/material";
+import { Backdrop, Box, Button, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Input, TextareaAutosize, TextField } from "@mui/material";
 import { useFetchUser } from "../../../lib/user";
 import { AdaptiveEditor } from "../../../components/component-adaptive-editor";
 import { useEffect, useState } from "react";
@@ -13,6 +13,9 @@ import { Article } from "../../../../common/models";
 import { ArticleDocument } from "../../../lib/page-graphql/query-post.graphql.interface";
 import { UpdateArticleWithIdDocument } from "../../../lib/page-graphql/mutation-update-post.graphql.interface";
 import LoadingButton from '@mui/lab/LoadingButton';
+import { urlObjectKeys } from "next/dist/shared/lib/utils";
+import { CardItem } from "../../../components/card-list";
+import { uploadPostImage } from "../../../utils/image-upload-utils";
 
 type PostPageProps = {
   post?: Article,
@@ -71,15 +74,17 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [savedPost, setSavedPost] = useState(post);
   const [updatedPost, setUpdatedPost] = useState(post);
+  const [uploadingCoverImage, setUploadingCoverImage] = useState(false);
 
   useEffect(() => {
     if (state === State.DRAFT && updated && !isActioning) {
       if (timeout) {
         clearTimeout(timeout);
       }
-      timeout = setTimeout(() => {
+      timeout = setTimeout(async () => {
         setIsAutoSaving(true);
-        savePost(updatedPost).then(suc => setIsAutoSaving(false));
+        await savePost(updatedPost);
+        setIsAutoSaving(false);
       }, 500);
     }
   }, [updatedPost]);
@@ -88,7 +93,7 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
   const updated = !shallowEqual(updatedPost, savedPost);
   const actions = getActions(state);
 
-  const confirmAction = () => {
+  const confirmAction = async () => {
     setIsActioning(true);
     const updatedPostWithState = updatedPost;
     // FIXME: should unpublish also update the post?
@@ -96,36 +101,34 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
     if (nextState) {
       updatedPostWithState.isPublished = nextState === State.PUBLISHED;
     }
-    savePost(updatedPostWithState).then(success => {
-      setIsActioning(false);
-      if (success) {
-        setConfirmingAction(null);
-        setIsActioning(false);
-        router.back();
-        return;
-      }
-      // TODO: handle action error
-    })
+    const success = await savePost(updatedPostWithState);
+    if (!success) {
+      // handle error
+    }
+    setUpdatedPost(updatedPostWithState);
+    setConfirmingAction(null);
+    setIsActioning(false);
+    router.back();
   }
 
-  const savePost = (postToSave: Article) => 
-    // return new Promise(r => setTimeout(r, 5000)).then(w => true);
-     apolloClient.mutate({
+  const savePost = async (postToSave: Article) => {
+    try {
+      const res = await apolloClient.mutate({
       mutation: UpdateArticleWithIdDocument,
       variables: { updateArticleWithIdId: postToSave.id, ...postToSave },
       fetchPolicy: "network-only",
-    }).then(res => {
+      });
       if (res.data?.updateArticleWithId?.id !== postToSave.id) {
         return false;
       }
-      setUpdatedPost(postToSave);
       setSavedPost(postToSave);
       return true;
-    }).catch(err => {
+    } catch (err) {
       console.error("Failed to save")
       return false;
-    })
-  
+    }
+  };
+
 
   return (
     <Container>
@@ -135,17 +138,53 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Dialog fullWidth open={showSettings} onClose={() => setShowSettings(false)}>
+      <Dialog fullScreen open={showSettings} onClose={() => setShowSettings(false)}>
         <DialogTitle>Settings</DialogTitle>
         <DialogContent>
+          <Typography variant="subtitle2">
+            Preview
+          </Typography>
+          <CardItem url={`/posts/${updatedPost.slug}`}
+            title={updatedPost.title || ''}
+            content={updatedPost.preview || ''}
+            displayDate=''
+            image={updatedPost.imageSource} />
+
+          <input
+            id="raised-button-file" hidden type="file" accept="image/png, image/jpeg"
+            onChange={async e => {
+              if (!e.target.files) {
+                return;
+              }
+              setUploadingCoverImage(true);
+              try {
+                const text = await uploadPostImage(e.target.files[0]);
+                setUpdatedPost({ ...updatedPost, imageSource: text });
+              } catch (err) {
+                // TODO: handle action error
+              } finally {
+                setUploadingCoverImage(false);
+              }
+            }} />
+          <label htmlFor="raised-button-file">
+            <LoadingButton component="span" variant="contained" loading={uploadingCoverImage}>
+              Upload Cover Image
+            </LoadingButton>
+          </label>
+          <Button onClick={() => setUpdatedPost({ ...updatedPost, imageSource: undefined })}>
+            Remove Cover Image
+          </Button>
           <TextField
             autoFocus fullWidth margin="dense" variant="standard"
             label="Post URL"
             value={updatedPost.slug}
+            placeholder={updatedPost.id}
             onChange={e => setUpdatedPost({ ...updatedPost, slug: e.target.value })}
           />
-          Description:
-          <TextareaAutosize style={{ width: "100%" }}
+          <TextField
+            fullWidth margin="dense" variant="standard"
+            multiline
+            label="Description"
             value={updatedPost.preview}
             onChange={e => setUpdatedPost({ ...updatedPost, preview: e.target.value })}
           />
@@ -243,6 +282,7 @@ PostPage.getInitialProps = async ({ req, query, apolloClient }) => {
         createdTime: post.createdTime || 0,
         slug: post.slug || '',
         preview: post.preview || '',
+        imageSource: post.imageSource || '',
       }
     };
   } catch (err) {
