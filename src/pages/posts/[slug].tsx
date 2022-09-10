@@ -1,26 +1,20 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import Typography from "@mui/material/Typography";
-import { Link } from "../../components/link";
 import { Layout } from "../../components/layout";
-import { Box, Button, Container } from "@mui/material";
 import { Banner } from "../../components/banner";
 import { getPublishedPosts } from ".";
-import { AdaptiveEditor } from "../../components/component-adaptive-editor";
-import { useUserRole } from "../../context/user-role";
 import { Article } from "../../generated/graphql-types";
 import { PublishedPostDocument } from "../../lib/page-graphql/query-post-by-slug.graphql.interface";
 import { Loading } from "../../components/loading";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
 import { initApolloClient } from "../../lib/with-apollo";
 import { PHASE_PRODUCTION_BUILD } from "next/constants";
+import { PostContent } from "../../components/post-content";
 
 type PostPageProps = {
   post?: Article,
 }
 
 const PostPage: NextPage<PostPageProps> = ({ post }) => {
-  const { isEditor } = useUserRole();
-
   if (!post) {
     return <Loading />;
   }
@@ -28,26 +22,10 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
   const pubDate = post.createdTime !== undefined ? new Date(post.createdTime as number).toLocaleDateString() : undefined;
 
   return (
-    <Layout>
+    <Layout title={post.title || undefined} type="article" description={post.preview || ''}
+      image={post.imageSource || undefined} >
       <Banner title={post.title || ''} subtitle={pubDate} />
-      <Container>
-        {isEditor && <>
-          <Link href={`admin/${post.id}`}>
-            <Button variant="contained">EDIT</Button>
-          </Link>
-          <Typography sx={{ mx: 5 }}>{post.isPublished ? 'Published' : 'Draft'}</Typography>
-        </>
-        }
-        <Box alignItems="center" sx={{ paddingTop: 3, display: 'flex', flexDirection: 'column' }}>
-          <Typography component="h2" variant="h5">
-            {post.title}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            {pubDate}
-          </Typography>
-        </Box>
-        <AdaptiveEditor value={post.content || ''} viewOnly={true} />
-      </Container>
+      <PostContent post={post} />
     </Layout >
   );
 };
