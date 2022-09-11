@@ -13,7 +13,6 @@ import { Article } from "../../../../common/models";
 import { ArticleDocument } from "../../../lib/page-graphql/query-post.graphql.interface";
 import { UpdateArticleWithIdDocument } from "../../../lib/page-graphql/mutation-update-post.graphql.interface";
 import LoadingButton from '@mui/lab/LoadingButton';
-import { urlObjectKeys } from "next/dist/shared/lib/utils";
 import { CardItem } from "../../../components/card-list";
 import { uploadPostImage } from "../../../utils/image-upload-utils";
 
@@ -114,9 +113,9 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
   const savePost = async (postToSave: Article) => {
     try {
       const res = await apolloClient.mutate({
-      mutation: UpdateArticleWithIdDocument,
-      variables: { updateArticleWithIdId: postToSave.id, ...postToSave },
-      fetchPolicy: "network-only",
+        mutation: UpdateArticleWithIdDocument,
+        variables: { updateArticleWithIdId: postToSave.id, ...postToSave },
+        fetchPolicy: "network-only",
       });
       if (res.data?.updateArticleWithId?.id !== postToSave.id) {
         return false;

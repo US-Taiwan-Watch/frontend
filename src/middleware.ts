@@ -11,8 +11,8 @@ export function middleware(request: NextRequest) {
 
   if (shouldHandleLocale) {
     let langs = [];
-    if ('preferred-language' in request.cookies) {
-      langs.push(request.cookies['preferred-language']);
+    if (request.cookies.has('preferred-language')) {
+      langs.push(request.cookies.get('preferred-language') as string);
     }
     const acceptLang = request.headers.get("accept-language");
     if (acceptLang) {
@@ -25,6 +25,9 @@ export function middleware(request: NextRequest) {
         break;
       }
     }
-    return NextResponse.redirect(`/${finalLang}${request.nextUrl.pathname}`);
+
+    const url = request.nextUrl.clone();
+    url.pathname = `/${finalLang}${request.nextUrl.pathname}`;
+    return NextResponse.redirect(url);
   }
 }
