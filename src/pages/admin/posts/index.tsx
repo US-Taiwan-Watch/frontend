@@ -34,8 +34,8 @@ const columns: GridColDef[] = [
   {
     field: 'actions', headerName: 'Actions', width: 150, sortable: false, renderCell: params => (
       <ButtonGroup>
-        <Link role="button" href={`admin/${params.id}`} sx={{ textDecoration: 'none' }}>
-          <Button href={`admin/${params.id}`}>Edit</Button>
+        <Link role="button" href={`/admin/posts/${params.id}`} sx={{ textDecoration: 'none' }}>
+          <Button href={`/admin/posts/${params.id}`}>Edit</Button>
         </Link>
         <Link role="button" href={`${params.row.slug}`} sx={{ textDecoration: 'none' }}>
           <Button>View</Button>

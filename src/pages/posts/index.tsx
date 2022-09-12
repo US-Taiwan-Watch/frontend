@@ -22,7 +22,7 @@ const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
       <Banner title="所有文章" >
       </Banner>
       {isEditor && <>
-        <Link href={`posts/admin`}>
+        <Link href={`/admin/posts`}>
           <Button variant="contained">Manage Posts</Button>
         </Link>
       </>}
