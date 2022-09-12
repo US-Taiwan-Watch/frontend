@@ -3,7 +3,7 @@ import { Layout } from "../../components/layout";
 import { Banner } from "../../components/banner";
 import { getPublishedPosts } from ".";
 import { Article } from "../../generated/graphql-types";
-import { PublishedPostDocument } from "../../lib/page-graphql/query-post-by-slug.graphql.interface";
+import { PublicPostDocument } from "../../lib/page-graphql/query-post-by-slug.graphql.interface";
 import { Loading } from "../../components/loading";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
 import { PostContent } from "../../components/post-content";
@@ -44,11 +44,11 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({ params }) 
   }
   const apolloClient = createApolloClient();
   const data = await apolloClient.query({
-    query: PublishedPostDocument,
+    query: PublicPostDocument,
     variables: { slug: params.slug },
     fetchPolicy: 'network-only',
   });
-  const post = data.data.articleBySlug;
+  const post = data.data.publicArticle;
   if (!post) {
     return { notFound: true };
   }

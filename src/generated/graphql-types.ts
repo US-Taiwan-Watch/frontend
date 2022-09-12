@@ -163,7 +163,6 @@ export type Query = {
   __typename?: 'Query';
   allArticles: Array<Article>;
   article?: Maybe<Article>;
-  articleBySlug?: Maybe<Article>;
   articles?: Maybe<Array<Article>>;
   bill?: Maybe<DenormalizedBill>;
   bills: PaginatedBills;
@@ -172,16 +171,12 @@ export type Query = {
   member?: Maybe<Member>;
   members: Array<Member>;
   myRoles?: Maybe<Array<Auth0RoleName>>;
+  publicArticle?: Maybe<Article>;
 };
 
 
 export type QueryArticleArgs = {
   id: Scalars['String'];
-};
-
-
-export type QueryArticleBySlugArgs = {
-  slug: Scalars['String'];
 };
 
 
@@ -210,6 +205,11 @@ export type QueryMembersArgs = {
   bioGuideIds?: InputMaybe<Array<Scalars['String']>>;
 };
 
+
+export type QueryPublicArticleArgs = {
+  slug: Scalars['String'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   onGlobalEvent: EventPayloadPublish;
@@ -225,4 +225,7 @@ export type User = {
   __typename?: 'User';
   email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  nickname?: Maybe<Scalars['String']>;
+  picture?: Maybe<Scalars['String']>;
 };
