@@ -1,0 +1,52 @@
+import * as React from "react";
+import { useFetchUser } from "../lib/user";
+import { Box, Toolbar, Typography } from "@mui/material";
+import { useI18n } from "../context/i18n";
+import { LocaleSwitcher } from "./locale-switcher";
+import { Link, LinkProps } from "./link";
+import Image from "next/image";
+import { useUserRole } from "../context/user-role";
+
+const NavLink: React.FC<LinkProps> = (props) => (
+  <Link {...props} style={{ textDecoration: 'none' }}
+    variant="button"
+    color="text.primary" sx={{ my: 1, mx: 1.5 }}>
+    {props.children}
+  </Link >
+);
+
+export const AdminHeader: React.FC = () => {
+  const { i18n } = useI18n();
+  const { loading } = useFetchUser({ required: true });
+  const { isAdmin, isEditor } = useUserRole();
+
+  return (
+    <Toolbar sx={{ flexWrap: 'wrap', alignItems: 'center' }}>
+      <Box sx={{
+        my: 1,
+        flexGrow: 1,
+        display: 'flex',
+      }}>
+        <Image src="/assets/logo.png" width={30} height={30} />
+        {/* <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' }, a: { textDecoration: 'none' } }} /> */}
+        <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
+          [管理] {i18n.strings.brand.fullName}
+        </Typography>
+      </Box>
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        justifyContent: 'right',
+      }}>
+        {!loading && (isAdmin || isEditor) &&
+          <>
+            <NavLink href="/">回到首頁</NavLink>
+            <NavLink href="/posts">文章</NavLink>
+            <NavLink href="/api/logout" target="_self">Logout</NavLink>
+          </>
+        }
+      </Box>
+    </Toolbar>
+  )
+};

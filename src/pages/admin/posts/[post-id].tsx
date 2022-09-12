@@ -16,6 +16,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { CardItem } from "../../../components/card-list";
 import { uploadPostImage } from "../../../utils/image-upload-utils";
 import { revalidatePage } from "../../../utils/revalidte-page";
+import { LocaleSwitcher } from "../../../components/locale-switcher";
 
 type PostPageProps = {
   post?: Article,
@@ -132,7 +133,6 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
     }
   };
 
-
   return (
     <Container>
       <Backdrop
@@ -230,6 +230,9 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
           Update
         </Button>
         <Typography sx={{ mx: 5 }}>{post.isPublished ? 'Published' : (isAutoSaving ? 'Saving...' : 'Draft')}</Typography>
+        <Box sx={{ my: 1 }}>
+          <LocaleSwitcher />
+        </Box>
         <IconButton onClick={() => setShowSettings(true)}>
           <SettingsIcon />
         </IconButton>

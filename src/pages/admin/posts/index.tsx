@@ -15,6 +15,7 @@ import { CreatePostDocument } from "../../../lib/page-graphql/mutation-create-po
 import { useState } from "react";
 import { DataGridPro, GridColDef, GridSortModel, GridValueFormatterParams } from "@mui/x-data-grid-pro";
 import { useFetchUser } from "../../../lib/user";
+import { AdminLayout } from "../../../components/admin-layout";
 
 type PostsPageProps = {
   posts?: Article[],
@@ -37,7 +38,7 @@ const columns: GridColDef[] = [
         <Link role="button" href={`/admin/posts/${params.id}`} sx={{ textDecoration: 'none' }}>
           <Button href={`/admin/posts/${params.id}`}>Edit</Button>
         </Link>
-        <Link role="button" href={`${params.row.slug}`} sx={{ textDecoration: 'none' }}>
+        <Link role="button" href={`/posts/${params.row.slug || params.id}`} target="_blank" sx={{ textDecoration: 'none' }}>
           <Button>View</Button>
         </Link>
       </ButtonGroup>)
@@ -59,7 +60,7 @@ const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
     return <Error statusCode={404} />
   }
   return (
-    <Layout>
+    <AdminLayout>
       <Banner title="管理文章" >
       </Banner>
       <IconButton onClick={() => {
@@ -77,7 +78,7 @@ const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
       <DataGridPro autoHeight={true} columns={columns} rows={posts}
         sortModel={sortModel}
         onSortModelChange={(model) => setSortModel(model)} />
-    </Layout >
+    </AdminLayout >
   );
 };
 

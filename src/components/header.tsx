@@ -9,11 +9,6 @@ import { ColorModeContext } from "../pages/_app";
 import { useUserRole } from "../context/user-role";
 import { useRouter } from "next/router";
 
-export interface IHeaderProps {
-  user?: IUser;
-  loading?: boolean;
-}
-
 const NavLink: React.FC<LinkProps> = (props) => (
   <Link {...props} style={{ textDecoration: 'none' }}
     variant="button"
