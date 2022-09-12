@@ -6,9 +6,8 @@ import { Article } from "../../generated/graphql-types";
 import { PublishedPostDocument } from "../../lib/page-graphql/query-post-by-slug.graphql.interface";
 import { Loading } from "../../components/loading";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
-import { initApolloClient } from "../../lib/with-apollo";
-import { PHASE_PRODUCTION_BUILD } from "next/constants";
 import { PostContent } from "../../components/post-content";
+import { createApolloClient } from "../../lib/apollo-client";
 
 type PostPageProps = {
   post?: Article,
@@ -43,27 +42,18 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({ params }) 
   if (typeof params?.slug !== 'string') {
     return { notFound: true };
   }
-  let post: Article | null | undefined;
-  // In build time, query all posts (it will be cached) to avoid querying every post one by one
-  if (process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD) {
-    const posts = await getPublishedPosts();
-    post = posts.find(p => p.slug === params.slug);
-  }
-  else {
-    const apolloClient = initApolloClient();
-    const data = await apolloClient.query({
-      query: PublishedPostDocument,
-      variables: { slug: params.slug },
-      fetchPolicy: 'network-only',
-    });
-    post = data.data.articleBySlug;
-  }
+  const apolloClient = createApolloClient();
+  const data = await apolloClient.query({
+    query: PublishedPostDocument,
+    variables: { slug: params.slug },
+    fetchPolicy: 'network-only',
+  });
+  const post = data.data.articleBySlug;
   if (!post) {
     return { notFound: true };
   }
   return {
     props: { post },
-    revalidate: 300, // In seconds
   };
 }
 

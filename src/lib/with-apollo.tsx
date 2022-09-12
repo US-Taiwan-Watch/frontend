@@ -92,7 +92,7 @@ export const initApolloClient = (
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   // but allow using the same client in build time
-  if (typeof window === "undefined" && process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+  if (typeof window === "undefined") {
     return createApolloClient(headers, initialState);
   }
 

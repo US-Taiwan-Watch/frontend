@@ -15,6 +15,7 @@ import { UpdateArticleWithIdDocument } from "../../../lib/page-graphql/mutation-
 import LoadingButton from '@mui/lab/LoadingButton';
 import { CardItem } from "../../../components/card-list";
 import { uploadPostImage } from "../../../utils/image-upload-utils";
+import { revalidatePage } from "../../../utils/revalidte-page";
 
 type PostPageProps = {
   post?: Article,
@@ -91,6 +92,7 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
   const state = savedPost.isPublished ? State.PUBLISHED : State.DRAFT;
   const updated = !shallowEqual(updatedPost, savedPost);
   const actions = getActions(state);
+  const postUrl = `/posts/${updatedPost.slug ? updatedPost.slug : updatedPost.id}`;
 
   const confirmAction = async () => {
     setIsActioning(true);
@@ -103,7 +105,9 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
     const success = await savePost(updatedPostWithState);
     if (!success) {
       // handle error
+      return;
     }
+    revalidatePage(postUrl);
     setUpdatedPost(updatedPostWithState);
     setConfirmingAction(null);
     setIsActioning(false);
@@ -143,7 +147,7 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
           <Typography variant="subtitle2">
             Preview
           </Typography>
-          <CardItem url={`/posts/${updatedPost.slug}`}
+          <CardItem url={postUrl}
             title={updatedPost.title || ''}
             content={updatedPost.preview || ''}
             displayDate=''
@@ -279,7 +283,7 @@ PostPage.getInitialProps = async ({ req, query, apolloClient }) => {
         isPublished: post.isPublished || false,
         lastModifiedTime: post.lastModifiedTime || 0,
         createdTime: post.createdTime || 0,
-        slug: post.slug || '',
+        slug: post.slug || undefined,
         preview: post.preview || '',
         imageSource: post.imageSource || '',
       }

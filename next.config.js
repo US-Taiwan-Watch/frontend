@@ -3,11 +3,8 @@
 const path = require("path");
 
 /** @type {import('next').NextConfig} */
-module.exports = (phase, { defaultConfig }) => ({
+module.exports = {
   reactStrictMode: true,
-  env: {
-    NEXT_PHASE: phase,
-  },
   // experimental: {
   //   outputStandalone: true,
   //   workerThreads: false,
@@ -34,4 +31,4 @@ module.exports = (phase, { defaultConfig }) => ({
 
     return config;
   }
-});
+};
