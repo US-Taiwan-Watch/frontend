@@ -1,4 +1,4 @@
-query Article($articleId: String!) {
+query EditorPageQuery($articleId: String!) {
   article(id: $articleId) {
     id
     title
@@ -12,5 +12,9 @@ query Article($articleId: String!) {
     lastModifiedTime
     imageSource
     tags
+  }
+  editors {
+    id
+    name
   }
 }

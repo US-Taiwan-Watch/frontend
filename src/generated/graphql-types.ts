@@ -166,6 +166,7 @@ export type Query = {
   articles?: Maybe<Array<Article>>;
   bill?: Maybe<DenormalizedBill>;
   bills: PaginatedBills;
+  editors: Array<User>;
   imUser?: Maybe<User>;
   isAdmin: Scalars['Boolean'];
   member?: Maybe<Member>;

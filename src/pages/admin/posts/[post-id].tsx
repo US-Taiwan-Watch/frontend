@@ -1,5 +1,5 @@
 import Typography from "@mui/material/Typography";
-import { Backdrop, Box, Button, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Input, TextareaAutosize, TextField } from "@mui/material";
+import { Autocomplete, Backdrop, Box, Button, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Input, TextareaAutosize, TextField } from "@mui/material";
 import { useFetchUser } from "../../../lib/user";
 import { AdaptiveEditor } from "../../../components/component-adaptive-editor";
 import { useEffect, useState } from "react";
@@ -10,16 +10,18 @@ import { NextPageWithApollo, withApollo } from "../../../lib/with-apollo";
 import SettingsIcon from '@mui/icons-material/Settings';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Article } from "../../../../common/models";
-import { ArticleDocument } from "../../../lib/page-graphql/query-post.graphql.interface";
+import { EditorPageQueryDocument } from "../../../lib/page-graphql/query-post.graphql.interface";
 import { UpdateArticleWithIdDocument } from "../../../lib/page-graphql/mutation-update-post.graphql.interface";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { CardItem } from "../../../components/card-list";
 import { uploadPostImage } from "../../../utils/image-upload-utils";
 import { revalidatePage } from "../../../utils/revalidte-page";
 import { LocaleSwitcher } from "../../../components/locale-switcher";
+import { User } from "../../../generated/graphql-types";
 
 type PostPageProps = {
   post?: Article,
+  editors?: User[],
 }
 
 let timeout: NodeJS.Timeout | null = null;
@@ -65,7 +67,7 @@ const shallowEqual = (obj1: { [key: string]: any }, obj2: { [key: string]: any }
   Object.keys(obj1).length === Object.keys(obj2).length &&
   Object.keys(obj1).every(key => obj1[key] === obj2[key]);
 
-const Post: React.FC<{ post: Article }> = ({ post }) => {
+const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) => {
   const user = useFetchUser({ required: true });
   const router = useRouter();
   const apolloClient = useApolloClient();
@@ -177,6 +179,34 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
           <Button onClick={() => setUpdatedPost({ ...updatedPost, imageSource: undefined })}>
             Remove Cover Image
           </Button>
+          <Autocomplete
+            multiple
+            options={editors}
+            disableClearable={true}
+            value={updatedPost.authors?.map(a => editors.find(e => e.id === a)!)}
+            getOptionLabel={option => option.name!}
+            onChange={(_, values) => values.length > 0 && setUpdatedPost({
+              ...updatedPost,
+              authors: values.map(v => v.id),
+            })}
+            renderTags={(tagValue, getTagProps) =>
+              tagValue.map((option, index, values) => (
+                <Chip
+                  label={option.name}
+                  {...getTagProps({ index })}
+                  disabled={values.length === 1}
+                />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="standard"
+                label="Authors"
+                placeholder="Authors"
+              />
+            )}
+          />
           <TextField
             autoFocus fullWidth margin="dense" variant="standard"
             label="Post URL"
@@ -258,19 +288,19 @@ const Post: React.FC<{ post: Article }> = ({ post }) => {
   );
 }
 
-const PostPage: NextPageWithApollo<PostPageProps> = ({ post }) => {
+const PostPage: NextPageWithApollo<PostPageProps> = ({ post, editors }) => {
   if (!post) {
     return <Error statusCode={404} />
   }
 
-  return <Post post={post} />;
+  return <Post post={post} editors={editors || []} />;
 };
 
-PostPage.getInitialProps = async ({ req, query, apolloClient }) => {
+PostPage.getInitialProps = async ({ query, apolloClient }) => {
   // TODO: query real post
   try {
     const res = await apolloClient?.query({
-      query: ArticleDocument,
+      query: EditorPageQueryDocument,
       variables: { articleId: query['post-id'] as string },
       fetchPolicy: "network-only",
     });
@@ -289,7 +319,9 @@ PostPage.getInitialProps = async ({ req, query, apolloClient }) => {
         slug: post.slug || undefined,
         preview: post.preview || '',
         imageSource: post.imageSource || '',
-      }
+        authors: post.authors || [],
+      },
+      editors: res.data.editors,
     };
   } catch (err) {
     return { post: undefined };
