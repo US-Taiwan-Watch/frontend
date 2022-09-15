@@ -1,10 +1,10 @@
-import { Box, Button, Chip, Container, Typography } from "@mui/material";
+import { Avatar, Box, Button, Chip, Container, Typography } from "@mui/material";
 import Link from "next/link";
 import { useUserRole } from "../context/user-role";
-import { Article } from "../generated/graphql-types";
+import { DenormalizedArticle } from "../generated/graphql-types";
 import { AdaptiveEditor } from "./component-adaptive-editor";
 
-export const PostContent: React.FC<{ post: Article }> = ({ post }) => {
+export const PostContent: React.FC<{ post: DenormalizedArticle }> = ({ post }) => {
   const { isEditor } = useUserRole();
 
   return (
@@ -21,7 +21,9 @@ export const PostContent: React.FC<{ post: Article }> = ({ post }) => {
         </Typography>
         <Typography variant="subtitle1" color="text.secondary">
           {post.pusblishTime && new Date(post.pusblishTime).toLocaleDateString()}{' by '}
-          {post.authors?.map(author => <Chip label={author} onClick={() => { }} />)}
+          {post.authorInfos.map(author =>
+            <Chip avatar={<Avatar alt={author.name || ''} src={author.picture || ''} />}
+              label={author.name} />)}
         </Typography>
         {/* {post.imageSource && <img src={post.imageSource} width="100%" style={{ paddingTop: 10 }} />} */}
       </Box>

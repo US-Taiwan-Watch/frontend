@@ -34,6 +34,23 @@ export enum Auth0RoleName {
   S2S = 'S2S'
 }
 
+export type DenormalizedArticle = {
+  __typename?: 'DenormalizedArticle';
+  authorInfos: Array<User>;
+  authors?: Maybe<Array<Scalars['String']>>;
+  content?: Maybe<Scalars['String']>;
+  createdTime?: Maybe<Scalars['Float']>;
+  id: Scalars['String'];
+  imageSource?: Maybe<Scalars['String']>;
+  isPublished?: Maybe<Scalars['Boolean']>;
+  lastModifiedTime?: Maybe<Scalars['Float']>;
+  preview?: Maybe<Scalars['String']>;
+  pusblishTime?: Maybe<Scalars['Float']>;
+  slug?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Scalars['String']>>;
+  title?: Maybe<Scalars['String']>;
+};
+
 export type DenormalizedBill = {
   __typename?: 'DenormalizedBill';
   billNumber: Scalars['Float'];
@@ -172,7 +189,7 @@ export type Query = {
   member?: Maybe<Member>;
   members: Array<Member>;
   myRoles?: Maybe<Array<Auth0RoleName>>;
-  publicArticle?: Maybe<Article>;
+  publicArticle?: Maybe<DenormalizedArticle>;
 };
 
 

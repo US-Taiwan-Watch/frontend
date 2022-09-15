@@ -6,11 +6,16 @@ query PublicPost($slug: String!) {
     slug
     preview
     isPublished
-    authors
     pusblishTime
     createdTime
     lastModifiedTime
     imageSource
     tags
+    authorInfos {
+      id
+      name
+      picture
+      nickname
+    }
   }
 }

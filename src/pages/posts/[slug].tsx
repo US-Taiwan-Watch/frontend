@@ -2,17 +2,17 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { Layout } from "../../components/layout";
 import { Banner } from "../../components/banner";
 import { getPublishedPosts } from ".";
-import { Article } from "../../generated/graphql-types";
-import { PublicPostDocument } from "../../lib/page-graphql/query-post-by-slug.graphql.interface";
+import { Article, DenormalizedArticle } from "../../generated/graphql-types";
 import { Loading } from "../../components/loading";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
 import { PostContent } from "../../components/post-content";
 import { createApolloClient } from "../../lib/apollo-client";
 import Link from "next/link";
 import { Box, Grid, Paper, Typography } from "@mui/material";
+import { PublicPostDocument } from "../../lib/page-graphql/query-public-post.graphql.interface";
 
 type PostPageProps = {
-  post?: Article,
+  post?: DenormalizedArticle,
 }
 
 const PostPage: NextPage<PostPageProps> = ({ post }) => {
@@ -32,13 +32,11 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
-          backgroundImage: `url(${post.imageSource})`,
+          backgroundImage: `url(${post.imageSource || '/assets/banner.png'})`,
           borderRadius: 0,
         }}
       >
-        {/* Increase the priority of the hero background image */}
-        {post.imageSource &&
-          <img style={{ visibility: 'hidden', maxHeight: "500px" }} src={post.imageSource} width="100%" />}
+        <img style={{ visibility: 'hidden', maxHeight: "500px" }} src={post.imageSource || '/assets/banner.png'} width="100%" />
       </Paper >
       <PostContent post={post} />
     </Layout >
