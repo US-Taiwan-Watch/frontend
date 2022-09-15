@@ -1,5 +1,5 @@
-mutation CreatePost {
-  createEmptyArticle {
+mutation CreatePost($title: String) {
+  addArticle(title: $title) {
     id
   }
 }

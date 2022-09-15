@@ -9,20 +9,23 @@ import { IconButton } from "@material-ui/core";
 import { NextPageWithApollo, withApollo } from "../../../lib/with-apollo";
 import Error from "next/error";
 import { AllArticlesDocument } from "../../../lib/page-graphql/query-posts.graphql.interface";
-import { Article } from "../../../../common/models";
 import { useApolloClient } from "@apollo/client";
 import { CreatePostDocument } from "../../../lib/page-graphql/mutation-create-post.graphql.interface";
 import { useState } from "react";
 import { DataGridPro, GridColDef, GridSortModel, GridValueFormatterParams } from "@mui/x-data-grid-pro";
 import { useFetchUser } from "../../../lib/user";
 import { AdminLayout } from "../../../components/admin-layout";
+import { Article } from "../../../generated/graphql-types";
 
 type PostsPageProps = {
   posts?: Article[],
 }
 
-function dateFormatter(params: GridValueFormatterParams<number>): string {
-  const date = new Date(params.value);
+function dateFormatter(params: GridValueFormatterParams<number | null>): string {
+  if (!params.value) {
+    return '';
+  }
+  const date = new Date(params.value)
   return new Date().toLocaleDateString() === date.toLocaleDateString() ?
     date.toLocaleTimeString() : date.toLocaleDateString();
 }
@@ -30,6 +33,7 @@ function dateFormatter(params: GridValueFormatterParams<number>): string {
 const columns: GridColDef[] = [
   { field: 'title', headerName: 'Title', flex: 10, resizable: true },
   { field: 'isPublished', headerName: 'Status', valueFormatter: param => param.value === true ? 'Published' : 'Draft' },
+  { field: 'pusblishTime', headerName: 'Published', width: 150, valueFormatter: dateFormatter, },
   { field: 'createdTime', headerName: 'Created', width: 150, valueFormatter: dateFormatter, },
   { field: 'lastModifiedTime', headerName: 'Last Modified', width: 150, valueFormatter: dateFormatter, },
   {
@@ -66,10 +70,11 @@ const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
       <IconButton onClick={() => {
         apolloClient.mutate({
           mutation: CreatePostDocument,
+          variables: { title: `(Untitled ${new Date().toLocaleString()})` },
           fetchPolicy: "network-only",
         }).then(res => {
-          if (res.data?.createEmptyArticle?.id) {
-            router.push(`admin/${res.data?.createEmptyArticle?.id}`);
+          if (res.data?.addArticle?.id) {
+            router.push(`posts/${res.data?.addArticle?.id}`);
           }
         })
       }}>
@@ -89,15 +94,7 @@ PostsPage.getInitialProps = async ({ apolloClient }) => {
       fetchPolicy: "network-only",
     });
     return {
-      posts: data?.data.allArticles.map(post => ({
-        id: post.id,
-        title: post.title || '(Untitled)',
-        content: post.content || '',
-        isPublished: post.isPublished || false,
-        lastModifiedTime: post.lastModifiedTime || 0,
-        createdTime: post.createdTime || 0,
-        slug: post.slug || '',
-      }))
+      posts: data?.data.allArticles,
     };
   } catch (err) {
     console.log(err);

@@ -9,7 +9,6 @@ import { useApolloClient } from "@apollo/client";
 import { NextPageWithApollo, withApollo } from "../../../lib/with-apollo";
 import SettingsIcon from '@mui/icons-material/Settings';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Article } from "../../../../common/models";
 import { EditorPageQueryDocument } from "../../../lib/page-graphql/query-post.graphql.interface";
 import { UpdateArticleWithIdDocument } from "../../../lib/page-graphql/mutation-update-post.graphql.interface";
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -17,7 +16,7 @@ import { CardItem } from "../../../components/card-list";
 import { uploadPostImage } from "../../../utils/image-upload-utils";
 import { revalidatePage } from "../../../utils/revalidte-page";
 import { LocaleSwitcher } from "../../../components/locale-switcher";
-import { User } from "../../../generated/graphql-types";
+import { Article, User } from "../../../generated/graphql-types";
 
 type PostPageProps = {
   post?: Article,
@@ -153,8 +152,7 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
             title={updatedPost.title || ''}
             content={updatedPost.preview || ''}
             displayDate=''
-            image={updatedPost.imageSource} />
-
+            image={updatedPost.imageSource || undefined} />
           <input
             id="raised-button-file" hidden type="file" accept="image/png, image/jpeg"
             onChange={async e => {
@@ -281,7 +279,7 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
         </Typography>
       </Box>
       <AdaptiveEditor
-        value={updatedPost.content}
+        value={updatedPost.content || undefined}
         viewOnly={false}
         onSave={val => setUpdatedPost({ ...updatedPost, content: val })} />
     </Container>
@@ -309,18 +307,7 @@ PostPage.getInitialProps = async ({ query, apolloClient }) => {
       return { post: undefined };
     }
     return {
-      post: {
-        id: post.id,
-        title: post.title || `(Untitled ${new Date(post.createdTime || 0).toLocaleString()})`,
-        content: post.content || '',
-        isPublished: post.isPublished || false,
-        lastModifiedTime: post.lastModifiedTime || 0,
-        createdTime: post.createdTime || 0,
-        slug: post.slug || undefined,
-        preview: post.preview || '',
-        imageSource: post.imageSource || '',
-        authors: post.authors || [],
-      },
+      post,
       editors: res.data.editors,
     };
   } catch (err) {
