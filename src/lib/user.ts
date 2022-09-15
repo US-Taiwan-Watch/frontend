@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
 export interface IUser {
@@ -48,6 +49,7 @@ export const fetchUser = async (cookie = "") => {
 };
 
 export const useFetchUser = ({ required }: { required?: boolean } = {}) => {
+  const { asPath } = useRouter();
   const [loading, setLoading] = useState(
     () => !(typeof window !== "undefined" && (window as USTWWindow).__user)
   );
@@ -58,6 +60,8 @@ export const useFetchUser = ({ required }: { required?: boolean } = {}) => {
     }
     return (window as USTWWindow).__user;
   });
+
+  const callback = process.env.NEXT_PUBLIC_BASE_URL + asPath.replace(/[#|?].*$/, '');
 
   useEffect(
     () => {
@@ -72,7 +76,7 @@ export const useFetchUser = ({ required }: { required?: boolean } = {}) => {
         if (isMounted) {
           // When the user is not logged in but login is required
           if (required && !user) {
-            window.location.href = "/api/login";
+            window.location.href = `/api/login?callback=${callback}`;
             return;
           }
           setUser(user);

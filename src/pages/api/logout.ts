@@ -6,7 +6,11 @@ export default async function logout(
   res: NextApiResponse
 ) {
   try {
-    await auth0.handleLogout(req, res);
+    let options;
+    if (typeof req.query.callback === 'string') {
+      options = { returnTo: req.query.callback };
+    }
+    await auth0.handleLogout(req, res, options);
   } catch (error: any) {
     console.error(error);
     res.status(error.status || 500).end(error.message);
