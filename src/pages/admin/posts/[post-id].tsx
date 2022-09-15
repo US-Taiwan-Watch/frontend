@@ -5,6 +5,7 @@ import { AdaptiveEditor } from "../../../components/component-adaptive-editor";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Error from "next/error";
+import CloseIcon from '@mui/icons-material/Close';
 import { useApolloClient } from "@apollo/client";
 import { NextPageWithApollo, withApollo } from "../../../lib/with-apollo";
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -111,7 +112,7 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
 
   const confirmAction = async () => {
     setIsActioning(true);
-    let updatedPostWithState = updatedPost;
+    const updatedPostWithState = { ...updatedPost };
     // FIXME: should unpublish also update the post?
     const nextState = confirmingAction && getNextState(state, confirmingAction);
     let success: boolean;
@@ -176,6 +177,18 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
         <CircularProgress color="inherit" />
       </Backdrop>
       <Dialog fullScreen open={showSettings} onClose={() => setShowSettings(false)}>
+        <IconButton
+          aria-label="close"
+          onClick={() => setShowSettings(false)}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
         <DialogTitle>Settings</DialogTitle>
         <DialogContent>
           <Typography variant="subtitle2">
@@ -186,6 +199,12 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
             content={updatedPost.preview || ''}
             displayDate=''
             image={updatedPost.imageSource || undefined} />
+          <TextField
+            fullWidth margin="dense" variant="standard"
+            label="Cover Image URL"
+            value={updatedPost.imageSource}
+            onChange={e => setUpdatedPost({ ...updatedPost, imageSource: e.target.value })}
+          />
           <input
             id="raised-button-file" hidden type="file" accept="image/png, image/jpeg"
             onChange={async e => {
@@ -207,7 +226,7 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
               Upload Cover Image
             </LoadingButton>
           </label>
-          <Button onClick={() => setUpdatedPost({ ...updatedPost, imageSource: undefined })}>
+          <Button onClick={() => setUpdatedPost({ ...updatedPost, imageSource: '' })}>
             Remove Cover Image
           </Button>
           <Autocomplete
