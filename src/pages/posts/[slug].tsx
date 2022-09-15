@@ -8,6 +8,8 @@ import { Loading } from "../../components/loading";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
 import { PostContent } from "../../components/post-content";
 import { createApolloClient } from "../../lib/apollo-client";
+import Link from "next/link";
+import { Box, Grid, Paper, Typography } from "@mui/material";
 
 type PostPageProps = {
   post?: Article,
@@ -23,7 +25,21 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
   return (
     <Layout title={post.title || undefined} type="article" description={post.preview || ''}
       image={post.imageSource || undefined} >
-      <Banner title={post.title || ''} subtitle={pubDate} />
+      <Paper
+        sx={{
+          position: 'relative',
+          color: '#fff',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          backgroundImage: `url(${post.imageSource})`,
+          borderRadius: 0,
+        }}
+      >
+        {/* Increase the priority of the hero background image */}
+        {post.imageSource &&
+          <img style={{ visibility: 'hidden', maxHeight: "500px" }} src={post.imageSource} width="100%" />}
+      </Paper >
       <PostContent post={post} />
     </Layout >
   );
