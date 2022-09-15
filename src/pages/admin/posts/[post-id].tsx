@@ -17,6 +17,7 @@ import { uploadPostImage } from "../../../utils/image-upload-utils";
 import { revalidatePage } from "../../../utils/revalidte-page";
 import { LocaleSwitcher } from "../../../components/locale-switcher";
 import { Article, User } from "../../../generated/graphql-types";
+import { DeleteArticleDocument } from "../../../lib/page-graphql/delete-post.graphql.interface";
 
 type PostPageProps = {
   post?: Article,
@@ -29,11 +30,13 @@ enum Action {
   PUBLISH = 'Publish',
   UNPUBLISH = 'Unpublish',
   UPDATE = 'Update',
+  DELETE = 'Delete',
 }
 
 enum State {
   DRAFT = 'Draft',
   PUBLISHED = 'Published',
+  DELETED = 'Deleted',
 }
 
 type StateTransition = {
@@ -46,6 +49,8 @@ const stateTransitions: StateTransition[] = [
   { currentState: State.DRAFT, action: Action.PUBLISH, newState: State.PUBLISHED },
   { currentState: State.PUBLISHED, action: Action.UNPUBLISH, newState: State.DRAFT },
   { currentState: State.PUBLISHED, action: Action.UPDATE, newState: State.PUBLISHED },
+  { currentState: State.DRAFT, action: Action.DELETE, newState: State.DELETED },
+  { currentState: State.PUBLISHED, action: Action.DELETE, newState: State.DELETED },
 ];
 
 function getNextState(state: State, action: Action) {
@@ -60,6 +65,7 @@ const confirmationMessage = {
   [Action.PUBLISH]: 'You sure to publish?',
   [Action.UNPUBLISH]: 'You sure to unpublish?',
   [Action.UPDATE]: 'You sure to update?',
+  [Action.DELETE]: 'You sure to delete?',
 }
 
 const shallowEqual = (obj1: { [key: string]: any }, obj2: { [key: string]: any }) =>
@@ -71,12 +77,19 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
   const router = useRouter();
   const apolloClient = useApolloClient();
   const [confirmingAction, setConfirmingAction] = useState<Action | null>(null);
+  const [displayedConfirmingAction, setDisplayedConfirmingAction] = useState(confirmingAction);
   const [isActioning, setIsActioning] = useState(false);
   const [isAutoSaving, setIsAutoSaving] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [savedPost, setSavedPost] = useState(post);
   const [updatedPost, setUpdatedPost] = useState(post);
   const [uploadingCoverImage, setUploadingCoverImage] = useState(false);
+
+  useEffect(() => {
+    if (confirmingAction) {
+      setDisplayedConfirmingAction(confirmingAction)
+    }
+  }, [confirmingAction]);
 
   useEffect(() => {
     if (state === State.DRAFT && updated && !isActioning) {
@@ -98,13 +111,19 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
 
   const confirmAction = async () => {
     setIsActioning(true);
-    const updatedPostWithState = updatedPost;
+    let updatedPostWithState = updatedPost;
     // FIXME: should unpublish also update the post?
     const nextState = confirmingAction && getNextState(state, confirmingAction);
-    if (nextState) {
-      updatedPostWithState.isPublished = nextState === State.PUBLISHED;
+    let success: boolean;
+    if (nextState === State.DELETED) {
+      success = await deletePost(updatedPost.id);
     }
-    const success = await savePost(updatedPostWithState);
+    else {
+      if (nextState) {
+        updatedPostWithState.isPublished = nextState === State.PUBLISHED;
+      }
+      success = await savePost(updatedPostWithState);
+    }
     if (!success) {
       // handle error
       return;
@@ -128,6 +147,20 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
       }
       setSavedPost(postToSave);
       return true;
+    } catch (err) {
+      console.error("Failed to save")
+      return false;
+    }
+  };
+
+  const deletePost = async (id: string) => {
+    try {
+      const res = await apolloClient.mutate({
+        mutation: DeleteArticleDocument,
+        variables: { deleteArticleId: id },
+        fetchPolicy: "network-only",
+      });
+      return !!res.data?.deleteArticle;
     } catch (err) {
       console.error("Failed to save")
       return false;
@@ -221,7 +254,7 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
           />
         </DialogContent>
         <DialogActions>
-          <Button startIcon={<DeleteIcon />}>Delete post</Button>
+          <Button startIcon={<DeleteIcon />} onClick={() => setConfirmingAction(Action.DELETE)}>Delete post</Button>
           <Button onClick={() => setShowSettings(false)}>Close</Button>
         </DialogActions>
       </Dialog>
@@ -232,16 +265,16 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Sure you want to save?"}
+          {displayedConfirmingAction}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {confirmingAction && confirmationMessage[confirmingAction]}
+            {displayedConfirmingAction && confirmationMessage[displayedConfirmingAction]}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setConfirmingAction(null)} autoFocus disabled={isActioning}>Cancel</Button>
-          <LoadingButton onClick={confirmAction} loading={isActioning} loadingPosition="start">{confirmingAction}</LoadingButton>
+          <LoadingButton onClick={confirmAction} loading={isActioning}>{displayedConfirmingAction}</LoadingButton>
         </DialogActions>
       </Dialog>
       <Box sx={{
@@ -275,7 +308,7 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
           onChange={(e) => setUpdatedPost({ ...updatedPost, title: e.target.value })}
         />
         <Typography variant="subtitle1" color="text.secondary">
-          {post.pusblishTime}
+          Published: {post.pusblishTime && new Date(post.pusblishTime).toLocaleString()}
         </Typography>
       </Box>
       <AdaptiveEditor
