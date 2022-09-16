@@ -12,7 +12,6 @@ query PublicPost($slug: String!) {
     imageSource
     tags
     authorInfos {
-      id
       name
       picture
       nickname

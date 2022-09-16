@@ -1,11 +1,10 @@
 import Typography from "@mui/material/Typography";
 import { Box, Button, ButtonProps, Grid, Paper } from "@mui/material";
 import { Link } from "./link";
-import { IconApplePodcasts, IconSpotify } from "../styles";
 import { ReactNode } from "react";
 
 export type BannerProps = {
-  title: string,
+  title?: string,
   subtitle?: string,
   actions?: CTA[],
 };
@@ -49,15 +48,15 @@ export const Banner: React.FC<BannerProps> = (props) => (
             pr: { md: 0 },
           }}
         >
-          <Typography component="h1" variant="h4" gutterBottom>
+          {props.title && <Typography component="h1" variant="h4" gutterBottom>
             {props.title}
-          </Typography>
-          <Typography variant="h6" paragraph>
+          </Typography>}
+          {props.subtitle && <Typography variant="h6" paragraph>
             {props.subtitle}
-          </Typography>
+          </Typography>}
           {props.actions && props.actions.map((action, i) => (
             <Box key={i} sx={{ display: 'inline-block' }} marginRight={1} marginTop={1} >
-              <Link key={i} href={action.url} sx={{ textDecoration: 'none' }}>
+              <Link href={action.url} sx={{ textDecoration: 'none' }}>
                 <Button variant="contained" color="secondary" startIcon={action.startIcon} {...action.buttonProps}>
                   {action.text}
                 </Button>

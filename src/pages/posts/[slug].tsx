@@ -2,17 +2,15 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { Layout } from "../../components/layout";
 import { Banner } from "../../components/banner";
 import { getPublishedPosts } from ".";
-import { Article, DenormalizedArticle } from "../../generated/graphql-types";
 import { Loading } from "../../components/loading";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
 import { PostContent } from "../../components/post-content";
 import { createApolloClient } from "../../lib/apollo-client";
-import Link from "next/link";
-import { Box, Grid, Paper, Typography } from "@mui/material";
-import { PublicPostDocument } from "../../lib/page-graphql/query-public-post.graphql.interface";
+import { Avatar, Box, Chip, Container, Typography } from "@mui/material";
+import { PublicPostDocument, PublicPostQuery } from "../../lib/page-graphql/query-public-post.graphql.interface";
 
 type PostPageProps = {
-  post?: DenormalizedArticle,
+  post?: PublicPostQuery['publicArticle'],
 }
 
 const PostPage: NextPage<PostPageProps> = ({ post }) => {
@@ -20,24 +18,26 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
     return <Loading />;
   }
 
-  const pubDate = post.createdTime !== undefined ? new Date(post.createdTime as number).toLocaleDateString() : undefined;
-
   return (
     <Layout title={post.title || undefined} type="article" description={post.preview || ''}
       image={post.imageSource || undefined} >
-      <Paper
-        sx={{
-          position: 'relative',
-          color: '#fff',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          backgroundImage: `url(${post.imageSource || '/assets/banner.png'})`,
-          borderRadius: 0,
-        }}
-      >
-        <img style={{ visibility: 'hidden', maxHeight: "500px" }} src={post.imageSource || '/assets/banner.png'} width="100%" />
-      </Paper >
+      <Banner>
+        <Container>
+          <Typography component="h1" variant="h4" gutterBottom>
+            {post.title}
+          </Typography>
+          <Typography variant="subtitle1" gutterBottom>
+            {post.pusblishTime && new Date(post.pusblishTime).toLocaleDateString()}
+          </Typography>
+          <Typography variant="subtitle1">
+            {post.authorInfos.map(author =>
+              <Box key={author.nickname} sx={{ display: 'inline-block' }} marginRight={1} marginTop={1} >
+                <Chip color="primary" avatar={<Avatar alt={author.name || ''} src={author.picture || ''} />}
+                  label={author.name} />
+              </Box>)}
+          </Typography>
+        </Container>
+      </Banner>
       <PostContent post={post} />
     </Layout >
   );
