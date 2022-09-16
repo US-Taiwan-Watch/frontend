@@ -2,7 +2,6 @@ import * as React from "react";
 import { useFetchUser } from "../lib/user";
 import { Box, Toolbar, Typography } from "@mui/material";
 import { useI18n } from "../context/i18n";
-import { LocaleSwitcher } from "./locale-switcher";
 import { Link, LinkProps } from "./link";
 import Image from "next/image";
 import { useUserRole } from "../context/user-role";
@@ -15,7 +14,7 @@ const NavLink: React.FC<LinkProps> = (props) => (
   </Link >
 );
 
-export const AdminHeader: React.FC = () => {
+export const AdminHeader: React.FC<{ title: string }> = ({ title }) => {
   const { i18n } = useI18n();
   const { loading } = useFetchUser({ required: true });
   const { isAdmin, isEditor } = useUserRole();
@@ -28,9 +27,8 @@ export const AdminHeader: React.FC = () => {
         display: 'flex',
       }}>
         <Image src="/assets/logo.png" width={30} height={30} />
-        {/* <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' }, a: { textDecoration: 'none' } }} /> */}
         <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
-          [管理] {i18n.strings.brand.fullName}
+          [{title}] {i18n.strings.brand.fullName}
         </Typography>
       </Box>
       <Box sx={{

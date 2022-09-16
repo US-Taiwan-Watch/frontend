@@ -1,5 +1,5 @@
 import Typography from "@mui/material/Typography";
-import { Autocomplete, Backdrop, Box, Button, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Input, TextareaAutosize, TextField } from "@mui/material";
+import { Autocomplete, Backdrop, Box, Button, Chip, CircularProgress, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Input, Snackbar, TextareaAutosize, TextField } from "@mui/material";
 import { useFetchUser } from "../../../lib/user";
 import { AdaptiveEditor } from "../../../components/component-adaptive-editor";
 import { useEffect, useState } from "react";
@@ -19,6 +19,7 @@ import { revalidatePage } from "../../../utils/revalidte-page";
 import { LocaleSwitcher } from "../../../components/locale-switcher";
 import { Article, User } from "../../../generated/graphql-types";
 import { DeleteArticleDocument } from "../../../lib/page-graphql/delete-post.graphql.interface";
+import { AdminLayout } from "../../../components/admin-layout";
 
 type PostPageProps = {
   post?: Article,
@@ -73,7 +74,7 @@ const shallowEqual = (obj1: { [key: string]: any }, obj2: { [key: string]: any }
   Object.keys(obj1).length === Object.keys(obj2).length &&
   Object.keys(obj1).every(key => obj1[key] === obj2[key]);
 
-const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) => {
+const PostEditor: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) => {
   const user = useFetchUser({ required: true });
   const router = useRouter();
   const apolloClient = useApolloClient();
@@ -86,6 +87,7 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
   const [updatedPost, setUpdatedPost] = useState(post);
   const [uploadingCoverImage, setUploadingCoverImage] = useState(false);
 
+  // To make the button text not disappeared during transition 
   useEffect(() => {
     if (confirmingAction) {
       setDisplayedConfirmingAction(confirmingAction)
@@ -169,14 +171,14 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
   };
 
   return (
-    <Container>
+    <>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isActioning}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Dialog fullScreen open={showSettings} onClose={() => setShowSettings(false)}>
+      <Dialog fullWidth maxWidth="lg" open={showSettings} onClose={() => setShowSettings(false)}>
         <IconButton
           aria-label="close"
           onClick={() => setShowSettings(false)}
@@ -190,7 +192,9 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
           <CloseIcon />
         </IconButton>
         <DialogTitle>Settings</DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{
+          flexDirection: 'row', '& > *': { my: 1.5 }
+        }}>
           <Typography variant="subtitle2">
             Preview
           </Typography>
@@ -199,36 +203,39 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
             content={updatedPost.preview || ''}
             displayDate=''
             image={updatedPost.imageSource || undefined} />
-          <TextField
-            fullWidth margin="dense" variant="standard"
-            label="Cover Image URL"
-            value={updatedPost.imageSource}
-            onChange={e => setUpdatedPost({ ...updatedPost, imageSource: e.target.value })}
-          />
-          <input
-            id="raised-button-file" hidden type="file" accept="image/png, image/jpeg"
-            onChange={async e => {
-              if (!e.target.files) {
-                return;
-              }
-              setUploadingCoverImage(true);
-              try {
-                const text = await uploadPostImage(e.target.files[0]);
-                setUpdatedPost({ ...updatedPost, imageSource: text });
-              } catch (err) {
-                // TODO: handle action error
-              } finally {
-                setUploadingCoverImage(false);
-              }
-            }} />
-          <label htmlFor="raised-button-file">
-            <LoadingButton component="span" variant="contained" loading={uploadingCoverImage}>
-              Upload Cover Image
-            </LoadingButton>
-          </label>
-          <Button onClick={() => setUpdatedPost({ ...updatedPost, imageSource: '' })}>
-            Remove Cover Image
-          </Button>
+          <Box>
+            <TextField
+              fullWidth margin="dense" variant="standard"
+              label="Cover Image"
+              value={updatedPost.imageSource}
+              // onChange={e => setUpdatedPost({ ...updatedPost, imageSource: e.target.value })}
+              disabled
+            />
+            <input
+              id="raised-button-file" hidden type="file" accept="image/png, image/jpeg"
+              onChange={async e => {
+                if (!e.target.files) {
+                  return;
+                }
+                setUploadingCoverImage(true);
+                try {
+                  const text = await uploadPostImage(e.target.files[0]);
+                  setUpdatedPost({ ...updatedPost, imageSource: text });
+                } catch (err) {
+                  // TODO: handle action error
+                } finally {
+                  setUploadingCoverImage(false);
+                }
+              }} />
+            <label htmlFor="raised-button-file">
+              <LoadingButton component="span" variant="contained" loading={uploadingCoverImage}>
+                Upload
+              </LoadingButton>
+            </label>
+            <Button onClick={() => setUpdatedPost({ ...updatedPost, imageSource: '' })}>
+              Remove
+            </Button>
+          </Box>
           <Autocomplete
             multiple
             options={editors}
@@ -273,7 +280,7 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
           />
         </DialogContent>
         <DialogActions>
-          <Button startIcon={<DeleteIcon />} onClick={() => setConfirmingAction(Action.DELETE)}>Delete post</Button>
+          <Button color="error" startIcon={<DeleteIcon />} onClick={() => setConfirmingAction(Action.DELETE)}>Delete post</Button>
           <Button onClick={() => setShowSettings(false)}>Close</Button>
         </DialogActions>
       </Dialog>
@@ -296,57 +303,74 @@ const Post: React.FC<{ post: Article, editors: User[] }> = ({ post, editors }) =
           <LoadingButton onClick={confirmAction} loading={isActioning}>{displayedConfirmingAction}</LoadingButton>
         </DialogActions>
       </Dialog>
-      <Box sx={{
-        paddingTop: 3, display: 'flex', flexDirection: 'row', '& > *': { mx: 1.5 },
-      }}>
-        <Button variant="outlined" onClick={() => router.back()}>Back</Button>
-        <Button variant="contained" disabled={!actions.includes(Action.PUBLISH)} onClick={() => setConfirmingAction(Action.PUBLISH)}>
-          Publish
-        </Button>
-        <Button variant="contained" disabled={!actions.includes(Action.UNPUBLISH)} onClick={() => setConfirmingAction(Action.UNPUBLISH)}>
-          Unpublish
-        </Button>
-        <Button variant="contained" disabled={!actions.includes(Action.UPDATE) || !updated} onClick={() => setConfirmingAction(Action.UPDATE)}>
-          Update
-        </Button>
-        <Typography sx={{ mx: 5 }}>{post.isPublished ? 'Published' : (isAutoSaving ? 'Saving...' : 'Draft')}</Typography>
-        <Box sx={{ my: 1 }}>
-          <LocaleSwitcher />
+      <Snackbar open={isAutoSaving} message="Saving..." />
+      <Box sx={{ m: 2, display: 'flex', }}>
+        <Box sx={{
+          my: 1, flexGrow: 1, display: 'flex', alignItems: 'center',
+          flexDirection: 'row', '& > *': { mx: 1.5 }
+        }}>
+          <Button variant="outlined" onClick={() => router.back()}>Back</Button>
+          <Chip label={post.isPublished ? 'Published' : 'Draft'} />
         </Box>
-        <IconButton onClick={() => setShowSettings(true)}>
-          <SettingsIcon />
-        </IconButton>
+        <Box sx={{
+          display: 'flex',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          justifyContent: 'right',
+          flexDirection: 'row', '& > *': { mx: 1.6 }
+        }}>
+          <LocaleSwitcher />
+          {actions.includes(Action.PUBLISH) &&
+            <Button variant="contained" onClick={() => setConfirmingAction(Action.PUBLISH)}>
+              Publish
+            </Button>}
+          {actions.includes(Action.UNPUBLISH) &&
+            <Button variant="contained" onClick={() => setConfirmingAction(Action.UNPUBLISH)}>
+              Unpublish
+            </Button>}
+          {actions.includes(Action.UPDATE) &&
+            <Button variant="contained" disabled={!updated} onClick={() => setConfirmingAction(Action.UPDATE)}>
+              Update
+            </Button>}
+          <IconButton onClick={() => setShowSettings(true)}>
+            <SettingsIcon />
+          </IconButton>
+        </Box>
       </Box>
-      <Box alignItems="center" sx={{ paddingTop: 3, display: 'flex', flexDirection: 'column' }}>
-        <TextField
-          margin="dense"
-          label="Title"
-          fullWidth
-          variant="standard"
-          value={updatedPost.title}
-          onChange={(e) => setUpdatedPost({ ...updatedPost, title: e.target.value })}
-        />
-        <Typography variant="subtitle1" color="text.secondary">
-          Published: {post.pusblishTime && new Date(post.pusblishTime).toLocaleString()}
-        </Typography>
-      </Box>
-      <AdaptiveEditor
-        value={updatedPost.content || undefined}
-        viewOnly={false}
-        onSave={val => setUpdatedPost({ ...updatedPost, content: val })} />
-    </Container>
+      <Container>
+        <Box alignItems="center" sx={{ paddingTop: 3, display: 'flex', flexDirection: 'column' }}>
+          <TextField
+            inputProps={{ style: { fontSize: 30 } }} // font size of input textl
+            margin="dense"
+            label="Title"
+            fullWidth
+            variant="standard"
+            value={updatedPost.title}
+            onChange={(e) => setUpdatedPost({ ...updatedPost, title: e.target.value })}
+          />
+        </Box>
+        <AdaptiveEditor
+          value={updatedPost.content || undefined}
+          viewOnly={false}
+          onSave={val => setUpdatedPost({ ...updatedPost, content: val })} />
+      </Container>
+    </>
   );
 }
 
-const PostPage: NextPageWithApollo<PostPageProps> = ({ post, editors }) => {
+const PostEditorPage: NextPageWithApollo<PostPageProps> = ({ post, editors }) => {
   if (!post) {
     return <Error statusCode={404} />
   }
 
-  return <Post post={post} editors={editors || []} />;
+  return (
+    <AdminLayout title="編輯文章">
+      <PostEditor post={post} editors={editors || []} />
+    </AdminLayout>
+  );
 };
 
-PostPage.getInitialProps = async ({ query, apolloClient }) => {
+PostEditorPage.getInitialProps = async ({ query, apolloClient }) => {
   // TODO: query real post
   try {
     const res = await apolloClient?.query({
@@ -367,4 +391,4 @@ PostPage.getInitialProps = async ({ query, apolloClient }) => {
   }
 }
 
-export default withApollo()(PostPage);
+export default withApollo()(PostEditorPage);

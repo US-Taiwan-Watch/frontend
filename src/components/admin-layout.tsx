@@ -1,28 +1,22 @@
 import Head from "next/head";
-import { Header } from "./header";
-import { Footer } from "./footer";
 import { useI18n } from "../context/i18n";
 import { useRouter } from "next/router";
-import Script from "next/script";
-import { isLocal } from "../utils/gate-keeper";
 import { AdminHeader } from "./admin-header";
 
 export type LayoutProps = {
-  title?: string,
-  type?: string,
-  description?: string,
-  image?: string,
-  imageAlt?: string,
+  title: string,
 }
 
 export const AdminLayout: React.FC<LayoutProps> = (props) => {
   const { i18n } = useI18n();
   const { asPath } = useRouter();
   const title = props.title ? `${props.title} - ${i18n.strings.brand.fullName}` : i18n.strings.brand.fullName;
-  const description = props.description || i18n.strings.landing.aboutDesc;
   return (
     <>
-      <AdminHeader />
+      <Head>
+        <title>{title}</title>
+      </Head>
+      <AdminHeader title={props.title} />
 
       <main>
         <div>{props.children}</div>

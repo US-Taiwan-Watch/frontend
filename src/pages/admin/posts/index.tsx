@@ -1,4 +1,3 @@
-import { Layout } from "../../../components/layout";
 import { Banner } from "../../../components/banner";
 import { useRouter } from "next/router";
 import { useUserRole } from "../../../context/user-role";
@@ -64,7 +63,7 @@ const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
     return <Error statusCode={404} />
   }
   return (
-    <AdminLayout>
+    <AdminLayout title="管理文章">
       <Banner title="管理文章" >
       </Banner>
       <IconButton onClick={() => {
