@@ -16,10 +16,13 @@ export const CardItem: React.FC<CardProps> = (props) => {
     <Grid item xs={12} md={12} sx={{ my: 3 }}>
       <Link href={props.url} sx={{ textDecoration: 'none' }}>
         <CardActionArea>
-          <Card sx={{ display: 'flex' }}>
+          <Card sx={{
+            display: 'flex',
+            alignItems: 'center',
+          }}>
             {props.image && <CardMedia
               component="img"
-              sx={{ height: '100%', width: 180, display: { xs: 'none', sm: 'block' } }}
+              sx={{ width: 180, display: { xs: 'none', sm: 'block' } }}
               image={props.image}
               alt={props.title}
             />}

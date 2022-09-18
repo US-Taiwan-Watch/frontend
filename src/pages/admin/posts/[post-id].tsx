@@ -317,7 +317,7 @@ const PostEditor: React.FC<{ post: Article, editors: User[] }> = ({ post, editor
           alignItems: 'center',
           flexWrap: 'wrap',
           justifyContent: 'right',
-          flexDirection: 'row', '& > *': { mx: 1.6 }
+          flexDirection: 'row', '& > *': { mx: 1.61 }
         }}>
           <LocaleSwitcher />
           {actions.includes(Action.PUBLISH) &&
@@ -340,13 +340,14 @@ const PostEditor: React.FC<{ post: Article, editors: User[] }> = ({ post, editor
       <Container>
         <Box alignItems="center" sx={{ paddingTop: 3, display: 'flex', flexDirection: 'column' }}>
           <TextField
-            inputProps={{ style: { fontSize: 30 } }} // font size of input textl
+            inputProps={{ style: { fontSize: 30, lineHeight: 1.2 } }} // font size of input textl
             margin="dense"
             label="Title"
             fullWidth
+            multiline
             variant="standard"
             value={updatedPost.title}
-            onChange={(e) => setUpdatedPost({ ...updatedPost, title: e.target.value })}
+            onChange={(e) => setUpdatedPost({ ...updatedPost, title: e.target.value.replace(/\n/g, '') })}
           />
         </Box>
         <AdaptiveEditor

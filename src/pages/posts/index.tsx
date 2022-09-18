@@ -21,15 +21,15 @@ const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
     <Layout title="所有文章">
       <Banner title="所有文章" >
       </Banner>
-      {isEditor && <>
+      {/* {isEditor && <>
         <Link href={`/admin/posts`}>
           <Button variant="contained">Manage Posts</Button>
         </Link>
-      </>}
+      </>} */}
 
       <CardList cards={posts.map(p => ({
         title: p.title || '',
-        displayDate: new Date(p.createdTime || 0).toLocaleDateString(), // change to pub date
+        displayDate: new Date(p.pusblishTime || 0).toLocaleDateString(), // change to pub date
         content: p.preview || '',
         url: `${router.pathname}/${p.slug}`,
         image: p.imageSource || undefined,
@@ -52,10 +52,10 @@ export const getPublishedPosts = (): Promise<Article[]> => {
   return apolloClient.query({
     query: AllArticlesDocument,
     fetchPolicy: "network-only",
-  }).then(data => data.data.allArticles.map(p => ({
+  }).then(data => data.data.allArticles.filter(p => p.isPublished).map(p => ({
     ...p,
     slug: p.slug || p.id,
-  })));
+  })).sort((a, b) => a.pusblishTime! - b.pusblishTime!));
 };
 
 export default PostsPage;
