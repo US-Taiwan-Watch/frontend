@@ -1,8 +1,7 @@
 import { Banner } from "../../../components/banner";
 import { useRouter } from "next/router";
-import { useUserRole } from "../../../context/user-role";
 import { Link } from "../../../components/link";
-import { Button, ButtonGroup } from "@mui/material";
+import { Button, ButtonGroup, Container } from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { IconButton } from "@material-ui/core";
 import { NextPageWithApollo, withApollo } from "../../../lib/with-apollo";
@@ -10,21 +9,19 @@ import Error from "next/error";
 import { AllArticlesDocument } from "../../../lib/page-graphql/query-posts.graphql.interface";
 import { useApolloClient } from "@apollo/client";
 import { CreatePostDocument } from "../../../lib/page-graphql/mutation-create-post.graphql.interface";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DataGridPro, GridColDef, GridSortModel, GridValueFormatterParams } from "@mui/x-data-grid-pro";
 import { useFetchUser } from "../../../lib/user";
 import { AdminLayout } from "../../../components/admin-layout";
 import { Article } from "../../../generated/graphql-types";
-
-type PostsPageProps = {
-  posts?: Article[],
-}
+import { Loading } from "../../../components/loading";
+import { UserRolesDocument } from "../../../lib/page-graphql/query-user-roles.graphql.interface";
 
 function dateFormatter(params: GridValueFormatterParams<number | null>): string {
   if (!params.value) {
     return '';
   }
-  const date = new Date(params.value)
+  const date = new Date(params.value);
   return new Date().toLocaleDateString() === date.toLocaleDateString() ?
     date.toLocaleTimeString() : date.toLocaleDateString();
 }
@@ -48,10 +45,9 @@ const columns: GridColDef[] = [
   }
 ];
 
-const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
-  const user = useFetchUser({ required: true });
+const PostsAdminPage: NextPageWithApollo<{ posts?: Article[] }> = ({ posts }) => {
+  const _ = useFetchUser({ required: true });
   const router = useRouter();
-  const { isEditor } = useUserRole();
   const apolloClient = useApolloClient();
   const [sortModel, setSortModel] = useState<GridSortModel>([
     {
@@ -59,13 +55,15 @@ const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
       sort: 'desc',
     },
   ]);
+  // if (!loading && !isEditor) {
+  //   return <Error statusCode={403} title="You don't have permission to access this page" />
+  // }
   if (!posts) {
-    return <Error statusCode={404} />
+    return <Loading />;
   }
   return (
     <AdminLayout title="管理文章">
-      <Banner title="管理文章" >
-      </Banner>
+      <Banner title="管理文章" />
       <IconButton onClick={() => {
         apolloClient.mutate({
           mutation: CreatePostDocument,
@@ -86,14 +84,17 @@ const PostsPage: NextPageWithApollo<PostsPageProps> = ({ posts }) => {
   );
 };
 
-PostsPage.getInitialProps = async ({ apolloClient }) => {
+PostsAdminPage.getInitialProps = async ({ apolloClient }) => {
   try {
     const data = await apolloClient?.query({
       query: AllArticlesDocument,
       fetchPolicy: "network-only",
     });
     return {
-      posts: data?.data.allArticles,
+      posts: data?.data.allArticles.map(post => ({
+        ...post,
+        pusblishTime: post.isPublished ? post.pusblishTime : null,
+      })),
     };
   } catch (err) {
     console.log(err);
@@ -101,4 +102,4 @@ PostsPage.getInitialProps = async ({ apolloClient }) => {
   }
 }
 
-export default withApollo()(PostsPage);
+export default withApollo()(PostsAdminPage);

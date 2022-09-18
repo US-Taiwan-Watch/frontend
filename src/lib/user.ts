@@ -1,5 +1,9 @@
+import { useApolloClient } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import { Auth0RoleName } from "../generated/graphql-types";
+import { UserRolesDocument } from "./page-graphql/query-user-roles.graphql.interface";
+import { initApolloClient } from "./with-apollo";
 
 export interface IUser {
   given_name?: string;
@@ -16,6 +20,7 @@ export interface IUser {
 
 export interface USTWWindow extends Window {
   __user?: IUser;
+  __userRoles?: Auth0RoleName[];
 }
 
 export const fetchUser = async (cookie = "") => {
@@ -38,6 +43,7 @@ export const fetchUser = async (cookie = "") => {
 
   if (!res.ok) {
     delete asWindow.__user;
+    delete asWindow.__userRoles;
     return null;
   }
 
@@ -51,8 +57,11 @@ export const fetchUser = async (cookie = "") => {
 export const useFetchUser = ({ required }: { required?: boolean } = {}) => {
   const { asPath } = useRouter();
   const [loading, setLoading] = useState(
-    () => !(typeof window !== "undefined" && (window as USTWWindow).__user)
+    () => !(typeof window !== "undefined" && (window as USTWWindow).__userRoles)
   );
+  const client = useApolloClient();
+  const [roles, setRoles] = useState(
+    () => typeof window === "undefined" ? undefined : (window as USTWWindow).__userRoles);
 
   const [user, setUser] = useState(() => {
     if (typeof window === "undefined") {
@@ -65,7 +74,7 @@ export const useFetchUser = ({ required }: { required?: boolean } = {}) => {
 
   useEffect(
     () => {
-      if (!loading && user) {
+      if (user) {
         return;
       }
       setLoading(true);
@@ -80,7 +89,6 @@ export const useFetchUser = ({ required }: { required?: boolean } = {}) => {
             return;
           }
           setUser(user);
-          setLoading(false);
         }
       });
 
@@ -92,5 +100,28 @@ export const useFetchUser = ({ required }: { required?: boolean } = {}) => {
     []
   );
 
-  return { user, loading };
+  useEffect(() => {
+    if (roles || !user) {
+      return;
+    }
+    client.query({
+      query: UserRolesDocument,
+      fetchPolicy: "network-only",
+    }).then(res => {
+      setRoles(res.data.myRoles ?? []);
+      if (!res.data.myRoles) {
+        delete (window as USTWWindow).__userRoles;
+      }
+      setLoading(false);
+      (window as USTWWindow).__userRoles = res.data.myRoles || undefined;
+    });
+  }, [client, user]);
+
+  return {
+    user,
+    loading,
+    roles,
+    isAdmin: roles?.includes(Auth0RoleName.Admin),
+    isEditor: roles?.includes(Auth0RoleName.Admin) || roles?.includes(Auth0RoleName.Editor),
+  };
 };

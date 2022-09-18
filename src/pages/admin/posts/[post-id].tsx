@@ -266,10 +266,10 @@ const PostEditor: React.FC<{ post: Article, editors: User[] }> = ({ post, editor
           />
           <TextField
             autoFocus fullWidth margin="dense" variant="standard"
-            label="Post URL"
+            label="Post URL (Allowed characters: English characters, numbers, _ and -)"
             value={updatedPost.slug}
             placeholder={updatedPost.id}
-            onChange={e => setUpdatedPost({ ...updatedPost, slug: e.target.value })}
+            onChange={e => setUpdatedPost({ ...updatedPost, slug: e.target.value.replace(/[^\w-]/g, '') })}
           />
           <TextField
             fullWidth margin="dense" variant="standard"

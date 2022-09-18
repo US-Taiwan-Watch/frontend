@@ -10,7 +10,6 @@ import { I18nProvider } from "../context/i18n";
 import { useInitApolloClient } from "../lib/with-apollo";
 import { ApolloProvider } from "@apollo/client";
 import { useMediaQuery } from "@mui/material";
-import { UserRoleProvider } from "../context/user-role";
 import { LicenseInfo } from "@mui/x-license-pro";
 import { useRouter } from "next/router";
 import { createGenerateClassName } from '@material-ui/core/styles';
@@ -109,19 +108,17 @@ export default function MyApp(props: MyAppProps) {
         {/* Build a better loading page */}
         {loading ? <Loading /> :
           <ApolloProvider client={client}>
-            <UserRoleProvider>
-              <StylesProvider generateClassName={generateClassName}>
-                <ThemeProviderV4 theme={themeV4}>
-                  <ThemeProviderV5 theme={themeV5}>
-                    <I18nProvider>
-                      {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                      <CssBaseline />
-                      <Component {...pageProps} />
-                    </I18nProvider>
-                  </ThemeProviderV5>
-                </ThemeProviderV4>
-              </StylesProvider>
-            </UserRoleProvider>
+            <StylesProvider generateClassName={generateClassName}>
+              <ThemeProviderV4 theme={themeV4}>
+                <ThemeProviderV5 theme={themeV5}>
+                  <I18nProvider>
+                    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                    <CssBaseline />
+                    <Component {...pageProps} />
+                  </I18nProvider>
+                </ThemeProviderV5>
+              </ThemeProviderV4>
+            </StylesProvider>
           </ApolloProvider>}
       </CacheProvider>
     </ColorModeContext.Provider>

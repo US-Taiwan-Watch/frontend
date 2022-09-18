@@ -3,12 +3,12 @@ import { Layout } from "../../components/layout";
 import { Banner } from "../../components/banner";
 import { useRouter } from "next/router";
 import { CardList } from "../../components/card-list";
-import { useUserRole } from "../../context/user-role";
 import { Link } from "../../components/link";
 import { Button } from "@mui/material";
 import { AllArticlesDocument } from "../../lib/page-graphql/query-posts.graphql.interface";
 import { Article } from "../../generated/graphql-types";
 import { initApolloClient } from "../../lib/with-apollo";
+import { useFetchUser } from "../../lib/user";
 
 type PostsPageProps = {
   posts: Article[],
@@ -16,9 +16,9 @@ type PostsPageProps = {
 
 const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
   const router = useRouter();
-  const { isEditor } = useUserRole();
+  const { isEditor } = useFetchUser();
   return (
-    <Layout>
+    <Layout title="所有文章">
       <Banner title="所有文章" >
       </Banner>
       {isEditor && <>

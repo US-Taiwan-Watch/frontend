@@ -4,7 +4,6 @@ import { Box, Toolbar, Typography } from "@mui/material";
 import { useI18n } from "../context/i18n";
 import { Link, LinkProps } from "./link";
 import Image from "next/image";
-import { useUserRole } from "../context/user-role";
 
 const NavLink: React.FC<LinkProps> = (props) => (
   <Link {...props} style={{ textDecoration: 'none' }}
@@ -16,8 +15,7 @@ const NavLink: React.FC<LinkProps> = (props) => (
 
 export const AdminHeader: React.FC<{ title: string }> = ({ title }) => {
   const { i18n } = useI18n();
-  const { loading } = useFetchUser({ required: true });
-  const { isAdmin, isEditor } = useUserRole();
+  const { isAdmin, isEditor } = useFetchUser({ required: true });
 
   return (
     <Toolbar sx={{ flexWrap: 'wrap', alignItems: 'center' }}>
@@ -37,7 +35,7 @@ export const AdminHeader: React.FC<{ title: string }> = ({ title }) => {
         flexWrap: 'wrap',
         justifyContent: 'right',
       }}>
-        {!loading && (isAdmin || isEditor) &&
+        {(isAdmin || isEditor) &&
           <>
             <NavLink href="/">回到首頁</NavLink>
             <NavLink href="/posts">文章</NavLink>

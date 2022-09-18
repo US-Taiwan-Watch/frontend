@@ -7,7 +7,7 @@ import Script from "next/script";
 import { isLocal } from "../utils/gate-keeper";
 
 export type LayoutProps = {
-  title: string,
+  title?: string,
   type?: string,
   description?: string,
   image?: string,

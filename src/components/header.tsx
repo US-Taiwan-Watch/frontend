@@ -6,7 +6,6 @@ import { LocaleSwitcher } from "./locale-switcher";
 import { Link, LinkProps } from "./link";
 import Image from "next/image";
 import { ColorModeContext } from "../pages/_app";
-import { useUserRole } from "../context/user-role";
 import { useRouter } from "next/router";
 
 const NavLink: React.FC<LinkProps> = (props) => (
@@ -19,9 +18,8 @@ const NavLink: React.FC<LinkProps> = (props) => (
 
 export const Header: React.FC = () => {
   const { i18n } = useI18n();
-  const { loading } = useFetchUser();
+  const { loading, isAdmin, isEditor } = useFetchUser();
   const { pathname } = useRouter();
-  const { isAdmin, isEditor } = useUserRole();
   const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
   const isHome = pathname === '/';
@@ -75,7 +73,7 @@ export const Header: React.FC = () => {
             {i18n.strings.header.donate}
           </Button>
         </NavLink>
-        {!loading && (isAdmin || isEditor) &&
+        {isAdmin || isEditor &&
           <>
             <NavLink href="/posts">文章</NavLink>
             <NavLink href="/api/logout" target="_self">Logout</NavLink>
