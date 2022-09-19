@@ -30,6 +30,7 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
       <Section id="about"
         title={i18n.strings.header.about}
         description={i18n.strings.landing.aboutDesc}
+        descLinks={i18n.strings.landing.aboutDescLinks}
         right={<img src="/assets/watch.png" width="70%" />}
       />
       <Section id="partners" title={i18n.strings.header.partners}>

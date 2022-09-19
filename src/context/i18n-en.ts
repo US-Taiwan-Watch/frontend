@@ -1,6 +1,7 @@
 export default {
   brand: {
     fullName: 'US Taiwan Watch',
+    description: 'US Taiwan Watch is committed to deepening the U.S.-Taiwan relationship, lowering the entry barrier to citizen diplomacy, and bolstering citizen diplomacy by reducing information asymmetry and enhancing public understanding of U.S.-Taiwan affairs and international trends. In 2022, US Taiwan Watch will continue its efforts in bridging the gap between Taiwan and the U.S. With the advantage of being physically located in the United States, our team will produce and broadcast more audio-visual content in the U.S. We hope doing so will connect Taiwanese and American societies and provide our Taiwanese audience with a more comprehensive understanding of U.S. society, culture, and diplomacy. ',
   },
   header: {
     subtitle: 'Promote and facilitate understanding of U.S.-Taiwan relations through cultivating grassroots Taiwanese and Taiwanese American opinions and providing analyses of international affairs ',
@@ -14,7 +15,16 @@ export default {
   },
   landing: {
     testI18n: "I18n - 中文內容",
-    aboutDesc: 'US Taiwan Watch is committed to deepening the U.S.-Taiwan relationship, lowering the entry barrier to citizen diplomacy, and bolstering citizen diplomacy by reducing information asymmetry and enhancing public understanding of U.S.-Taiwan affairs and international trends. In 2022, US Taiwan Watch will continue its efforts in bridging the gap between Taiwan and the U.S. With the advantage of being physically located in the United States, our team will produce and broadcast more audio-visual content in the U.S. We hope doing so will connect Taiwanese and American societies and provide our Taiwanese audience with a more comprehensive understanding of U.S. society, culture, and diplomacy. ',
+    aboutDesc: [
+      "US Taiwan Watch is a 501c(3) non-profit organization that aims to strengthen U.S.-Taiwan relations through civil society and civil engagement.",
+      "US Taiwan Watch was founded in June 2017 by a group of U.S.-based Taiwanese engineers. The founders’ initial objective was to synthesize data on Taiwan-related bills in Congress on a website to facilitate greater Taiwanese understanding of U.S. policy. We later expanded to a series of other initiatives. This included providing more comprehensive analysis on U.S. foreign policy and U.S.-Taiwan relations and recording weekly podcast episodes to discuss U.S.-Taiwan relations.",
+      "Currently, US Taiwan Watch wields considerable influence on social media. It has over 150K followers on Facebook and over 60 downloads for each podcast episode. Twitter is the organization's all-English platform, and followers include prominent think tank fellows, scholars, and journalists in the United States.",
+      "In October 2021, US Taiwan Watch published the book, {0} The book provides an overview of the history of U.S.-Taiwan relations, resolves common misconceptions about the U.S.-Taiwan relationship, analyzes U.S. politics, and examines important issues within U.S.-Taiwan-China dynamics. This includes discussions of ractopamine pork, the South China Sea, and technology-based trade. Following the book’s publication, we held in-person workshops and began social media publicity campaigns to elevate the book's online media presence. ",
+    ],
+    aboutDescLinks: [{
+      url: 'https://www.books.com.tw/products/0010903863?sloc=main',
+      text: '"Why and How the US Matters?"',
+    }],
     partnersDesc: "We work with blahblah",
     followDesc: "yoyoyo",
     joinDesc: 'US Taiwan Watch is a 100% volunteer-based organization. We welcome anyone interested in building stronger U.S.-Taiwan ties to join our team! We are looking for volunteers to write news memos in Mandarin and English, research, translate, fundraise, and plan events. If you are interested in joining our team, please fill out our volunteer form, and we will contact you as soon as possible!',

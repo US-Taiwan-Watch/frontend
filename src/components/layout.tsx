@@ -18,7 +18,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
   const { i18n } = useI18n();
   const { asPath } = useRouter();
   const title = props.title ? `${props.title} - ${i18n.strings.brand.fullName}` : i18n.strings.brand.fullName;
-  const description = props.description || i18n.strings.landing.aboutDesc;
+  const description = props.description || i18n.strings.brand.description;
   return (
     <>
       {!isLocal && <>

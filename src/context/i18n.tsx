@@ -45,7 +45,7 @@ const getLang = (lang?: string) => {
 
 export const I18nProvider = React.memo(({ children }) => {
   const { i18n } = useI18n();
-  const { locale, push, pathname, query, asPath } = useRouter();
+  const { locale, replace, pathname, query, asPath } = useRouter();
 
   const [lang, setLang] = React.useState(getLang(locale));
 
@@ -57,7 +57,7 @@ export const I18nProvider = React.memo(({ children }) => {
   i18n.setLanguage(lang);
 
   const setLanguage = (locale: string) => {
-    push({ pathname, query }, asPath, { locale });
+    replace({ pathname, query }, asPath, { locale });
   };
 
   const displayI18NText = (i18nText?: I18NText) =>
