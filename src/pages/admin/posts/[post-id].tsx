@@ -132,6 +132,7 @@ const PostEditor: React.FC<{ post: Article, editors: User[] }> = ({ post, editor
       return;
     }
     revalidatePage(postUrl);
+    revalidatePage('/posts');
     setUpdatedPost(updatedPostWithState);
     setConfirmingAction(null);
     setIsActioning(false);
