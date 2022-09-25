@@ -1,0 +1,9 @@
+mutation UpdateUserInfo($name: String, $picture: String!, $nickname: String!) {
+  updateUser(name: $name, picture: $picture, nickname: $nickname) {
+    id
+    email
+    name
+    nickname
+    picture
+  }
+}

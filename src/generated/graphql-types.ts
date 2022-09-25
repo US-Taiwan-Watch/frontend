@@ -117,6 +117,7 @@ export type Mutation = {
   emitGlobalEvent: Scalars['Boolean'];
   emitUserEvent: Scalars['Boolean'];
   updateArticleWithId?: Maybe<Article>;
+  updateUser: User;
 };
 
 
@@ -167,6 +168,13 @@ export type MutationUpdateArticleWithIdArgs = {
   slug?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
   title?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationUpdateUserArgs = {
+  name?: InputMaybe<Scalars['String']>;
+  nickname?: InputMaybe<Scalars['String']>;
+  picture?: InputMaybe<Scalars['String']>;
 };
 
 export type PaginatedBills = {
