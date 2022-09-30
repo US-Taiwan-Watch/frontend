@@ -360,9 +360,12 @@ const PostEditor: React.FC<{ post: Article, editors: User[] }> = ({ post, editor
   );
 }
 
-const PostEditorPage: NextPageWithApollo<PostPageProps> = ({ post, editors }) => {
+export const PostEditorPage: NextPageWithApollo<PostPageProps> = ({
+  post,
+  editors,
+}) => {
   if (!post) {
-    return <Error statusCode={404} />
+    return <Error statusCode={404} />;
   }
 
   return (

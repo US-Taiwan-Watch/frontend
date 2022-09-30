@@ -1,5 +1,5 @@
-mutation CreatePost($title: String) {
-  addArticle(title: $title) {
+mutation CreatePost($title: String, $type: ArticleType) {
+  addArticle(title: $title, type: $type) {
     id
   }
 }

@@ -11,6 +11,7 @@ query PublicPost($slug: String!) {
     lastModifiedTime
     imageSource
     tags
+    type
     authorInfos {
       name
       picture

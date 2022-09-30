@@ -12,5 +12,6 @@ query AllArticles {
     lastModifiedTime
     imageSource
     tags
+    type
   }
 }
