@@ -82,16 +82,14 @@ export const PostsAdminPage: NextPageWithApollo<{ posts?: Article[] }> = ({
         <ButtonGroup>
           <Link
             role="button"
-            href={`${router.pathname}/${params.id}`}
+            href={`/${router.asPath}/${params.id}`}
             sx={{ textDecoration: "none" }}
           >
-            <Button href={`${router.pathname}/${params.id}`}>Edit</Button>
+            <Button>Edit</Button>
           </Link>
           <Link
             role="button"
-            href={`${router.pathname.replace("/admin", "")}/${
-              params.row.slug || params.id
-            }`}
+            href={`/${router.query["type"]}/${params.row.slug || params.id}`}
             target="_blank"
             sx={{ textDecoration: "none" }}
           >
@@ -114,16 +112,16 @@ export const PostsAdminPage: NextPageWithApollo<{ posts?: Article[] }> = ({
               mutation: CreatePostDocument,
               variables: {
                 title: `(Untitled ${new Date().toLocaleString()})`,
-                // FIXME: Not a very good approach
-                type: router.pathname.includes("posters")
-                  ? ArticleType.Poster
-                  : ArticleType.Post,
+                type:
+                  router.query["type"] === "posters"
+                    ? ArticleType.Poster
+                    : ArticleType.Post,
               },
               fetchPolicy: "network-only",
             })
             .then((res) => {
               if (res.data?.addArticle?.id) {
-                router.push(`${router.pathname}/${res.data?.addArticle?.id}`);
+                router.push(`${router.asPath}/${res.data?.addArticle?.id}`);
               }
             });
         }}
@@ -141,7 +139,16 @@ export const PostsAdminPage: NextPageWithApollo<{ posts?: Article[] }> = ({
   );
 };
 
-PostsAdminPage.getInitialProps = async ({ apolloClient }) => {
+PostsAdminPage.getInitialProps = async ({ query, apolloClient }) => {
+  const type =
+    query["type"] === "posts"
+      ? ArticleType.Post
+      : query["type"] === "posters"
+      ? ArticleType.Poster
+      : null;
+  if (!type) {
+    return { posts: undefined };
+  }
   try {
     const data = await apolloClient?.query({
       query: AllArticlesDocument,
@@ -153,7 +160,7 @@ PostsAdminPage.getInitialProps = async ({ apolloClient }) => {
           ...post,
           pusblishTime: post.isPublished ? post.pusblishTime : null,
         }))
-        .filter((p) => p.type === ArticleType.Post),
+        .filter((p) => p.type === type),
     };
   } catch (err) {
     console.log(err);
