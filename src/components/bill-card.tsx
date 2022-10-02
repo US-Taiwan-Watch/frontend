@@ -20,16 +20,19 @@ import {
   Step,
   StepLabel
 } from '@mui/material';
+import { BillTracker } from "../generated/graphql-types";
 
 export type BillCardProps = {
-  id: string,
-  title: string,
-  introducedDate: string,
+  billNumber: number,
+  billType: string,
+  congress: number,
+  title?: string,
+  introducedDate?: string,
   tags?: string[],
-  sponsor: string,
+  sponsor?: string,
   cosponsorCount?: number,
   cosponsors?: string[],
-  trackers?: string[]
+  trackers?: BillTracker[]
 }
 
 /*
@@ -52,10 +55,10 @@ const bill = {
 */
 
 export const BillCard: React.FC<BillCardProps> = (props) => {
-  const keys = props.id;
-  const congress = keys[0];
-  const billType = keys[1];
-  const billNumber = keys[2];
+  // const keys = props.id;
+  const congress = props.congress;
+  const billType = props.billType;
+  const billNumber = props.billNumber;
   return (
     <Container maxWidth="lg">
       <Box
@@ -150,13 +153,13 @@ export const BillCard: React.FC<BillCardProps> = (props) => {
                     <Typography variant="subtitle1">
                       法案進度
                     </Typography>
-                    <Stepper activeStep={1} alternativeLabel sx={{ margin: 2 }}>
+                    {/* <Stepper activeStep={1} alternativeLabel sx={{ margin: 2 }}>
                       {props.trackers.map((label) => (
-                        <Step key={label}>
+                        <Step key={label.stepName}>
                           <StepLabel>{label}</StepLabel>
                         </Step>
                       ))}
-                    </Stepper>
+                    </Stepper> */}
                   </Box>}
                 </Grid>
               </Grid>

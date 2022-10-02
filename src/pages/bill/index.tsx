@@ -15,44 +15,48 @@ import { BillCard } from "../../components/bill-card";
 import { useI18n } from "../../context/i18n";
 import { Bill } from "../../../common/models";
 import { useFetchUser } from "../../lib/user";
-import { GetStaticProps } from "next";
+import { GetStaticProps, NextPage } from "next";
 import { BillDocument, BillQueryVariables } from "../../lib/page-graphql/query-bill.graphql.interface";
+import { createApolloClient } from "../../lib/apollo-client";
+import { DenormalizedBill } from "../../generated/graphql-types";
 
 type BillPageProps = {
-  data?: any
+  bill: DenormalizedBill,
 }
 
-const BillPage: NextPageWithApollo<BillPageProps> = ({ data }) => {
-  console.log(data)
+const BillPage: NextPage<BillPageProps> = ({ bill }) => {
+  console.log(bill)
   return (
-    // <Layout>
-    //   {/* <BillCard id={bill.id} title={bill.title} introducedDate={bill.introducedDate} sponsor={bill.sponsor}></BillCard> */}
-    // </Layout>
-    <pre></pre>
+    <Layout>
+      <BillCard
+        billNumber={bill.billNumber}
+        billType={bill.billType}
+        congress={bill.congress}
+        title={bill.title.zh || undefined}
+        introducedDate={bill.introducedDate || undefined}
+        sponsor={"" + bill.sponsor?.firstName_zh + " " + bill.sponsor?.lastName_zh || undefined}
+        cosponsorCount={bill.cosponsorsCount || undefined}
+        trackers={bill.trackers || undefined}></BillCard>
+    </Layout>
+    // <pre></pre>
   );
 };
 
-BillPage.getInitialProps = async ({ req, query, apolloClient }) => {
-  try {
-    console.log(apolloClient);
-    const data = await apolloClient?.query({
-      query: BillDocument,
-      variables: { billId: "116-hr-2002" as string },
-      fetchPolicy: "network-only",
-    });
-
-    // const bill = data?.bill;
-    return {
-      props: {
-        data,
-      }
-    };
-  } catch (err) {
-    console.error(err);
-    return { data: undefined };
-
+export const getStaticProps: GetStaticProps<BillPageProps> = async ({ req, query }) => {
+  const client = createApolloClient();
+  console.log(client);
+  const data = await client.query({
+    query: BillDocument,
+    variables: { billId: "116-hr-2002" as string },
+    fetchPolicy: "network-only"
+  });
+  const bill = data.data.bill;
+  console.log(bill);
+  return {
+    props: {
+      bill,
+    }
   }
+};
 
-}
-
-export default withApollo()(BillPage);
+export default BillPage;
