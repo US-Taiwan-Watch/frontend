@@ -1,14 +1,17 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import { Layout } from "../../components/layout";
-import { Banner } from "../../components/banner";
-import { getPublishedPosts } from ".";
-import { Loading } from "../../components/loading";
-import { getStaticPathsWithLocale } from "../../utils/page-utils";
-import { PostContent } from "../../components/post-content";
-import { createApolloClient } from "../../lib/apollo-client";
+import { Layout } from "../../../components/layout";
+import { Banner } from "../../../components/banner";
+import { getPublishedPosts } from "..";
+import { Loading } from "../../../components/loading";
+import { getStaticPathsWithLocale } from "../../../utils/page-utils";
+import { PostContent } from "../../../components/post-content";
+import { createApolloClient } from "../../../lib/apollo-client";
 import { Avatar, Box, Chip, Container, Typography } from "@mui/material";
-import { PublicPostDocument, PublicPostQuery } from "../../lib/page-graphql/query-public-post.graphql.interface";
-import { ArticleType } from "../../generated/graphql-types";
+import {
+  PublicPostDocument,
+  PublicPostQuery,
+} from "../../../lib/page-graphql/query-public-post.graphql.interface";
+import { ArticleType } from "../../../generated/graphql-types";
 
 export type PostPageProps = {
   post?: PublicPostQuery["publicArticle"];

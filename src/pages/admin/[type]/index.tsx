@@ -171,9 +171,26 @@ PostsAdminPage.getInitialProps = async ({ query, apolloClient }) => {
 export const getPostUrl = (post: Partial<Article>) => {
   if (post.type === ArticleType.Poster) {
     return `/posters/${post.slug ? post.slug : post.id}`;
-  } else {
-    return `/posts/${post.slug ? post.slug : post.id}`;
   }
+  if (post.isPublished) {
+    const date = getPostPublishDate(post.pusblishTime || undefined);
+    return `/posts/${date?.year}/${date?.month}/${date?.day}/${
+      post.slug ? post.slug : post.id
+    }`;
+  }
+  return `/posts/draft/${post.slug ? post.slug : post.id}`;
+};
+
+export const getPostPublishDate = (time?: number) => {
+  if (!time) {
+    return null;
+  }
+  const date = new Date(time);
+  return {
+    year: date.getUTCFullYear().toString(),
+    month: (date.getUTCMonth() + 1).toString(),
+    day: date.getUTCDate().toString(),
+  };
 };
 
 export default withApollo()(PostsAdminPage);
