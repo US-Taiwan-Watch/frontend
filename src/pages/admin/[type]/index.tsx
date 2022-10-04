@@ -89,7 +89,7 @@ export const PostsAdminPage: NextPageWithApollo<{ posts?: Article[] }> = ({
           </Link>
           <Link
             role="button"
-            href={`/${router.query["type"]}/${params.row.slug || params.id}`}
+            href={getPostUrl(params.row)}
             target="_blank"
             sx={{ textDecoration: "none" }}
           >
@@ -165,6 +165,14 @@ PostsAdminPage.getInitialProps = async ({ query, apolloClient }) => {
   } catch (err) {
     console.log(err);
     return { posts: undefined };
+  }
+};
+
+export const getPostUrl = (post: Partial<Article>) => {
+  if (post.type === ArticleType.Poster) {
+    return `/posters/${post.slug ? post.slug : post.id}`;
+  } else {
+    return `/posts/${post.slug ? post.slug : post.id}`;
   }
 };
 

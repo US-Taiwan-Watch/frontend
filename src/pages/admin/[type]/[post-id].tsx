@@ -38,6 +38,7 @@ import { LocaleSwitcher } from "../../../components/locale-switcher";
 import { Article, ArticleType, User } from "../../../generated/graphql-types";
 import { DeleteArticleDocument } from "../../../lib/page-graphql/delete-post.graphql.interface";
 import { AdminLayout } from "../../../components/admin-layout";
+import { getPostUrl } from ".";
 
 type PostPageProps = {
   post?: Article;
@@ -155,9 +156,7 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
   const state = savedPost.isPublished ? State.PUBLISHED : State.DRAFT;
   const updated = !shallowEqual(updatedPost, savedPost);
   const actions = getActions(state);
-  const postUrl = `/${router.query["type"]}/${
-    updatedPost.slug ? updatedPost.slug : updatedPost.id
-  }`;
+  const postUrl = getPostUrl(updatedPost);
 
   const confirmAction = async () => {
     setIsActioning(true);

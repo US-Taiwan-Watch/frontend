@@ -1,6 +1,6 @@
 // This import is only needed when checking authentication status directly from getInitialProps
 // import auth0 from '../lib/auth0'
-import { IUser, useFetchUser, USTWWindow } from "../lib/user";
+import { IUser, useFetchUser } from "../lib/user";
 import { Layout } from "../components/layout";
 import { NextPage } from "next";
 import { Loading } from "../components/loading";
@@ -23,8 +23,6 @@ interface ProfileCardProps {
 const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
   const [updatedUser, setUpdatedUser] = useState(user);
   const client = useApolloClient();
-
-  console.log(updatedUser);
 
   return (
     <Container>
