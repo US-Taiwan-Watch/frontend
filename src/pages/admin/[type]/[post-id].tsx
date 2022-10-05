@@ -36,7 +36,7 @@ import { LocaleSwitcher } from "../../../components/locale-switcher";
 import { Article, ArticleType, User } from "../../../generated/graphql-types";
 import { DeleteArticleDocument } from "../../../lib/page-graphql/delete-post.graphql.interface";
 import { AdminLayout } from "../../../components/admin-layout";
-import { getPostUrl } from ".";
+import { getPostType, getPostUrl } from ".";
 
 type PostPageProps = {
   post?: Article;
@@ -529,12 +529,7 @@ export const PostEditorPage: NextPageWithApollo<PostPageProps> = ({
 };
 
 PostEditorPage.getInitialProps = async ({ query, apolloClient }) => {
-  const type =
-    query["type"] === "posts"
-      ? ArticleType.Post
-      : query["type"] === "posters"
-      ? ArticleType.Poster
-      : null;
+  const type = getPostType(query["type"]);
   if (!type) {
     return { post: undefined };
   }

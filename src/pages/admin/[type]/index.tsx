@@ -112,10 +112,7 @@ export const PostsAdminPage: NextPageWithApollo<{ posts?: Article[] }> = ({
               mutation: CreatePostDocument,
               variables: {
                 title: `(Untitled ${new Date().toLocaleString()})`,
-                type:
-                  router.query["type"] === "posters"
-                    ? ArticleType.Poster
-                    : ArticleType.Post,
+                type: getPostType(router.query["type"]),
               },
               fetchPolicy: "network-only",
             })
@@ -140,12 +137,7 @@ export const PostsAdminPage: NextPageWithApollo<{ posts?: Article[] }> = ({
 };
 
 PostsAdminPage.getInitialProps = async ({ query, apolloClient }) => {
-  const type =
-    query["type"] === "posts"
-      ? ArticleType.Post
-      : query["type"] === "posters"
-      ? ArticleType.Poster
-      : null;
+  const type = getPostType(query["type"]);
   if (!type) {
     return { posts: undefined };
   }
@@ -168,17 +160,36 @@ PostsAdminPage.getInitialProps = async ({ query, apolloClient }) => {
   }
 };
 
+export const getPostTypeSlug = (type?: ArticleType | null) => {
+  if (type === ArticleType.Poster) {
+    return "posters";
+  }
+  return "posts";
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getPostType = (type?: any) => {
+  if (type === "posters") {
+    return ArticleType.Poster;
+  }
+  if (type === "posts") {
+    return ArticleType.Post;
+  }
+  return null;
+};
+
 export const getPostUrl = (post: Partial<Article>) => {
+  const typeSlug = getPostTypeSlug(post.type);
   if (post.type === ArticleType.Poster) {
-    return `/posters/${post.slug ? post.slug : post.id}`;
+    return `/${typeSlug}/${post.slug ? post.slug : post.id}`;
   }
   if (post.isPublished && post.pusblishTime) {
     const date = getPostPublishDate(post.pusblishTime);
-    return `/posts/${date?.year}/${date?.month}/${
+    return `/${typeSlug}/${date?.year}/${date?.month}/${
       post.slug ? post.slug : post.id
     }`;
   }
-  return `/posts/${post.slug ? post.slug : post.id}`;
+  return `/${typeSlug}/${post.slug ? post.slug : post.id}`;
 };
 
 export const getPostPublishDate = (time: number) => {
