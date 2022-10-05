@@ -41,7 +41,7 @@ const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
 
 export const getStaticProps: GetStaticProps<PostsPageProps> = async () => ({
   props: {
-    posts: await getPublishedPosts(ArticleType.Post),
+    posts: await getPublishedPosts(ArticleType.Article),
   },
   revalidate: 300, // In seconds
 });

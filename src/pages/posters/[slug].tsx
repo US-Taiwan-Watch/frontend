@@ -3,8 +3,8 @@ import { ArticleType } from "../../generated/graphql-types";
 import { createApolloClient } from "../../lib/apollo-client";
 import { PublicPostDocument } from "../../lib/page-graphql/query-public-post.graphql.interface";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
-import { getPublishedPosts } from "../posts";
-import PostPage, { PostPageProps } from "../posts/[...slugs]";
+import { getPublishedPosts } from "../articles";
+import PostPage, { PostPageProps } from "../articles/[...slugs]";
 
 export const getStaticPaths: GetStaticPaths<{ slug: string }> = async ({
   locales,

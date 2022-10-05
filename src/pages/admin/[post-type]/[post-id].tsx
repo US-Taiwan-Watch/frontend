@@ -177,7 +177,7 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
       }
       if (confirmingAction === Action.CHANGE_TYPE) {
         if (updatedPostWithState.type === ArticleType.Poster) {
-          updatedPostWithState.type = ArticleType.Post;
+          updatedPostWithState.type = ArticleType.Article;
         } else {
           updatedPostWithState.type = ArticleType.Poster;
         }

@@ -31,7 +31,7 @@ export type Article = {
 };
 
 export enum ArticleType {
-  Post = 'POST',
+  Article = 'ARTICLE',
   Poster = 'POSTER'
 }
 

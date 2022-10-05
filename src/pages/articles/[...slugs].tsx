@@ -71,7 +71,7 @@ export const getStaticPaths: GetStaticPaths<{ slugs: string[] }> = async ({
   locales,
 }) => ({
   paths: getStaticPathsWithLocale(
-    (await getPublishedPosts(ArticleType.Post)).map((post) => {
+    (await getPublishedPosts(ArticleType.Article)).map((post) => {
       if (!post.pusblishTime) {
         return {
           params: {
@@ -108,7 +108,7 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
     fetchPolicy: "network-only",
   });
   const post = data.data.publicArticle;
-  if (!post || post.type !== ArticleType.Post) {
+  if (!post || post.type !== ArticleType.Article) {
     return { notFound: true };
   }
   if (slugs.length > 1) {
