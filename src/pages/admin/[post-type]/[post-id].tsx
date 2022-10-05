@@ -15,6 +15,7 @@ import {
   IconButton,
   Snackbar,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { useFetchUser } from "../../../lib/user";
 import { AdaptiveEditor } from "../../../components/component-adaptive-editor";
@@ -231,6 +232,17 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
     }
   };
 
+  const changeTypeButton = (
+    <Button
+      color="secondary"
+      variant="text"
+      onClick={() => setConfirmingAction(Action.CHANGE_TYPE)}
+      disabled={!actions.includes(Action.CHANGE_TYPE)}
+    >
+      Change type
+    </Button>
+  );
+
   return (
     <>
       <Backdrop
@@ -438,14 +450,12 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
             Back
           </Button>
           <Chip label={post.isPublished ? "Published" : "Draft"} />
-          {actions.includes(Action.CHANGE_TYPE) && (
-            <Button
-              color="secondary"
-              variant="text"
-              onClick={() => setConfirmingAction(Action.CHANGE_TYPE)}
-            >
-              Change type
-            </Button>
+          {actions.includes(Action.CHANGE_TYPE) ? (
+            changeTypeButton
+          ) : (
+            <Tooltip title="Unpublish it before changing the type">
+              <span>{changeTypeButton}</span>
+            </Tooltip>
           )}
         </Box>
         <Box
