@@ -172,19 +172,16 @@ export const getPostUrl = (post: Partial<Article>) => {
   if (post.type === ArticleType.Poster) {
     return `/posters/${post.slug ? post.slug : post.id}`;
   }
-  if (post.isPublished) {
-    const date = getPostPublishDate(post.pusblishTime || undefined);
-    return `/posts/${date?.year}/${date?.month}/${date?.day}/${
+  if (post.isPublished && post.pusblishTime) {
+    const date = getPostPublishDate(post.pusblishTime);
+    return `/posts/${date?.year}/${date?.month}/${
       post.slug ? post.slug : post.id
     }`;
   }
-  return `/posts/draft/${post.slug ? post.slug : post.id}`;
+  return `/posts/${post.slug ? post.slug : post.id}`;
 };
 
-export const getPostPublishDate = (time?: number) => {
-  if (!time) {
-    return null;
-  }
+export const getPostPublishDate = (time: number) => {
   const date = new Date(time);
   return {
     year: date.getUTCFullYear().toString(),
