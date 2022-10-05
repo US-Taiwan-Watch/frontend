@@ -5,6 +5,8 @@ import { useI18n } from "../context/i18n";
 import { Link, LinkProps } from "./link";
 import Image from "next/image";
 import { UserMenu } from "./user-menu";
+import { ArticleType } from "../generated/graphql-types";
+import { LocaleSwitcher } from "./locale-switcher";
 
 const NavLink: React.FC<LinkProps> = (props) => (
   <Link
@@ -46,8 +48,22 @@ export const AdminHeader: React.FC<{ title: string }> = ({ title }) => {
       >
         {(isAdmin || isEditor) && (
           <>
-            <NavLink href="/admin/articles">管理文章</NavLink>
-            <NavLink href="/admin/posters">管理佈告</NavLink>
+            <NavLink href="/admin/articles">
+              {
+                i18n.formatString(
+                  i18n.strings.admin.posts.managePosts,
+                  i18n.strings.posts[ArticleType.Article]
+                ) as string
+              }
+            </NavLink>
+            <NavLink href="/admin/posters">
+              {
+                i18n.formatString(
+                  i18n.strings.admin.posts.managePosts,
+                  i18n.strings.posts[ArticleType.Poster]
+                ) as string
+              }
+            </NavLink>
             <NavLink href="/">回到首頁</NavLink>
             <NavLink href="/articles" target="_blank">
               文章欄
@@ -56,6 +72,9 @@ export const AdminHeader: React.FC<{ title: string }> = ({ title }) => {
               佈告欄
             </NavLink>
             <UserMenu />
+            <Box sx={{ mx: 1 }}>
+              <LocaleSwitcher />
+            </Box>
           </>
         )}
       </Box>

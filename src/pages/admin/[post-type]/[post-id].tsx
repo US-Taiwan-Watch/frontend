@@ -37,6 +37,7 @@ import { Article, ArticleType, User } from "../../../generated/graphql-types";
 import { DeleteArticleDocument } from "../../../lib/page-graphql/delete-post.graphql.interface";
 import { AdminLayout } from "../../../components/admin-layout";
 import { getPostType, getPostUrl } from ".";
+import { useI18n } from "../../../context/i18n";
 
 type PostPageProps = {
   post?: Article;
@@ -50,7 +51,7 @@ enum Action {
   UNPUBLISH = "Unpublish",
   UPDATE = "Update",
   DELETE = "Delete",
-  CHANGE_TYPE = "ChangeType",
+  CHANGE_TYPE = "Change Type",
 }
 
 enum State {
@@ -106,14 +107,6 @@ function getActions(state: State) {
     .map((t) => t.action);
 }
 
-const confirmationMessage = {
-  [Action.PUBLISH]: "You sure to publish?",
-  [Action.UNPUBLISH]: "You sure to unpublish?",
-  [Action.UPDATE]: "You sure to update?",
-  [Action.DELETE]: "You sure to delete?",
-  [Action.CHANGE_TYPE]: "You sure to change the type?",
-};
-
 const shallowEqual = (
   obj1: { [key: string]: any },
   obj2: { [key: string]: any }
@@ -137,6 +130,20 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
   const [savedPost, setSavedPost] = useState(post);
   const [updatedPost, setUpdatedPost] = useState(post);
   const [uploadingCoverImage, setUploadingCoverImage] = useState(false);
+
+  const postType = getPostType(router.query["post-type"])?.toLowerCase();
+  const changeableType =
+    updatedPost.type === ArticleType.Poster
+      ? ArticleType.Article
+      : ArticleType.Poster;
+
+  const confirmationMessage = {
+    [Action.PUBLISH]: `Are you sure to publish this ${postType}? It will become public to everone.`,
+    [Action.UNPUBLISH]: `Are you sure to unpublish ${postType}? It will be taken down from the public and become a draft. You can publish it later again.`,
+    [Action.UPDATE]: `Are you sure to update the public ${postType}? This will update the public ${postType}`,
+    [Action.DELETE]: `Are you sure to delete this ${postType}? Please don't do it if you're not sure. You can always make it a draft instead. A draft ${postType} is not visible to public.`,
+    [Action.CHANGE_TYPE]: `Are you sure to convert this ${postType} to ${changeableType.toLowerCase()}?`,
+  };
 
   // To make the button text not disappeared during transition
   useEffect(() => {
@@ -176,11 +183,7 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
         updatedPostWithState.isPublished = nextState === State.PUBLISHED;
       }
       if (confirmingAction === Action.CHANGE_TYPE) {
-        if (updatedPostWithState.type === ArticleType.Poster) {
-          updatedPostWithState.type = ArticleType.Article;
-        } else {
-          updatedPostWithState.type = ArticleType.Poster;
-        }
+        updatedPostWithState.type = changeableType;
       }
       success = await savePost(updatedPostWithState);
     }
@@ -410,7 +413,11 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
           >
             Cancel
           </Button>
-          <LoadingButton onClick={confirmAction} loading={isActioning}>
+          <LoadingButton
+            variant="contained"
+            onClick={confirmAction}
+            loading={isActioning}
+          >
             {displayedConfirmingAction}
           </LoadingButton>
         </DialogActions>
@@ -517,12 +524,22 @@ export const PostEditorPage: NextPageWithApollo<PostPageProps> = ({
   post,
   editors,
 }) => {
+  const router = useRouter();
+  const { i18n } = useI18n();
   if (!post) {
     return <Error statusCode={404} />;
   }
 
   return (
-    <AdminLayout title="編輯文章">
+    <AdminLayout
+      title={
+        i18n.formatString(
+          i18n.strings.admin.posts.editPost,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          i18n.strings.post[getPostType(router.query["post-type"])!]
+        ) as string
+      }
+    >
       <PostEditor post={post} editors={editors || []} />
     </AdminLayout>
   );

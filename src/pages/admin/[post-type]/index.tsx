@@ -19,11 +19,13 @@ import { useFetchUser } from "../../../lib/user";
 import { AdminLayout } from "../../../components/admin-layout";
 import { Article, ArticleType } from "../../../generated/graphql-types";
 import { Loading } from "../../../components/loading";
+import { useI18n } from "../../../context/i18n";
 
 export const PostsAdminPage: NextPageWithApollo<{ posts?: Article[] }> = ({
   posts,
 }) => {
   const _ = useFetchUser({ required: true });
+  const { i18n } = useI18n();
   const router = useRouter();
   const apolloClient = useApolloClient();
   const [sortModel, setSortModel] = useState<GridSortModel>([
@@ -102,9 +104,15 @@ export const PostsAdminPage: NextPageWithApollo<{ posts?: Article[] }> = ({
   if (!posts) {
     return <Loading />;
   }
+  const title = i18n.formatString(
+    i18n.strings.admin.posts.managePosts,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    i18n.strings.posts[getPostType(router.query["post-type"])!]
+  ) as string;
+
   return (
-    <AdminLayout title="管理文章">
-      <Banner title="管理文章" />
+    <AdminLayout title={title}>
+      <Banner title={title} />
       <IconButton
         onClick={() => {
           apolloClient
