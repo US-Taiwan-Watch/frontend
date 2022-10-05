@@ -13,9 +13,7 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
-  Input,
   Snackbar,
-  TextareaAutosize,
   TextField,
 } from "@mui/material";
 import { useFetchUser } from "../../../lib/user";
@@ -52,6 +50,7 @@ enum Action {
   UNPUBLISH = "Unpublish",
   UPDATE = "Update",
   DELETE = "Delete",
+  CHANGE_TYPE = "ChangeType",
 }
 
 enum State {
@@ -88,6 +87,11 @@ const stateTransitions: StateTransition[] = [
     action: Action.DELETE,
     newState: State.DELETED,
   },
+  {
+    currentState: State.DRAFT,
+    action: Action.CHANGE_TYPE,
+    newState: State.DRAFT,
+  },
 ];
 
 function getNextState(state: State, action: Action) {
@@ -107,6 +111,7 @@ const confirmationMessage = {
   [Action.UNPUBLISH]: "You sure to unpublish?",
   [Action.UPDATE]: "You sure to update?",
   [Action.DELETE]: "You sure to delete?",
+  [Action.CHANGE_TYPE]: "You sure to change the type?",
 };
 
 const shallowEqual = (
@@ -170,6 +175,13 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
       if (nextState) {
         updatedPostWithState.isPublished = nextState === State.PUBLISHED;
       }
+      if (confirmingAction === Action.CHANGE_TYPE) {
+        if (updatedPostWithState.type === ArticleType.Poster) {
+          updatedPostWithState.type = ArticleType.Post;
+        } else {
+          updatedPostWithState.type = ArticleType.Poster;
+        }
+      }
       success = await savePost(updatedPostWithState);
     }
     if (!success) {
@@ -178,9 +190,9 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
     }
     revalidatePage(postUrl);
     revalidatePage(`/${router.query["type"]}`);
-    setUpdatedPost(updatedPostWithState);
-    setConfirmingAction(null);
-    setIsActioning(false);
+    // setUpdatedPost(updatedPostWithState);
+    // setConfirmingAction(null);
+    // setIsActioning(false);
     router.back();
   };
 
@@ -419,6 +431,15 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
             Back
           </Button>
           <Chip label={post.isPublished ? "Published" : "Draft"} />
+          {actions.includes(Action.CHANGE_TYPE) && (
+            <Button
+              color="secondary"
+              variant="text"
+              onClick={() => setConfirmingAction(Action.CHANGE_TYPE)}
+            >
+              Change type
+            </Button>
+          )}
         </Box>
         <Box
           sx={{
@@ -509,7 +530,7 @@ export const PostEditorPage: NextPageWithApollo<PostPageProps> = ({
 
 PostEditorPage.getInitialProps = async ({ query, apolloClient }) => {
   const type =
-    query["type"] === "post"
+    query["type"] === "posts"
       ? ArticleType.Post
       : query["type"] === "posters"
       ? ArticleType.Poster

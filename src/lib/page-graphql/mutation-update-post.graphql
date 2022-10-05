@@ -1,5 +1,27 @@
-mutation UpdateArticleWithId($updateArticleWithIdId: String!, $tags: [String!], $title: String, $content: String, $slug: String, $preview: String, $isPublished: Boolean, $authors: [String!], $imageSource: String) {
-  updateArticleWithId(id: $updateArticleWithIdId, tags: $tags, title: $title, content: $content, slug: $slug, preview: $preview, isPublished: $isPublished, authors: $authors, imageSource: $imageSource) {
+mutation UpdateArticleWithId(
+  $updateArticleWithIdId: String!
+  $tags: [String!]
+  $title: String
+  $content: String
+  $slug: String
+  $preview: String
+  $isPublished: Boolean
+  $authors: [String!]
+  $imageSource: String
+  $type: ArticleType
+) {
+  updateArticleWithId(
+    id: $updateArticleWithIdId
+    tags: $tags
+    title: $title
+    content: $content
+    slug: $slug
+    preview: $preview
+    isPublished: $isPublished
+    authors: $authors
+    imageSource: $imageSource
+    type: $type
+  ) {
     id
     title
     content

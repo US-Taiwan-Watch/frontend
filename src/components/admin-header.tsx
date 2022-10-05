@@ -1,19 +1,9 @@
 import * as React from "react";
 import { useFetchUser } from "../lib/user";
-import {
-  Avatar,
-  Box,
-  Chip,
-  ListItemIcon,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Box, Toolbar, Typography } from "@mui/material";
 import { useI18n } from "../context/i18n";
 import { Link, LinkProps } from "./link";
 import Image from "next/image";
-import { AccountCircle, Logout } from "@mui/icons-material";
 import { UserMenu } from "./user-menu";
 
 const NavLink: React.FC<LinkProps> = (props) => (
@@ -57,7 +47,14 @@ export const AdminHeader: React.FC<{ title: string }> = ({ title }) => {
         {(isAdmin || isEditor) && (
           <>
             <NavLink href="/">回到首頁</NavLink>
-            <NavLink href="/posts">文章</NavLink>
+            <NavLink href="/admin/posts">管理文章</NavLink>
+            <NavLink href="/admin/posters">管理佈告</NavLink>
+            <NavLink href="/posts" target="_blank">
+              文章欄
+            </NavLink>
+            <NavLink href="/posters" target="_blank">
+              佈告欄
+            </NavLink>
             <UserMenu />
           </>
         )}

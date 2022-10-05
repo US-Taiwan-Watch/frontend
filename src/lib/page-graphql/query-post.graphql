@@ -12,6 +12,7 @@ query EditorPageQuery($articleId: String!) {
     lastModifiedTime
     imageSource
     tags
+    type
   }
   editors {
     id
