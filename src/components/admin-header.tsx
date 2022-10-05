@@ -46,9 +46,9 @@ export const AdminHeader: React.FC<{ title: string }> = ({ title }) => {
       >
         {(isAdmin || isEditor) && (
           <>
-            <NavLink href="/">回到首頁</NavLink>
             <NavLink href="/admin/posts">管理文章</NavLink>
             <NavLink href="/admin/posters">管理佈告</NavLink>
+            <NavLink href="/">回到首頁</NavLink>
             <NavLink href="/posts" target="_blank">
               文章欄
             </NavLink>

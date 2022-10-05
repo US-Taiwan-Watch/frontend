@@ -112,7 +112,7 @@ export const PostsAdminPage: NextPageWithApollo<{ posts?: Article[] }> = ({
               mutation: CreatePostDocument,
               variables: {
                 title: `(Untitled ${new Date().toLocaleString()})`,
-                type: getPostType(router.query["type"]),
+                type: getPostType(router.query["post-type"]),
               },
               fetchPolicy: "network-only",
             })
@@ -137,7 +137,7 @@ export const PostsAdminPage: NextPageWithApollo<{ posts?: Article[] }> = ({
 };
 
 PostsAdminPage.getInitialProps = async ({ query, apolloClient }) => {
-  const type = getPostType(query["type"]);
+  const type = getPostType(query["post-type"]);
   if (!type) {
     return { posts: undefined };
   }

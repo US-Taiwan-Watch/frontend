@@ -189,7 +189,7 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
       return;
     }
     revalidatePage(postUrl);
-    revalidatePage(`/${router.query["type"]}`);
+    revalidatePage(`/${router.query["post-type"]}`);
     // setUpdatedPost(updatedPostWithState);
     // setConfirmingAction(null);
     // setIsActioning(false);
@@ -529,7 +529,7 @@ export const PostEditorPage: NextPageWithApollo<PostPageProps> = ({
 };
 
 PostEditorPage.getInitialProps = async ({ query, apolloClient }) => {
-  const type = getPostType(query["type"]);
+  const type = getPostType(query["post-type"]);
   if (!type) {
     return { post: undefined };
   }

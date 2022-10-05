@@ -12,7 +12,7 @@ import {
   PublicPostQuery,
 } from "../../lib/page-graphql/query-public-post.graphql.interface";
 import { ArticleType } from "../../generated/graphql-types";
-import { getPostPublishDate } from "../admin/[type]";
+import { getPostPublishDate } from "../admin/[post-type]";
 
 export type PostPageProps = {
   post?: PublicPostQuery["publicArticle"];
