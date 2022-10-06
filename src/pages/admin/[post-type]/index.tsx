@@ -186,7 +186,15 @@ export const getPostType = (type?: any) => {
   return null;
 };
 
-export const getPostUrl = (post: Partial<Article>) => {
+type PartialPost = {
+  id: string;
+  isPublished?: boolean | null;
+  pusblishTime?: number | null;
+  slug?: string | null;
+  type?: ArticleType | null;
+};
+
+export const getPostUrl = (post: PartialPost) => {
   const typeSlug = getPostTypeSlug(post.type);
   if (post.type === ArticleType.Poster) {
     return `/${typeSlug}/${post.slug ? post.slug : post.id}`;

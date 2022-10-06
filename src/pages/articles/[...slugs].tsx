@@ -12,17 +12,35 @@ import {
   PublicPostQuery,
 } from "../../lib/page-graphql/query-public-post.graphql.interface";
 import { ArticleType } from "../../generated/graphql-types";
-import { getPostPublishDate } from "../admin/[post-type]";
+import { getPostPublishDate, getPostUrl } from "../admin/[post-type]";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 export type PostPageProps = {
   post?: PublicPostQuery["publicArticle"];
 };
 
 const PostPage: NextPage<PostPageProps> = ({ post }) => {
+  const router = useRouter();
+  useEffect(() => {
+    if (!post?.pusblishTime) {
+      return;
+    }
+    const slugs = router.query["slugs"];
+    const date = getPostPublishDate(post.pusblishTime);
+    if (
+      slugs?.length === 3 &&
+      slugs[0] === date.year &&
+      slugs[1] === date.month
+    ) {
+      return;
+    }
+    router.replace(getPostUrl(post), undefined, { shallow: true });
+  }, [post, router]);
+
   if (!post) {
     return <Loading />;
   }
-
   return (
     <Layout
       title={post.title || undefined}
@@ -98,9 +116,6 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
   if (!slugs) {
     return { notFound: true };
   }
-  if (slugs.length !== 1 && slugs.length !== 3) {
-    return { notFound: true };
-  }
   const apolloClient = createApolloClient();
   const data = await apolloClient.query({
     query: PublicPostDocument,
@@ -108,21 +123,10 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
     fetchPolicy: "network-only",
   });
   const post = data.data.publicArticle;
-  if (!post || post.type !== ArticleType.Article) {
+  if (!post || post.type !== ArticleType.Article || !post.pusblishTime) {
     return { notFound: true };
   }
-  if (slugs.length > 1) {
-    if (!post.pusblishTime) {
-      return { notFound: true };
-    }
-    const date = getPostPublishDate(post.pusblishTime);
-    if (slugs[0] !== date?.year || slugs[1] !== date?.month) {
-      return { notFound: true };
-    }
-  }
-  return {
-    props: { post },
-  };
+  return { props: { post } };
 };
 
 export default PostPage;
