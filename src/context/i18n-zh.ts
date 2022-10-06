@@ -77,6 +77,12 @@ export default {
     ARTICLE: "文章",
     POSTER: "公告",
   },
+  articles: {
+    title: "文章",
+  },
+  posters: {
+    title: "公告訊息",
+  },
   admin: {
     posts: {
       managePosts: "管理{0}",

@@ -60,40 +60,48 @@ function getGridSize(count: number, size: 'sm' | 'md') {
   return 6;
 }
 
-export const FeaturedCards: React.FC<{ cards: CardProps[], noBreak?: boolean }> = ({ cards, noBreak }) => (
+export const FeaturedCards: React.FC<{ cards: CardProps[]; noBreak?: boolean }> = ({
+  cards,
+  noBreak,
+}) => (
   <Grid container spacing={4}>
     {cards.map((card, i) => (
-      <Grid item key={i}
+      <Grid
+        item
+        key={i}
         xs={12}
-        sm={getGridSize(cards.length, 'sm')}
-        md={getGridSize(cards.length, 'md')}
+        sm={getGridSize(cards.length, "sm")}
+        md={getGridSize(cards.length, "md")}
         sx={{
           my: 3,
           display: {
-            xs: noBreak && i > 0 ? 'none' : 'block',
-            sm: noBreak && i > 0 ? 'none' : 'block',
-            md: 'block',
-          }
-        }}>
-        <Card
-          sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-        >
-          <CardActionArea href={card.url} target="_blank" sx={{ height: '100%' }}>
-            <CardMedia
-              component="img"
-              image={card.image}
-              alt="random"
-            />
+            xs: noBreak && i > 0 ? "none" : "block",
+            sm: noBreak && i > 0 ? "none" : "block",
+            md: "block",
+          },
+        }}
+      >
+        <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+          <CardActionArea
+            href={card.url}
+            target="_blank"
+            sx={{ height: "100%" }}
+          >
+            {card.image && (
+              <CardMedia component="img" image={card.image} alt="random" />
+            )}
             <CardContent sx={{ flexGrow: 1 }}>
               <Typography gutterBottom variant="h6" component="h2">
                 {card.title}
               </Typography>
-              <Typography variant="subtitle1" color="text.secondary" sx={{ paddingBottom: 2 }}>
+              <Typography
+                variant="subtitle1"
+                color="text.secondary"
+                sx={{ paddingBottom: 2 }}
+              >
                 {card.displayDate}
               </Typography>
-              <Typography>
-                {card.content}
-              </Typography>
+              <Typography>{card.content}</Typography>
             </CardContent>
           </CardActionArea>
         </Card>

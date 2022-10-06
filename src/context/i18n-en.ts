@@ -77,6 +77,12 @@ export default {
     ARTICLE: "Article",
     POSTER: "Poster",
   },
+  articles: {
+    title: "News",
+  },
+  posters: {
+    title: "Updates",
+  },
   admin: {
     posts: {
       managePosts: "Manage {0}",

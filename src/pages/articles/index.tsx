@@ -6,18 +6,18 @@ import { CardList } from "../../components/card-list";
 import { AllArticlesDocument } from "../../lib/page-graphql/query-posts.graphql.interface";
 import { Article, ArticleType } from "../../generated/graphql-types";
 import { initApolloClient } from "../../lib/with-apollo";
-import { useFetchUser } from "../../lib/user";
+import { getPostUrl } from "../admin/[post-type]";
+import { useI18n } from "../../context/i18n";
 
-export type PostsPageProps = {
+type PostsPageProps = {
   posts: Article[];
 };
 
 const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
-  const router = useRouter();
-  const { isEditor } = useFetchUser();
+  const { i18n } = useI18n();
   return (
-    <Layout title="所有文章">
-      <Banner title="所有文章"></Banner>
+    <Layout title={i18n.strings.articles.title}>
+      <Banner title={i18n.strings.articles.title}></Banner>
       {/* {isEditor && <>
         <Link href={`/admin/posts`}>
           <Button variant="contained">Manage Posts</Button>
@@ -30,7 +30,7 @@ const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
             title: p.title || "",
             displayDate: new Date(p.pusblishTime || 0).toLocaleDateString(), // change to pub date
             content: p.preview || "",
-            url: `${router.pathname}/${p.slug}`,
+            url: getPostUrl(p),
             image: p.imageSource || undefined,
           }))
           .reverse()}

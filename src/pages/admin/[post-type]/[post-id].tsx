@@ -291,8 +291,10 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
               variant="standard"
               label="Cover Image"
               value={updatedPost.imageSource}
-              // onChange={e => setUpdatedPost({ ...updatedPost, imageSource: e.target.value })}
-              disabled
+              onChange={(e) =>
+                setUpdatedPost({ ...updatedPost, imageSource: e.target.value })
+              }
+              // disabled
             />
             <input
               id="raised-button-file"
