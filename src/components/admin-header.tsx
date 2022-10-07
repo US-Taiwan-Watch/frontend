@@ -22,7 +22,7 @@ const NavLink: React.FC<LinkProps> = (props) => (
 
 export const AdminHeader: React.FC<{ title: string }> = ({ title }) => {
   const { i18n } = useI18n();
-  const { isAdmin, isEditor } = useFetchUser({ required: true });
+  const { canEdit } = useFetchUser({ required: true });
 
   return (
     <Toolbar sx={{ flexWrap: "wrap", alignItems: "center" }}>
@@ -46,7 +46,7 @@ export const AdminHeader: React.FC<{ title: string }> = ({ title }) => {
           justifyContent: "right",
         }}
       >
-        {(isAdmin || isEditor) && (
+        {canEdit && (
           <>
             <NavLink href="/admin/articles">
               {

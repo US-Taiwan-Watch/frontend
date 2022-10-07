@@ -6,7 +6,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { IconButton } from "@material-ui/core";
 import { NextPageWithApollo, withApollo } from "../../../lib/with-apollo";
 import { AllArticlesDocument } from "../../../lib/page-graphql/query-posts.graphql.interface";
-import { useApolloClient } from "@apollo/client";
+import { ApolloError, useApolloClient } from "@apollo/client";
 import { CreatePostDocument } from "../../../lib/page-graphql/mutation-create-post.graphql.interface";
 import { useState } from "react";
 import {
@@ -15,16 +15,16 @@ import {
   GridSortModel,
   GridValueFormatterParams,
 } from "@mui/x-data-grid-pro";
-import { useFetchUser } from "../../../lib/user";
 import { AdminLayout } from "../../../components/admin-layout";
 import { Article, ArticleType } from "../../../generated/graphql-types";
 import { Loading } from "../../../components/loading";
 import { useI18n } from "../../../context/i18n";
+import Error from "next/error";
 
-export const PostsAdminPage: NextPageWithApollo<{ posts?: Article[] }> = ({
-  posts,
-}) => {
-  const _ = useFetchUser({ required: true });
+export const PostsAdminPage: NextPageWithApollo<{
+  posts?: Article[];
+  statusCode?: number;
+}> = ({ posts, statusCode }) => {
   const { i18n } = useI18n();
   const router = useRouter();
   const apolloClient = useApolloClient();
@@ -34,9 +34,12 @@ export const PostsAdminPage: NextPageWithApollo<{ posts?: Article[] }> = ({
       sort: "desc",
     },
   ]);
-  // if (!loading && !isEditor) {
-  //   return <Error statusCode={403} title="You don't have permission to access this page" />
-  // }
+  if (statusCode === 404) {
+    return <Error statusCode={404} />;
+  }
+  if (!posts && statusCode !== 403) {
+    return <Error statusCode={404} title="Failed to find or fetch posts" />;
+  }
 
   function dateFormatter(
     params: GridValueFormatterParams<number | null>
@@ -147,7 +150,7 @@ export const PostsAdminPage: NextPageWithApollo<{ posts?: Article[] }> = ({
 PostsAdminPage.getInitialProps = async ({ query, apolloClient }) => {
   const type = getPostType(query["post-type"]);
   if (!type) {
-    return { posts: undefined };
+    return { statusCode: 404 };
   }
   try {
     const data = await apolloClient?.query({
@@ -164,7 +167,10 @@ PostsAdminPage.getInitialProps = async ({ query, apolloClient }) => {
     };
   } catch (err) {
     console.log(err);
-    return { posts: undefined };
+    if ((err as ApolloError).message.includes("Access denied")) {
+      return { statusCode: 403 };
+    }
+    return { statusCode: 500 };
   }
 };
 

@@ -23,7 +23,7 @@ const NavLink: React.FC<LinkProps> = (props) => (
 
 export const Header: React.FC = () => {
   const { i18n } = useI18n();
-  const { loading, isAdmin, isEditor } = useFetchUser();
+  const { user } = useFetchUser();
   const { pathname } = useRouter();
   const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
@@ -81,7 +81,7 @@ export const Header: React.FC = () => {
         <NavLink href="/#donate">
           <Button variant="contained">{i18n.strings.header.donate}</Button>
         </NavLink>
-        {(isAdmin || isEditor) && (
+        {user && (
           <>
             <NavLink href="/posts">文章</NavLink>
             <UserMenu />

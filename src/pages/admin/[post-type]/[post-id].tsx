@@ -23,7 +23,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Error from "next/error";
 import CloseIcon from "@mui/icons-material/Close";
-import { useApolloClient } from "@apollo/client";
+import { ApolloError, useApolloClient } from "@apollo/client";
 import { NextPageWithApollo, withApollo } from "../../../lib/with-apollo";
 import SettingsIcon from "@mui/icons-material/Settings";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -43,6 +43,7 @@ import { useI18n } from "../../../context/i18n";
 type PostPageProps = {
   post?: Article;
   editors?: User[];
+  statusCode?: number;
 };
 
 let timeout: NodeJS.Timeout | null = null;
@@ -535,11 +536,16 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
 export const PostEditorPage: NextPageWithApollo<PostPageProps> = ({
   post,
   editors,
+  statusCode,
 }) => {
   const router = useRouter();
   const { i18n } = useI18n();
-  if (!post) {
+  const type = getPostType(router.query["post-type"]);
+  if (statusCode === 404 || !type) {
     return <Error statusCode={404} />;
+  }
+  if (!post && statusCode !== 403) {
+    return <Error statusCode={404} title="Post not found" />;
   }
 
   return (
@@ -547,12 +553,11 @@ export const PostEditorPage: NextPageWithApollo<PostPageProps> = ({
       title={
         i18n.formatString(
           i18n.strings.admin.posts.editPost,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          i18n.strings.post[getPostType(router.query["post-type"])!]
+          i18n.strings.post[type]
         ) as string
       }
     >
-      <PostEditor post={post} editors={editors || []} />
+      {post && <PostEditor post={post} editors={editors || []} />}
     </AdminLayout>
   );
 };
@@ -560,7 +565,7 @@ export const PostEditorPage: NextPageWithApollo<PostPageProps> = ({
 PostEditorPage.getInitialProps = async ({ query, apolloClient }) => {
   const type = getPostType(query["post-type"]);
   if (!type) {
-    return { post: undefined };
+    return { statusCode: 404 };
   }
   try {
     const res = await apolloClient?.query({
@@ -568,16 +573,16 @@ PostEditorPage.getInitialProps = async ({ query, apolloClient }) => {
       variables: { articleId: query["post-id"] as string },
       fetchPolicy: "network-only",
     });
-    const post = res?.data.article;
-    if (!post) {
-      return { post: undefined };
-    }
     return {
-      post,
-      editors: res.data.editors,
+      post: res?.data.article || undefined,
+      editors: res?.data.editors,
     };
   } catch (err) {
-    return { post: undefined };
+    console.log(err);
+    if ((err as ApolloError).message.includes("Access denied")) {
+      return { statusCode: 403 };
+    }
+    return { statusCode: 500 };
   }
 };
 
