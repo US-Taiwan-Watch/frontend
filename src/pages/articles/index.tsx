@@ -33,7 +33,7 @@ const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
         cards={posts
           .map((p) => ({
             title: p.title || "",
-            displayDate: new Date(p.pusblishTime || 0).toLocaleDateString(), // change to pub date
+            displayDate: new Date(p.publishedTime || 0).toLocaleDateString(), // change to pub date
             content: p.preview || "",
             url: getPostUrl(p),
             image: p.imageSource || undefined,
@@ -67,7 +67,7 @@ export const getPublishedPosts = (type: ArticleType): Promise<Article[]> => {
           ...p,
           slug: p.slug || p.id,
         }))
-        .sort((a, b) => a.pusblishTime! - b.pusblishTime!)
+        .sort((a, b) => a.publishedTime! - b.publishedTime!)
     );
 };
 

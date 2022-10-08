@@ -22,7 +22,7 @@ export type Article = {
   isPublished?: Maybe<Scalars['Boolean']>;
   lastModifiedTime?: Maybe<Scalars['Float']>;
   preview?: Maybe<Scalars['String']>;
-  pusblishTime?: Maybe<Scalars['Float']>;
+  publishedTime?: Maybe<Scalars['Float']>;
   slug?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Scalars['String']>>;
   title?: Maybe<Scalars['String']>;
@@ -108,7 +108,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addArticle?: Maybe<Article>;
   createOrUpdateUser?: Maybe<Scalars['Boolean']>;
-  deleteArticle?: Maybe<Scalars['Boolean']>;
+  deleteArticle: Scalars['Boolean'];
   emitGlobalEvent: Scalars['Boolean'];
   emitUserEvent: Scalars['Boolean'];
   updateArticleWithId?: Maybe<Article>;
@@ -161,6 +161,7 @@ export type MutationUpdateArticleWithIdArgs = {
   imageSource?: InputMaybe<Scalars['String']>;
   isPublished?: InputMaybe<Scalars['Boolean']>;
   preview?: InputMaybe<Scalars['String']>;
+  publishedTime?: InputMaybe<Scalars['Float']>;
   slug?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
   title?: InputMaybe<Scalars['String']>;

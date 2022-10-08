@@ -17,7 +17,6 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-import { useFetchUser } from "../../../lib/user";
 import { AdaptiveEditor } from "../../../components/component-adaptive-editor";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -37,11 +36,14 @@ import { CardItem } from "../../../components/card-list";
 import { uploadPostImage } from "../../../utils/image-upload-utils";
 import { revalidatePage } from "../../../utils/revalidte-page";
 import { LocaleSwitcher } from "../../../components/locale-switcher";
-import { Article, ArticleType, User } from "../../../generated/graphql-types";
+import { ArticleType, User } from "../../../generated/graphql-types";
 import { DeleteArticleDocument } from "../../../lib/page-graphql/delete-post.graphql.interface";
 import { AdminLayout } from "../../../components/admin-layout";
 import { getPostType, getPostUrl } from ".";
 import { useI18n } from "../../../context/i18n";
+import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 type PostPageProps = {
   post?: EditorPageQuery["getArticle"];
@@ -141,6 +143,9 @@ const PostEditor: React.FC<{
   const [savedPost, setSavedPost] = useState(postNonNull);
   const [updatedPost, setUpdatedPost] = useState<PostType>(postNonNull);
   const [uploadingCoverImage, setUploadingCoverImage] = useState(false);
+  const [publishedTime, setPublishedTime] = useState<Dayjs | null>(
+    dayjs(post?.publishedTime)
+  );
 
   // To make the button text not disappeared during transition
   useEffect(() => {
@@ -148,6 +153,15 @@ const PostEditor: React.FC<{
       setDisplayedConfirmingAction(confirmingAction);
     }
   }, [confirmingAction]);
+
+  useEffect(() => {
+    if (publishedTime?.isValid()) {
+      setUpdatedPost({
+        ...updatedPost,
+        publishedTime: publishedTime.valueOf(),
+      });
+    }
+  }, [publishedTime]);
 
   useEffect(() => {
     if (state === State.DRAFT && updated && !isActioning) {
@@ -172,7 +186,7 @@ const PostEditor: React.FC<{
     [Action.PUBLISH]: `Are you sure to publish this ${postType}? It will become public to everone.`,
     [Action.UNPUBLISH]: `Are you sure to unpublish ${postType}? It will be taken down from the public and become a draft. You can publish it later again.`,
     [Action.UPDATE]: `Are you sure to update the public ${postType}? This will update the public ${postType}`,
-    [Action.DELETE]: `Are you sure to delete this ${postType}? Please don't do it if you're not sure. You can always make it a draft instead. A draft ${postType} is not visible to public.`,
+    [Action.DELETE]: `Are you sure to delete this ${postType}? Please don't do it if you're not sure. You can always make it a draft instead. A draft ${postType} is not visible to public. If you delete it by accident, please reach out to jingwan@ustw.watch`,
     [Action.CHANGE_TYPE]: `Are you sure to convert this ${postType} to ${changeableType.toLowerCase()}?`,
   };
 
@@ -211,6 +225,7 @@ const PostEditor: React.FC<{
   };
 
   const savePost = async (postToSave: PostType) => {
+    console.log(postToSave);
     try {
       const res = await apolloClient.mutate({
         mutation: UpdateArticleWithIdDocument,
@@ -460,6 +475,18 @@ const PostEditor: React.FC<{
             Back
           </Button>
           <Chip label={postNonNull.isPublished ? "Published" : "Draft"} />
+          {actions.includes(Action.UPDATE) && (
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                renderInput={(props: any) => (
+                  <TextField {...props} size="small" />
+                )}
+                label="Published Time (local time)"
+                value={publishedTime}
+                onChange={(value: Dayjs | null) => setPublishedTime(value)}
+              />
+            </LocalizationProvider>
+          )}
           {actions.includes(Action.CHANGE_TYPE) ? (
             changeTypeButton
           ) : (

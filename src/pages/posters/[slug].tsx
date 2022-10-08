@@ -33,8 +33,8 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
             {post.title}
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
-            {post.pusblishTime &&
-              new Date(post.pusblishTime).toLocaleDateString()}
+            {post.publishedTime &&
+              new Date(post.publishedTime).toLocaleDateString()}
           </Typography>
         </Container>
       </Banner>

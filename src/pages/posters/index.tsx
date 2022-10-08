@@ -17,7 +17,7 @@ const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
   const cards = posts
     .map((p) => ({
       title: p.title || "",
-      displayDate: new Date(p.pusblishTime || 0).toLocaleDateString(), // change to pub date
+      displayDate: new Date(p.publishedTime || 0).toLocaleDateString(), // change to pub date
       content: p.preview || "",
       url: getPostUrl(p),
       image: p.imageSource || undefined,

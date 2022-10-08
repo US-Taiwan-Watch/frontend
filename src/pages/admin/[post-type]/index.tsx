@@ -61,7 +61,7 @@ export const PostsAdminPage: NextPageWithApollo<{
       valueFormatter: (param) => (param.value === true ? "Published" : "Draft"),
     },
     {
-      field: "pusblishTime",
+      field: "publishedTime",
       headerName: "Published",
       width: 150,
       valueFormatter: dateFormatter,
@@ -161,7 +161,7 @@ PostsAdminPage.getInitialProps = async ({ query, apolloClient }) => {
       posts: data?.data.getAllArticles
         .map((post) => ({
           ...post,
-          pusblishTime: post.isPublished ? post.pusblishTime : null,
+          publishedTime: post.isPublished ? post.publishedTime : null,
         }))
         .filter((p) => p.type === type),
     };
@@ -195,7 +195,7 @@ export const getPostType = (type?: any) => {
 type PartialPost = {
   id: string;
   isPublished?: boolean | null;
-  pusblishTime?: number | null;
+  publishedTime?: number | null;
   slug?: string | null;
   type?: ArticleType | null;
 };
@@ -205,8 +205,8 @@ export const getPostUrl = (post: PartialPost) => {
   if (post.type === ArticleType.Poster) {
     return `/${typeSlug}/${post.slug ? post.slug : post.id}`;
   }
-  if (post.isPublished && post.pusblishTime) {
-    const date = getPostPublishDate(post.pusblishTime);
+  if (post.isPublished && post.publishedTime) {
+    const date = getPostPublishDate(post.publishedTime);
     return `/${typeSlug}/${date?.year}/${date?.month}/${
       post.slug ? post.slug : post.id
     }`;

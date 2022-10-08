@@ -6,7 +6,7 @@ query PublicPost($slug: String!) {
     slug
     preview
     isPublished
-    pusblishTime
+    publishedTime
     createdTime
     lastModifiedTime
     imageSource

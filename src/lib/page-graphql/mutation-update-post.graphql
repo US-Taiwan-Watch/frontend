@@ -9,6 +9,7 @@ mutation UpdateArticleWithId(
   $authors: [String!]
   $imageSource: String
   $type: ArticleType
+  $publishedTime: Float
 ) {
   updateArticleWithId(
     id: $updateArticleWithIdId
@@ -21,6 +22,7 @@ mutation UpdateArticleWithId(
     authors: $authors
     imageSource: $imageSource
     type: $type
+    publishedTime: $publishedTime
   ) {
     id
   }

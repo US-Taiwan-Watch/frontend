@@ -23,11 +23,11 @@ export type PostPageProps = {
 const PostPage: NextPage<PostPageProps> = ({ post }) => {
   const router = useRouter();
   useEffect(() => {
-    if (!post?.pusblishTime) {
+    if (!post?.publishedTime) {
       return;
     }
     const slugs = router.query["slugs"];
-    const date = getPostPublishDate(post.pusblishTime);
+    const date = getPostPublishDate(post.publishedTime);
     if (
       slugs?.length === 3 &&
       slugs[0] === date.year &&
@@ -54,8 +54,8 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
             {post.title}
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
-            {post.pusblishTime &&
-              new Date(post.pusblishTime).toLocaleDateString()}
+            {post.publishedTime &&
+              new Date(post.publishedTime).toLocaleDateString()}
           </Typography>
           <Typography variant="subtitle1">
             {post.authorInfos?.map((author) => (
@@ -90,14 +90,14 @@ export const getStaticPaths: GetStaticPaths<{ slugs: string[] }> = async ({
 }) => ({
   paths: getStaticPathsWithLocale(
     (await getPublishedPosts(ArticleType.Article)).map((post) => {
-      if (!post.pusblishTime) {
+      if (!post.publishedTime) {
         return {
           params: {
             slugs: [post.slug as string],
           },
         };
       }
-      const date = getPostPublishDate(post.pusblishTime);
+      const date = getPostPublishDate(post.publishedTime);
       return {
         params: {
           slugs: [date?.year, date?.month, post.slug as string],
@@ -124,7 +124,7 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
       fetchPolicy: "network-only",
     });
     const post = data.data.getPublicArticle;
-    if (!post || post.type !== ArticleType.Article || !post.pusblishTime) {
+    if (!post || post.type !== ArticleType.Article || !post.publishedTime) {
       return { notFound: true };
     }
     return { props: { post } };
