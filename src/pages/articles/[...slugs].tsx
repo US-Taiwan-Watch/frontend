@@ -117,16 +117,21 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
     return { notFound: true };
   }
   const apolloClient = createApolloClient();
-  const data = await apolloClient.query({
-    query: PublicPostDocument,
-    variables: { slug: slugs[slugs.length - 1] },
-    fetchPolicy: "network-only",
-  });
-  const post = data.data.publicArticle;
-  if (!post || post.type !== ArticleType.Article || !post.pusblishTime) {
+  try {
+    const data = await apolloClient.query({
+      query: PublicPostDocument,
+      variables: { slug: slugs[slugs.length - 1] },
+      fetchPolicy: "network-only",
+    });
+    const post = data.data.publicArticle;
+    if (!post || post.type !== ArticleType.Article || !post.pusblishTime) {
+      return { notFound: true };
+    }
+    return { props: { post } };
+  } catch (err) {
+    console.error(err);
     return { notFound: true };
   }
-  return { props: { post } };
 };
 
 export default PostPage;

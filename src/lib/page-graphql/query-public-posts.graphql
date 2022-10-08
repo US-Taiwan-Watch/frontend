@@ -1,0 +1,13 @@
+query PublicPosts {
+  allArticles {
+    id
+    title
+    content
+    slug
+    preview
+    isPublished
+    pusblishTime
+    imageSource
+    type
+  }
+}

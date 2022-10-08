@@ -79,9 +79,11 @@ export default {
   },
   articles: {
     title: "文章",
+    desc: "新聞分析文章！",
   },
   posters: {
     title: "公告訊息",
+    desc: "公告！",
   },
   admin: {
     posts: {

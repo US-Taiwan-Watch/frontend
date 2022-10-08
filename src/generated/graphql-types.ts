@@ -191,6 +191,8 @@ export type Query = {
   bill?: Maybe<Bill>;
   bills: PaginatedBills;
   editors: Array<User>;
+  getUser: User;
+  getUsers: Array<User>;
   imUser?: Maybe<User>;
   isAdmin: Scalars['Boolean'];
   member?: Maybe<Member>;
@@ -218,6 +220,16 @@ export type QueryBillArgs = {
 export type QueryBillsArgs = {
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;
+};
+
+
+export type QueryGetUserArgs = {
+  user_id: Scalars['String'];
+};
+
+
+export type QueryGetUsersArgs = {
+  user_id: Array<Scalars['String']>;
 };
 
 

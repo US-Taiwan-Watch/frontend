@@ -1,13 +1,12 @@
 import type { GetStaticProps, NextPage } from "next";
 import { Layout } from "../../components/layout";
 import { Banner } from "../../components/banner";
-import { useRouter } from "next/router";
 import { CardList } from "../../components/card-list";
-import { AllArticlesDocument } from "../../lib/page-graphql/query-posts.graphql.interface";
 import { Article, ArticleType } from "../../generated/graphql-types";
 import { initApolloClient } from "../../lib/with-apollo";
 import { getPostUrl } from "../admin/[post-type]";
 import { useI18n } from "../../context/i18n";
+import { PublicPostsDocument } from "../../lib/page-graphql/query-public-posts.graphql.interface";
 
 type PostsPageProps = {
   posts: Article[];
@@ -16,8 +15,14 @@ type PostsPageProps = {
 const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
   const { i18n } = useI18n();
   return (
-    <Layout title={i18n.strings.articles.title}>
-      <Banner title={i18n.strings.articles.title}></Banner>
+    <Layout
+      title={i18n.strings.articles.title}
+      description={i18n.strings.articles.desc}
+    >
+      <Banner
+        title={i18n.strings.articles.title}
+        subtitle={i18n.strings.articles.desc}
+      ></Banner>
       {/* {isEditor && <>
         <Link href={`/admin/posts`}>
           <Button variant="contained">Manage Posts</Button>
@@ -51,7 +56,7 @@ export const getPublishedPosts = (type: ArticleType): Promise<Article[]> => {
   const apolloClient = initApolloClient();
   return apolloClient
     .query({
-      query: AllArticlesDocument,
+      query: PublicPostsDocument,
       fetchPolicy: "network-only",
     })
     .then((data) =>

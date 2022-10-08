@@ -24,8 +24,14 @@ const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
     }))
     .reverse();
   return (
-    <Layout title={i18n.strings.posters.title}>
-      <Banner title={i18n.strings.posters.title}></Banner>
+    <Layout
+      title={i18n.strings.posters.title}
+      description={i18n.strings.posters.desc}
+    >
+      <Banner
+        title={i18n.strings.posters.title}
+        subtitle={i18n.strings.posters.desc}
+      ></Banner>
       {/* {isEditor && <>
         <Link href={`/admin/posts`}>
           <Button variant="contained">Manage Posts</Button>

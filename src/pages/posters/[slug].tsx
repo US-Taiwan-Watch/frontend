@@ -1,7 +1,5 @@
-import { Avatar, Box, Chip, Container, Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { Banner } from "../../components/banner";
 import { Layout } from "../../components/layout";
 import { Loading } from "../../components/loading";
@@ -26,7 +24,6 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
   return (
     <Layout
       title={post.title || undefined}
-      type="article"
       description={post.preview || ""}
       image={post.imageSource || undefined}
     >
@@ -65,18 +62,23 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
     return { notFound: true };
   }
   const apolloClient = createApolloClient();
-  const data = await apolloClient.query({
-    query: PublicPostDocument,
-    variables: { slug: params.slug },
-    fetchPolicy: "network-only",
-  });
-  const post = data.data.publicArticle;
-  if (!post || post.type !== ArticleType.Poster) {
+  try {
+    const data = await apolloClient.query({
+      query: PublicPostDocument,
+      variables: { slug: params.slug },
+      fetchPolicy: "network-only",
+    });
+    const post = data.data.publicArticle;
+    if (!post || post.type !== ArticleType.Poster) {
+      return { notFound: true };
+    }
+    return {
+      props: { post },
+    };
+  } catch (err) {
+    console.error(err);
     return { notFound: true };
   }
-  return {
-    props: { post },
-  };
 };
 
 export default PostPage;

@@ -79,9 +79,11 @@ export default {
   },
   articles: {
     title: "News",
+    desc: "News page!",
   },
   posters: {
     title: "Updates",
+    desc: "Posters page!",
   },
   admin: {
     posts: {
