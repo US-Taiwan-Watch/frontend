@@ -15,7 +15,6 @@ export type Scalars = {
 export type Article = {
   __typename?: 'Article';
   authorInfos?: Maybe<Array<User>>;
-  authors?: Maybe<Array<Scalars['String']>>;
   content?: Maybe<Scalars['String']>;
   createdTime?: Maybe<Scalars['Float']>;
   id: Scalars['String'];
@@ -108,7 +107,6 @@ export type MemberRole = {
 export type Mutation = {
   __typename?: 'Mutation';
   addArticle?: Maybe<Article>;
-  createEmptyArticle?: Maybe<Article>;
   createOrUpdateUser?: Maybe<Scalars['Boolean']>;
   deleteArticle?: Maybe<Scalars['Boolean']>;
   emitGlobalEvent: Scalars['Boolean'];
@@ -185,12 +183,12 @@ export type PaginatedBills = {
 
 export type Query = {
   __typename?: 'Query';
-  allArticles: Array<Article>;
-  article?: Maybe<Article>;
-  articles?: Maybe<Array<Article>>;
   bill?: Maybe<Bill>;
   bills: PaginatedBills;
   editors: Array<User>;
+  getAllArticles: Array<Article>;
+  getArticle?: Maybe<Article>;
+  getPublicArticle?: Maybe<Article>;
   getUser: User;
   getUsers: Array<User>;
   imUser?: Maybe<User>;
@@ -198,17 +196,6 @@ export type Query = {
   member?: Maybe<Member>;
   members: Array<Member>;
   myRoles?: Maybe<Array<Auth0RoleName>>;
-  publicArticle?: Maybe<Article>;
-};
-
-
-export type QueryArticleArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryArticlesArgs = {
-  ids: Array<Scalars['String']>;
 };
 
 
@@ -220,6 +207,16 @@ export type QueryBillArgs = {
 export type QueryBillsArgs = {
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;
+};
+
+
+export type QueryGetArticleArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryGetPublicArticleArgs = {
+  slug: Scalars['String'];
 };
 
 
@@ -240,11 +237,6 @@ export type QueryMemberArgs = {
 
 export type QueryMembersArgs = {
   bioGuideIds?: InputMaybe<Array<Scalars['String']>>;
-};
-
-
-export type QueryPublicArticleArgs = {
-  slug: Scalars['String'];
 };
 
 export type Subscription = {

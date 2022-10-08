@@ -1,12 +1,11 @@
-query AllArticles {
-  allArticles {
+query AdminAllPosts {
+  getAllArticles {
     id
     title
     content
     slug
     preview
     isPublished
-    authors
     pusblishTime
     createdTime
     lastModifiedTime

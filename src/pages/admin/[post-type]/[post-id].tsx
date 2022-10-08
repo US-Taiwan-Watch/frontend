@@ -27,7 +27,10 @@ import { ApolloError, useApolloClient } from "@apollo/client";
 import { NextPageWithApollo, withApollo } from "../../../lib/with-apollo";
 import SettingsIcon from "@mui/icons-material/Settings";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { EditorPageQueryDocument } from "../../../lib/page-graphql/query-post.graphql.interface";
+import {
+  EditorPageDocument,
+  EditorPageQuery,
+} from "../../../lib/page-graphql/query-post.graphql.interface";
 import { UpdateArticleWithIdDocument } from "../../../lib/page-graphql/mutation-update-post.graphql.interface";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { CardItem } from "../../../components/card-list";
@@ -41,7 +44,7 @@ import { getPostType, getPostUrl } from ".";
 import { useI18n } from "../../../context/i18n";
 
 type PostPageProps = {
-  post?: Article;
+  post?: EditorPageQuery["getArticle"];
   editors?: User[];
   statusCode?: number;
 };
@@ -116,11 +119,17 @@ const shallowEqual = (
   Object.keys(obj1).length === Object.keys(obj2).length &&
   Object.keys(obj1).every((key) => obj1[key] === obj2[key]);
 
-const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
-  post,
-  editors,
-}) => {
-  const user = useFetchUser({ required: true });
+const PostEditor: React.FC<{
+  post: EditorPageQuery["getArticle"];
+  editors: User[];
+}> = ({ post, editors }) => {
+  // It's alway non-null
+  const postNonNull = {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    ...post!,
+    authors: post?.authorInfos?.map((a) => a.id),
+  };
+  type PostType = typeof postNonNull;
   const router = useRouter();
   const apolloClient = useApolloClient();
   const [confirmingAction, setConfirmingAction] = useState<Action | null>(null);
@@ -129,23 +138,9 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
   const [isActioning, setIsActioning] = useState(false);
   const [isAutoSaving, setIsAutoSaving] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [savedPost, setSavedPost] = useState(post);
-  const [updatedPost, setUpdatedPost] = useState(post);
+  const [savedPost, setSavedPost] = useState(postNonNull);
+  const [updatedPost, setUpdatedPost] = useState<PostType>(postNonNull);
   const [uploadingCoverImage, setUploadingCoverImage] = useState(false);
-
-  const postType = getPostType(router.query["post-type"])?.toLowerCase();
-  const changeableType =
-    updatedPost.type === ArticleType.Poster
-      ? ArticleType.Article
-      : ArticleType.Poster;
-
-  const confirmationMessage = {
-    [Action.PUBLISH]: `Are you sure to publish this ${postType}? It will become public to everone.`,
-    [Action.UNPUBLISH]: `Are you sure to unpublish ${postType}? It will be taken down from the public and become a draft. You can publish it later again.`,
-    [Action.UPDATE]: `Are you sure to update the public ${postType}? This will update the public ${postType}`,
-    [Action.DELETE]: `Are you sure to delete this ${postType}? Please don't do it if you're not sure. You can always make it a draft instead. A draft ${postType} is not visible to public.`,
-    [Action.CHANGE_TYPE]: `Are you sure to convert this ${postType} to ${changeableType.toLowerCase()}?`,
-  };
 
   // To make the button text not disappeared during transition
   useEffect(() => {
@@ -166,6 +161,20 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
       }, 500);
     }
   }, [updatedPost]);
+
+  const postType = getPostType(router.query["post-type"])?.toLowerCase();
+  const changeableType =
+    updatedPost.type === ArticleType.Poster
+      ? ArticleType.Article
+      : ArticleType.Poster;
+
+  const confirmationMessage = {
+    [Action.PUBLISH]: `Are you sure to publish this ${postType}? It will become public to everone.`,
+    [Action.UNPUBLISH]: `Are you sure to unpublish ${postType}? It will be taken down from the public and become a draft. You can publish it later again.`,
+    [Action.UPDATE]: `Are you sure to update the public ${postType}? This will update the public ${postType}`,
+    [Action.DELETE]: `Are you sure to delete this ${postType}? Please don't do it if you're not sure. You can always make it a draft instead. A draft ${postType} is not visible to public.`,
+    [Action.CHANGE_TYPE]: `Are you sure to convert this ${postType} to ${changeableType.toLowerCase()}?`,
+  };
 
   const state = savedPost.isPublished ? State.PUBLISHED : State.DRAFT;
   const updated = !shallowEqual(updatedPost, savedPost);
@@ -201,7 +210,7 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
     router.back();
   };
 
-  const savePost = async (postToSave: Article) => {
+  const savePost = async (postToSave: PostType) => {
     try {
       const res = await apolloClient.mutate({
         mutation: UpdateArticleWithIdDocument,
@@ -338,10 +347,8 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
             multiple
             options={editors}
             disableClearable={true}
-            value={updatedPost.authors?.map(
-              (a) => editors.find((e) => e.id === a)!
-            )}
-            getOptionLabel={(option) => option.name!}
+            value={updatedPost.authorInfos || []}
+            getOptionLabel={(option) => option.name || ""}
             onChange={(_, values) =>
               values.length > 0 &&
               setUpdatedPost({
@@ -452,7 +459,7 @@ const PostEditor: React.FC<{ post: Article; editors: User[] }> = ({
           <Button variant="outlined" onClick={() => router.back()}>
             Back
           </Button>
-          <Chip label={post.isPublished ? "Published" : "Draft"} />
+          <Chip label={postNonNull.isPublished ? "Published" : "Draft"} />
           {actions.includes(Action.CHANGE_TYPE) ? (
             changeTypeButton
           ) : (
@@ -569,12 +576,12 @@ PostEditorPage.getInitialProps = async ({ query, apolloClient }) => {
   }
   try {
     const res = await apolloClient?.query({
-      query: EditorPageQueryDocument,
+      query: EditorPageDocument,
       variables: { articleId: query["post-id"] as string },
       fetchPolicy: "network-only",
     });
     return {
-      post: res?.data.article || undefined,
+      post: res?.data.getArticle || undefined,
       editors: res?.data.editors,
     };
   } catch (err) {

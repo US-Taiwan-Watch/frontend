@@ -5,7 +5,7 @@ import { Button, ButtonGroup } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { IconButton } from "@material-ui/core";
 import { NextPageWithApollo, withApollo } from "../../../lib/with-apollo";
-import { AllArticlesDocument } from "../../../lib/page-graphql/query-posts.graphql.interface";
+import { AdminAllPostsDocument } from "../../../lib/page-graphql/query-posts.graphql.interface";
 import { ApolloError, useApolloClient } from "@apollo/client";
 import { CreatePostDocument } from "../../../lib/page-graphql/mutation-create-post.graphql.interface";
 import { useState } from "react";
@@ -154,11 +154,11 @@ PostsAdminPage.getInitialProps = async ({ query, apolloClient }) => {
   }
   try {
     const data = await apolloClient?.query({
-      query: AllArticlesDocument,
+      query: AdminAllPostsDocument,
       fetchPolicy: "network-only",
     });
     return {
-      posts: data?.data.allArticles
+      posts: data?.data.getAllArticles
         .map((post) => ({
           ...post,
           pusblishTime: post.isPublished ? post.pusblishTime : null,

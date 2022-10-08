@@ -23,16 +23,5 @@ mutation UpdateArticleWithId(
     type: $type
   ) {
     id
-    title
-    content
-    slug
-    preview
-    isPublished
-    authors
-    pusblishTime
-    createdTime
-    lastModifiedTime
-    imageSource
-    tags
   }
 }

@@ -14,7 +14,7 @@ import { getStaticPathsWithLocale } from "../../utils/page-utils";
 import { getPublishedPosts } from "../articles";
 
 export type PostPageProps = {
-  post?: PublicPostQuery["publicArticle"];
+  post?: PublicPostQuery["getPublicArticle"];
 };
 
 const PostPage: NextPage<PostPageProps> = ({ post }) => {
@@ -68,7 +68,7 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
       variables: { slug: params.slug },
       fetchPolicy: "network-only",
     });
-    const post = data.data.publicArticle;
+    const post = data.data.getPublicArticle;
     if (!post || post.type !== ArticleType.Poster) {
       return { notFound: true };
     }

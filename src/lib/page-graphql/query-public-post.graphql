@@ -1,5 +1,5 @@
 query PublicPost($slug: String!) {
-  publicArticle(slug: $slug) {
+  getPublicArticle(slug: $slug) {
     id
     title
     content

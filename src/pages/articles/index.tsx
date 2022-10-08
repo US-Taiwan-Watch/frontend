@@ -60,7 +60,7 @@ export const getPublishedPosts = (type: ArticleType): Promise<Article[]> => {
       fetchPolicy: "network-only",
     })
     .then((data) =>
-      data.data.allArticles
+      data.data.getAllArticles
         .filter((p) => p.isPublished)
         .filter((p) => p.type === type)
         .map((p) => ({

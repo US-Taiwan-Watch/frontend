@@ -17,7 +17,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 export type PostPageProps = {
-  post?: PublicPostQuery["publicArticle"];
+  post?: PublicPostQuery["getPublicArticle"];
 };
 
 const PostPage: NextPage<PostPageProps> = ({ post }) => {
@@ -123,7 +123,7 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
       variables: { slug: slugs[slugs.length - 1] },
       fetchPolicy: "network-only",
     });
-    const post = data.data.publicArticle;
+    const post = data.data.getPublicArticle;
     if (!post || post.type !== ArticleType.Article || !post.pusblishTime) {
       return { notFound: true };
     }
