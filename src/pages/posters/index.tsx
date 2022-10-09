@@ -4,19 +4,20 @@ import { Banner } from "../../components/banner";
 import { CardList, FeaturedCards } from "../../components/card-list";
 import { Layout } from "../../components/layout";
 import { useI18n } from "../../context/i18n";
-import { Article, ArticleType } from "../../generated/graphql-types";
+import { ArticleType } from "../../generated/graphql-types";
+import { PublicPostsQuery } from "../../lib/page-graphql/query-public-posts.graphql.interface";
 import { getPostUrl } from "../admin/[post-type]";
 import { getPublishedPosts } from "../articles";
 
 export type PostsPageProps = {
-  posts: Article[];
+  posts: PublicPostsQuery["getAllArticles"];
 };
 
 const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
   const { i18n } = useI18n();
   const cards = posts
     .map((p) => ({
-      title: p.title || "",
+      title: p.title?.text || "",
       displayDate: new Date(p.publishedTime || 0).toLocaleDateString(), // change to pub date
       content: p.preview || "",
       url: getPostUrl(p),
@@ -48,9 +49,11 @@ const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<PostsPageProps> = async () => ({
+export const getStaticProps: GetStaticProps<PostsPageProps> = async ({
+  locale,
+}) => ({
   props: {
-    posts: await getPublishedPosts(ArticleType.Poster),
+    posts: await getPublishedPosts(ArticleType.Poster, locale),
   },
   revalidate: 300, // In seconds
 });

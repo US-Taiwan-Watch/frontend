@@ -43,7 +43,7 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
   }
   return (
     <Layout
-      title={post.title || undefined}
+      title={post.title?.text || undefined}
       type="article"
       description={post.preview || ""}
       image={post.imageSource || undefined}
@@ -51,7 +51,7 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
       <Banner>
         <Container>
           <Typography component="h1" variant="h4" gutterBottom>
-            {post.title}
+            {post.title?.text}
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
             {post.publishedTime &&
@@ -89,6 +89,7 @@ export const getStaticPaths: GetStaticPaths<{ slugs: string[] }> = async ({
   locales,
 }) => ({
   paths: getStaticPathsWithLocale(
+    // language!
     (await getPublishedPosts(ArticleType.Article)).map((post) => {
       if (!post.publishedTime) {
         return {
@@ -111,6 +112,7 @@ export const getStaticPaths: GetStaticPaths<{ slugs: string[] }> = async ({
 
 export const getStaticProps: GetStaticProps<PostPageProps> = async ({
   params,
+  locale,
 }) => {
   const slugs = params?.slugs;
   if (!slugs) {
@@ -120,7 +122,7 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
   try {
     const data = await apolloClient.query({
       query: PublicPostDocument,
-      variables: { slug: slugs[slugs.length - 1] },
+      variables: { slug: slugs[slugs.length - 1], lang: locale },
       fetchPolicy: "network-only",
     });
     const post = data.data.getPublicArticle;

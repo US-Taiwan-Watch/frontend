@@ -1,9 +1,7 @@
-query PublicPost($slug: String!) {
-  getPublicArticle(slug: $slug) {
+query PublicPost($slug: String!, $lang: String) {
+  getPublicArticle(slug: $slug, lang: $lang) {
     id
     title {
-      zh
-      en
       text
     }
     content

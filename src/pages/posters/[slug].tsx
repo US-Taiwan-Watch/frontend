@@ -23,14 +23,14 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
   }
   return (
     <Layout
-      title={post.title || undefined}
+      title={post.title?.text || undefined}
       description={post.preview || ""}
       image={post.imageSource || undefined}
     >
       <Banner>
         <Container>
           <Typography component="h1" variant="h4" gutterBottom>
-            {post.title}
+            {post.title?.text}
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
             {post.publishedTime &&
@@ -57,6 +57,7 @@ export const getStaticPaths: GetStaticPaths<{ slug: string }> = async ({
 
 export const getStaticProps: GetStaticProps<PostPageProps> = async ({
   params,
+  locale,
 }) => {
   if (typeof params?.slug !== "string") {
     return { notFound: true };
@@ -65,7 +66,7 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
   try {
     const data = await apolloClient.query({
       query: PublicPostDocument,
-      variables: { slug: params.slug },
+      variables: { slug: params.slug, lang: locale },
       fetchPolicy: "network-only",
     });
     const post = data.data.getPublicArticle;

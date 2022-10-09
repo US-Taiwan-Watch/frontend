@@ -216,12 +216,18 @@ export type QueryBillsArgs = {
 };
 
 
+export type QueryGetAllArticlesArgs = {
+  lang?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryGetArticleArgs = {
   id: Scalars['String'];
 };
 
 
 export type QueryGetPublicArticleArgs = {
+  lang?: InputMaybe<Scalars['String']>;
   slug: Scalars['String'];
 };
 
