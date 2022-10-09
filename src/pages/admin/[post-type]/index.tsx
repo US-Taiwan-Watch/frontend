@@ -81,7 +81,7 @@ export const PostsAdminPage: NextPageWithApollo<{
     {
       field: "actions",
       headerName: "Actions",
-      width: 150,
+      width: 170,
       sortable: false,
       renderCell: (params) => (
         <ButtonGroup>
@@ -98,7 +98,9 @@ export const PostsAdminPage: NextPageWithApollo<{
             target="_blank"
             sx={{ textDecoration: "none" }}
           >
-            <Button>View</Button>
+            <Button>
+              {(params.row as PartialPost).isPublished ? "View" : "Preview"}
+            </Button>
           </Link>
         </ButtonGroup>
       ),
@@ -202,10 +204,13 @@ type PartialPost = {
 
 export const getPostUrl = (post: PartialPost) => {
   const typeSlug = getPostTypeSlug(post.type);
+  if (!post.isPublished) {
+    return `/admin/${typeSlug}/preview/${post.slug ? post.slug : post.id}`;
+  }
   if (post.type === ArticleType.Poster) {
     return `/${typeSlug}/${post.slug ? post.slug : post.id}`;
   }
-  if (post.isPublished && post.publishedTime) {
+  if (post.publishedTime) {
     const date = getPostPublishDate(post.publishedTime);
     return `/${typeSlug}/${date?.year}/${date?.month}/${
       post.slug ? post.slug : post.id
