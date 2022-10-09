@@ -1,5 +1,6 @@
 import Typography from "@mui/material/Typography";
 import {
+  Alert,
   Autocomplete,
   Backdrop,
   Box,
@@ -132,6 +133,7 @@ const PostEditor: React.FC<{
     authors: post?.authorInfos?.map((a) => a.id),
   };
   type PostType = typeof postNonNull;
+  const { displayI18NText, i18n } = useI18n();
   const router = useRouter();
   const apolloClient = useApolloClient();
   const [confirmingAction, setConfirmingAction] = useState<Action | null>(null);
@@ -139,9 +141,17 @@ const PostEditor: React.FC<{
     useState(confirmingAction);
   const [isActioning, setIsActioning] = useState(false);
   const [isAutoSaving, setIsAutoSaving] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [updatedPost, setUpdatedPost] = useState<PostType>({
+    ...postNonNull,
+    title: Object.fromEntries(
+      Object.entries(postNonNull.title || {}).filter(
+        ([k, _]) => k !== "__typename"
+      )
+    ),
+  });
   const [savedPost, setSavedPost] = useState(postNonNull);
-  const [updatedPost, setUpdatedPost] = useState<PostType>(postNonNull);
   const [uploadingCoverImage, setUploadingCoverImage] = useState(false);
   const [publishedTime, setPublishedTime] = useState<Dayjs | null>(
     dayjs(post?.publishedTime)
@@ -164,6 +174,7 @@ const PostEditor: React.FC<{
   }, [publishedTime]);
 
   useEffect(() => {
+    console.log(updatedPost.title);
     if (state === State.DRAFT && updated && !isActioning) {
       if (timeout) {
         clearTimeout(timeout);
@@ -194,6 +205,10 @@ const PostEditor: React.FC<{
   const updated = !shallowEqual(updatedPost, savedPost);
   const actions = getActions(state);
   const postUrl = getPostUrl(updatedPost);
+  const title = displayI18NText(
+    Object.fromEntries(Object.entries(updatedPost.title || {}))
+  );
+  const lang = i18n.getLanguage();
 
   const confirmAction = async () => {
     setIsActioning(true);
@@ -213,7 +228,8 @@ const PostEditor: React.FC<{
       success = await savePost(updatedPostWithState);
     }
     if (!success) {
-      // handle error
+      setConfirmingAction(null);
+      setIsActioning(false);
       return;
     }
     revalidatePage(postUrl);
@@ -225,7 +241,6 @@ const PostEditor: React.FC<{
   };
 
   const savePost = async (postToSave: PostType) => {
-    console.log(postToSave);
     try {
       const res = await apolloClient.mutate({
         mutation: UpdateArticleWithIdDocument,
@@ -238,7 +253,8 @@ const PostEditor: React.FC<{
       setSavedPost(postToSave);
       return true;
     } catch (err) {
-      console.error("Failed to save");
+      console.error(err);
+      setErrorMsg("Something went wrong! Failed to save.");
       return false;
     }
   };
@@ -304,7 +320,7 @@ const PostEditor: React.FC<{
           <Typography variant="subtitle2">Preview</Typography>
           <CardItem
             url={postUrl}
-            title={updatedPost.title || ""}
+            title={title || ""}
             content={updatedPost.preview || ""}
             displayDate=""
             image={updatedPost.imageSource || undefined}
@@ -459,7 +475,14 @@ const PostEditor: React.FC<{
           </LoadingButton>
         </DialogActions>
       </Dialog>
-      <Snackbar open={isAutoSaving} message="Saving..." />
+      <Snackbar open={isAutoSaving}>
+        <Alert severity="info">Saving...</Alert>
+      </Snackbar>
+      <Snackbar open={!!errorMsg}>
+        <Alert onClose={() => setErrorMsg(null)} severity="error">
+          {errorMsg}
+        </Alert>
+      </Snackbar>
       <Box sx={{ m: 2, display: "flex" }}>
         <Box
           sx={{
@@ -548,11 +571,14 @@ const PostEditor: React.FC<{
             fullWidth
             multiline
             variant="standard"
-            value={updatedPost.title}
+            value={title}
             onChange={(e) =>
               setUpdatedPost({
                 ...updatedPost,
-                title: e.target.value.replace(/\n/g, ""),
+                title: {
+                  ...updatedPost.title,
+                  [lang]: e.target.value.replace(/\n/g, ""),
+                },
               })
             }
           />
@@ -612,7 +638,7 @@ PostEditorPage.getInitialProps = async ({ query, apolloClient }) => {
       editors: res?.data.editors,
     };
   } catch (err) {
-    console.log(err);
+    console.error(err);
     if ((err as ApolloError).message.includes("Access denied")) {
       return { statusCode: 403 };
     }
