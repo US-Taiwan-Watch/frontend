@@ -132,6 +132,7 @@ const PostEditor: React.FC<{
     authors: post?.authorInfos?.map((a) => a.id),
   };
   type PostType = typeof postNonNull;
+  const { displayI18NText, i18n } = useI18n();
   const router = useRouter();
   const apolloClient = useApolloClient();
   const [confirmingAction, setConfirmingAction] = useState<Action | null>(null);
@@ -194,6 +195,11 @@ const PostEditor: React.FC<{
   const updated = !shallowEqual(updatedPost, savedPost);
   const actions = getActions(state);
   const postUrl = getPostUrl(updatedPost);
+  const title = displayI18NText({
+    en: updatedPost.title?.en || undefined,
+    zh: updatedPost.title?.zh || undefined,
+  });
+  const lang = i18n.getLanguage();
 
   const confirmAction = async () => {
     setIsActioning(true);
@@ -225,7 +231,6 @@ const PostEditor: React.FC<{
   };
 
   const savePost = async (postToSave: PostType) => {
-    console.log(postToSave);
     try {
       const res = await apolloClient.mutate({
         mutation: UpdateArticleWithIdDocument,
@@ -304,7 +309,7 @@ const PostEditor: React.FC<{
           <Typography variant="subtitle2">Preview</Typography>
           <CardItem
             url={postUrl}
-            title={updatedPost.title || ""}
+            title={title || ""}
             content={updatedPost.preview || ""}
             displayDate=""
             image={updatedPost.imageSource || undefined}
@@ -548,11 +553,13 @@ const PostEditor: React.FC<{
             fullWidth
             multiline
             variant="standard"
-            value={updatedPost.title}
+            value={title}
             onChange={(e) =>
               setUpdatedPost({
                 ...updatedPost,
-                title: e.target.value.replace(/\n/g, ""),
+                title: {
+                  [lang]: e.target.value.replace(/\n/g, ""),
+                },
               })
             }
           />
@@ -612,7 +619,7 @@ PostEditorPage.getInitialProps = async ({ query, apolloClient }) => {
       editors: res?.data.editors,
     };
   } catch (err) {
-    console.log(err);
+    console.error(err);
     if ((err as ApolloError).message.includes("Access denied")) {
       return { statusCode: 403 };
     }

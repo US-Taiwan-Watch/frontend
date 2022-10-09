@@ -1,7 +1,11 @@
 query PublicPost($slug: String!) {
   getPublicArticle(slug: $slug) {
     id
-    title
+    title {
+      zh
+      en
+      text
+    }
     content
     slug
     preview

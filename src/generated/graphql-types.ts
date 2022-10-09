@@ -25,7 +25,7 @@ export type Article = {
   publishedTime?: Maybe<Scalars['Float']>;
   slug?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Scalars['String']>>;
-  title?: Maybe<Scalars['String']>;
+  title?: Maybe<I18NText>;
   type?: Maybe<ArticleType>;
 };
 
@@ -69,6 +69,11 @@ export type I18NText = {
   en?: Maybe<Scalars['String']>;
   text?: Maybe<Scalars['String']>;
   zh?: Maybe<Scalars['String']>;
+};
+
+export type I18NTextInput = {
+  en?: InputMaybe<Scalars['String']>;
+  zh?: InputMaybe<Scalars['String']>;
 };
 
 export type Member = {
@@ -124,7 +129,7 @@ export type MutationAddArticleArgs = {
   preview?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
-  title?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<I18NTextInput>;
   type?: InputMaybe<ArticleType>;
 };
 
@@ -164,7 +169,7 @@ export type MutationUpdateArticleWithIdArgs = {
   publishedTime?: InputMaybe<Scalars['Float']>;
   slug?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
-  title?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<I18NTextInput>;
   type?: InputMaybe<ArticleType>;
 };
 

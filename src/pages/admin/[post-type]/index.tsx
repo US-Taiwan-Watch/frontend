@@ -5,7 +5,10 @@ import { Button, ButtonGroup } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { IconButton } from "@material-ui/core";
 import { NextPageWithApollo, withApollo } from "../../../lib/with-apollo";
-import { AdminAllPostsDocument } from "../../../lib/page-graphql/query-posts.graphql.interface";
+import {
+  AdminAllPostsDocument,
+  AdminAllPostsQuery,
+} from "../../../lib/page-graphql/query-posts.graphql.interface";
 import { ApolloError, useApolloClient } from "@apollo/client";
 import { CreatePostDocument } from "../../../lib/page-graphql/mutation-create-post.graphql.interface";
 import { useState } from "react";
@@ -16,16 +19,16 @@ import {
   GridValueFormatterParams,
 } from "@mui/x-data-grid-pro";
 import { AdminLayout } from "../../../components/admin-layout";
-import { Article, ArticleType } from "../../../generated/graphql-types";
+import { ArticleType } from "../../../generated/graphql-types";
 import { Loading } from "../../../components/loading";
 import { useI18n } from "../../../context/i18n";
 import Error from "next/error";
 
 export const PostsAdminPage: NextPageWithApollo<{
-  posts?: Article[];
+  posts?: AdminAllPostsQuery["getAllArticles"];
   statusCode?: number;
 }> = ({ posts, statusCode }) => {
-  const { i18n } = useI18n();
+  const { i18n, displayI18NText } = useI18n();
   const router = useRouter();
   const apolloClient = useApolloClient();
   const [sortModel, setSortModel] = useState<GridSortModel>([
@@ -53,8 +56,23 @@ export const PostsAdminPage: NextPageWithApollo<{
       : date.toLocaleDateString();
   }
 
+  // const title = displayI18NText({
+  //   en: updatedPost.title?.en || undefined,
+  //   zh: updatedPost.title?.zh || undefined,
+  // });
+
   const columns: GridColDef[] = [
-    { field: "title", headerName: "Title", flex: 10, resizable: true },
+    {
+      field: "title",
+      headerName: "Title",
+      flex: 10,
+      resizable: true,
+      valueFormatter: (param) =>
+        displayI18NText({
+          en: param.value?.en,
+          zh: param.value?.zh,
+        }),
+    },
     {
       field: "isPublished",
       headerName: "Status",
@@ -87,7 +105,7 @@ export const PostsAdminPage: NextPageWithApollo<{
         <ButtonGroup>
           <Link
             role="button"
-            href={`/${router.asPath}/${params.id}`}
+            href={`${router.asPath}/${params.id}`}
             sx={{ textDecoration: "none" }}
           >
             <Button>Edit</Button>
@@ -124,7 +142,9 @@ export const PostsAdminPage: NextPageWithApollo<{
             .mutate({
               mutation: CreatePostDocument,
               variables: {
-                title: `(Untitled ${new Date().toLocaleString()})`,
+                title: {
+                  [i18n.getLanguage()]: `(Untitled ${new Date().toLocaleString()})`,
+                },
                 type: getPostType(router.query["post-type"]),
               },
               fetchPolicy: "network-only",
@@ -150,6 +170,7 @@ export const PostsAdminPage: NextPageWithApollo<{
 };
 
 PostsAdminPage.getInitialProps = async ({ query, apolloClient }) => {
+  console.log("??????????????");
   const type = getPostType(query["post-type"]);
   if (!type) {
     return { statusCode: 404 };

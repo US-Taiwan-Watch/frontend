@@ -1,7 +1,11 @@
 query PublicPosts {
   getAllArticles {
     id
-    title
+    title {
+      zh
+      en
+      text
+    }
     content
     slug
     preview

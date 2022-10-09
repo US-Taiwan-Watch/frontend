@@ -1,7 +1,10 @@
 query AdminAllPosts {
   getAllArticles {
     id
-    title
+    title {
+      zh
+      en
+    }
     content
     slug
     preview

@@ -1,7 +1,7 @@
 mutation UpdateArticleWithId(
   $updateArticleWithIdId: String!
   $tags: [String!]
-  $title: String
+  $title: I18NTextInput
   $content: String
   $slug: String
   $preview: String

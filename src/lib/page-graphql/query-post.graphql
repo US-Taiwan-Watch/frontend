@@ -1,7 +1,10 @@
 query EditorPage($articleId: String!) {
   getArticle(id: $articleId) {
     id
-    title
+    title {
+      zh
+      en
+    }
     content
     slug
     preview
