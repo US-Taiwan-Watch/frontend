@@ -72,9 +72,9 @@ export const AdminHeader: React.FC<{ title: string }> = ({ title }) => {
               佈告欄
             </NavLink>
             <UserMenu />
-            <Box sx={{ mx: 1 }}>
+            {/* <Box sx={{ mx: 1 }}>
               <LocaleSwitcher />
-            </Box>
+            </Box> */}
           </>
         )}
       </Box>

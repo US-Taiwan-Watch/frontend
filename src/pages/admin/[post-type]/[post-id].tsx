@@ -14,6 +14,9 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
   Snackbar,
   TextField,
   Tooltip,
@@ -36,7 +39,6 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { CardItem } from "../../../components/card-list";
 import { uploadPostImage } from "../../../utils/image-upload-utils";
 import { revalidatePage } from "../../../utils/revalidte-page";
-import { LocaleSwitcher } from "../../../components/locale-switcher";
 import { ArticleType, User } from "../../../generated/graphql-types";
 import { DeleteArticleDocument } from "../../../lib/page-graphql/delete-post.graphql.interface";
 import { AdminLayout } from "../../../components/admin-layout";
@@ -45,6 +47,8 @@ import { useI18n } from "../../../context/i18n";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
+import { resolveI18NText } from "../../../utils/graphql-util";
+import { I18NText } from "../../../../common/models/i18n.interface";
 
 type PostPageProps = {
   post?: EditorPageQuery["getArticle"];
@@ -133,7 +137,7 @@ const PostEditor: React.FC<{
     authors: post?.authorInfos?.map((a) => a.id),
   };
   type PostType = typeof postNonNull;
-  const { displayI18NText, i18n } = useI18n();
+  const { i18n } = useI18n();
   const router = useRouter();
   const apolloClient = useApolloClient();
   const [confirmingAction, setConfirmingAction] = useState<Action | null>(null);
@@ -156,6 +160,7 @@ const PostEditor: React.FC<{
   const [publishedTime, setPublishedTime] = useState<Dayjs | null>(
     dayjs(post?.publishedTime)
   );
+  const [lang, setLang] = useState(i18n.getLanguage());
 
   // To make the button text not disappeared during transition
   useEffect(() => {
@@ -205,10 +210,10 @@ const PostEditor: React.FC<{
   const updated = !shallowEqual(updatedPost, savedPost);
   const actions = getActions(state);
   const postUrl = getPostUrl(updatedPost);
-  const title = displayI18NText(
-    Object.fromEntries(Object.entries(updatedPost.title || {}))
+  const title = resolveI18NText(
+    lang,
+    new I18NText(Object.fromEntries(Object.entries(updatedPost.title || {})))
   );
-  const lang = i18n.getLanguage();
 
   const confirmAction = async () => {
     setIsActioning(true);
@@ -528,7 +533,15 @@ const PostEditor: React.FC<{
             "& > *": { mx: 1.61 },
           }}
         >
-          <LocaleSwitcher />
+          <InputLabel>Post Language</InputLabel>
+          <Select
+            size="small"
+            value={lang}
+            onChange={(e) => setLang(e.target.value)}
+          >
+            <MenuItem value="zh">中文</MenuItem>
+            <MenuItem value="en">EN</MenuItem>
+          </Select>
           {actions.includes(Action.PUBLISH) && (
             <Button
               variant="contained"
@@ -587,6 +600,7 @@ const PostEditor: React.FC<{
           value={updatedPost.content || undefined}
           viewOnly={false}
           onSave={(val) => setUpdatedPost({ ...updatedPost, content: val })}
+          postLang={lang}
         />
       </Container>
     </>
