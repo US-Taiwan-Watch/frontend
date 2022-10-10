@@ -14,7 +14,7 @@ export type Scalars = {
 
 export type Article = {
   __typename?: 'Article';
-  authors?: Maybe<Array<Scalars['String']>>;
+  authorInfos?: Maybe<Array<User>>;
   content?: Maybe<Scalars['String']>;
   createdTime?: Maybe<Scalars['Float']>;
   id: Scalars['String'];
@@ -22,11 +22,17 @@ export type Article = {
   isPublished?: Maybe<Scalars['Boolean']>;
   lastModifiedTime?: Maybe<Scalars['Float']>;
   preview?: Maybe<Scalars['String']>;
-  pusblishTime?: Maybe<Scalars['Float']>;
+  publishedTime?: Maybe<Scalars['Float']>;
   slug?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Scalars['String']>>;
-  title?: Maybe<Scalars['String']>;
+  title?: Maybe<I18NText>;
+  type?: Maybe<ArticleType>;
 };
+
+export enum ArticleType {
+  Article = 'ARTICLE',
+  Poster = 'POSTER'
+}
 
 export enum Auth0RoleName {
   Admin = 'Admin',
@@ -34,25 +40,8 @@ export enum Auth0RoleName {
   S2S = 'S2S'
 }
 
-export type DenormalizedArticle = {
-  __typename?: 'DenormalizedArticle';
-  authorInfos: Array<User>;
-  authors?: Maybe<Array<Scalars['String']>>;
-  content?: Maybe<Scalars['String']>;
-  createdTime?: Maybe<Scalars['Float']>;
-  id: Scalars['String'];
-  imageSource?: Maybe<Scalars['String']>;
-  isPublished?: Maybe<Scalars['Boolean']>;
-  lastModifiedTime?: Maybe<Scalars['Float']>;
-  preview?: Maybe<Scalars['String']>;
-  pusblishTime?: Maybe<Scalars['Float']>;
-  slug?: Maybe<Scalars['String']>;
-  tags?: Maybe<Array<Scalars['String']>>;
-  title?: Maybe<Scalars['String']>;
-};
-
-export type DenormalizedBill = {
-  __typename?: 'DenormalizedBill';
+export type Bill = {
+  __typename?: 'Bill';
   billNumber: Scalars['Float'];
   billType: Scalars['String'];
   congress: Scalars['Float'];
@@ -61,6 +50,13 @@ export type DenormalizedBill = {
   introducedDate?: Maybe<Scalars['String']>;
   sponsor?: Maybe<Member>;
   title: I18NText;
+  trackers?: Maybe<Array<BillTracker>>;
+};
+
+export type BillTracker = {
+  __typename?: 'BillTracker';
+  selected: Scalars['Boolean'];
+  stepName: Scalars['String'];
 };
 
 export type EventPayloadPublish = {
@@ -73,6 +69,11 @@ export type I18NText = {
   en?: Maybe<Scalars['String']>;
   text?: Maybe<Scalars['String']>;
   zh?: Maybe<Scalars['String']>;
+};
+
+export type I18NTextInput = {
+  en?: InputMaybe<Scalars['String']>;
+  zh?: InputMaybe<Scalars['String']>;
 };
 
 export type Member = {
@@ -111,12 +112,12 @@ export type MemberRole = {
 export type Mutation = {
   __typename?: 'Mutation';
   addArticle?: Maybe<Article>;
-  createEmptyArticle?: Maybe<Article>;
   createOrUpdateUser?: Maybe<Scalars['Boolean']>;
-  deleteArticle?: Maybe<Scalars['Boolean']>;
+  deleteArticle: Scalars['Boolean'];
   emitGlobalEvent: Scalars['Boolean'];
   emitUserEvent: Scalars['Boolean'];
   updateArticleWithId?: Maybe<Article>;
+  updateUser: User;
 };
 
 
@@ -128,7 +129,8 @@ export type MutationAddArticleArgs = {
   preview?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
-  title?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<I18NTextInput>;
+  type?: InputMaybe<ArticleType>;
 };
 
 
@@ -164,42 +166,42 @@ export type MutationUpdateArticleWithIdArgs = {
   imageSource?: InputMaybe<Scalars['String']>;
   isPublished?: InputMaybe<Scalars['Boolean']>;
   preview?: InputMaybe<Scalars['String']>;
+  publishedTime?: InputMaybe<Scalars['Float']>;
   slug?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
-  title?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<I18NTextInput>;
+  type?: InputMaybe<ArticleType>;
+};
+
+
+export type MutationUpdateUserArgs = {
+  name?: InputMaybe<Scalars['String']>;
+  nickname?: InputMaybe<Scalars['String']>;
+  picture?: InputMaybe<Scalars['String']>;
 };
 
 export type PaginatedBills = {
   __typename?: 'PaginatedBills';
   hasMore: Scalars['Boolean'];
-  items: Array<DenormalizedBill>;
+  items: Array<Bill>;
   total: Scalars['Int'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  allArticles: Array<Article>;
-  article?: Maybe<Article>;
-  articles?: Maybe<Array<Article>>;
-  bill?: Maybe<DenormalizedBill>;
+  bill?: Maybe<Bill>;
   bills: PaginatedBills;
   editors: Array<User>;
+  getAllArticles: Array<Article>;
+  getArticle?: Maybe<Article>;
+  getPublicArticle?: Maybe<Article>;
+  getUser: User;
+  getUsers: Array<User>;
   imUser?: Maybe<User>;
   isAdmin: Scalars['Boolean'];
   member?: Maybe<Member>;
   members: Array<Member>;
   myRoles?: Maybe<Array<Auth0RoleName>>;
-  publicArticle?: Maybe<DenormalizedArticle>;
-};
-
-
-export type QueryArticleArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryArticlesArgs = {
-  ids: Array<Scalars['String']>;
 };
 
 
@@ -214,6 +216,32 @@ export type QueryBillsArgs = {
 };
 
 
+export type QueryGetAllArticlesArgs = {
+  lang?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetArticleArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryGetPublicArticleArgs = {
+  lang?: InputMaybe<Scalars['String']>;
+  slug: Scalars['String'];
+};
+
+
+export type QueryGetUserArgs = {
+  user_id: Scalars['String'];
+};
+
+
+export type QueryGetUsersArgs = {
+  user_id: Array<Scalars['String']>;
+};
+
+
 export type QueryMemberArgs = {
   bioGuideId: Scalars['String'];
 };
@@ -221,11 +249,6 @@ export type QueryMemberArgs = {
 
 export type QueryMembersArgs = {
   bioGuideIds?: InputMaybe<Array<Scalars['String']>>;
-};
-
-
-export type QueryPublicArticleArgs = {
-  slug: Scalars['String'];
 };
 
 export type Subscription = {

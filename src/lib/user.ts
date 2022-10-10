@@ -122,6 +122,9 @@ export const useFetchUser = ({ required }: { required?: boolean } = {}) => {
     loading,
     roles,
     isAdmin: roles?.includes(Auth0RoleName.Admin),
-    isEditor: roles?.includes(Auth0RoleName.Admin) || roles?.includes(Auth0RoleName.Editor),
+    isEditor: roles?.includes(Auth0RoleName.Editor),
+    canEdit:
+      roles?.includes(Auth0RoleName.Admin) ||
+      roles?.includes(Auth0RoleName.Editor),
   };
 };

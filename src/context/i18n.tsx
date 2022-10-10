@@ -3,7 +3,7 @@ import React from "react";
 import LocalizedStrings from "react-localization";
 import en from "./i18n-en";
 import zh from "./i18n-zh";
-import { I18NText } from "../../common/models";
+import { I18NText, Ii18NText } from "../../common/models/i18n.interface";
 import { resolveI18NText } from "../utils/graphql-util";
 
 type I18nStrings = {
@@ -20,7 +20,7 @@ export interface Ii18nContext {
   i18n: typeof reactI18n;
   lang: string;
   setLanguage: (lang: string) => void;
-  displayI18NText: (i18nText?: I18NText) => string | undefined;
+  displayI18NText: (i18nText?: Ii18NText) => string | undefined;
 }
 
 export const I18nContext = React.createContext<Ii18nContext>({
@@ -60,8 +60,8 @@ export const I18nProvider = React.memo(({ children }) => {
     replace({ pathname, query }, asPath, { locale });
   };
 
-  const displayI18NText = (i18nText?: I18NText) =>
-    i18nText ? resolveI18NText(lang, i18nText, true) : undefined;
+  const displayI18NText = (i18nText?: Ii18NText) =>
+    i18nText ? resolveI18NText(lang, new I18NText(i18nText), true) : undefined;
 
   const value: Ii18nContext = {
     i18n,

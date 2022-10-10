@@ -15,6 +15,7 @@
   "dependencies": {
     "@apollo/client": "^3.5.10",
     "@auth0/nextjs-auth0": "^1.7.0",
+    "@date-io/dayjs": "^2.16.0",
     "@emotion/cache": "latest",
     "@emotion/react": "latest",
     "@emotion/server": "latest",
@@ -26,6 +27,7 @@
     "@mui/material": "latest",
     "@mui/styles": "^5.2.3",
     "@mui/x-data-grid-pro": "^5.16.0",
+    "@mui/x-date-pickers": "^5.0.4",
     "@react-page/editor": "^4.1.1",
     "@react-page/plugins-background": "^4.1.1",
     "@react-page/plugins-divider": "^4.1.1",
@@ -38,6 +40,7 @@
     "@types/accept-language-parser": "^1.5.3",
     "@types/xml2js": "^0.4.11",
     "accept-language-parser": "^1.5.0",
+    "dayjs": "^1.11.5",
     "graphql": "^16.2.0",
     "graphql-ws": "^5.6.3",
     "lodash": "^4.17.21",

@@ -1,16 +1,33 @@
 import Head from "next/head";
 import { useI18n } from "../context/i18n";
-import { useRouter } from "next/router";
 import { AdminHeader } from "./admin-header";
+import { useFetchUser } from "../lib/user";
+import Error from "next/error";
+import { Loading } from "./loading";
 
 export type LayoutProps = {
-  title: string,
-}
+  title: string;
+};
 
 export const AdminLayout: React.FC<LayoutProps> = (props) => {
   const { i18n } = useI18n();
-  const { asPath } = useRouter();
-  const title = props.title ? `${props.title} - ${i18n.strings.brand.fullName}` : i18n.strings.brand.fullName;
+  const { loading, canEdit } = useFetchUser({ required: true });
+  if (loading) {
+    return <Loading />;
+  }
+  if (!loading && !canEdit) {
+    return (
+      <Error
+        statusCode={403}
+        title="You don't have permission to access this page"
+      />
+    );
+  }
+
+  const title = props.title
+    ? `${props.title} - ${i18n.strings.brand.fullName}`
+    : i18n.strings.brand.fullName;
+
   return (
     <>
       <Head>

@@ -7,32 +7,44 @@ import { Link, LinkProps } from "./link";
 import Image from "next/image";
 import { ColorModeContext } from "../pages/_app";
 import { useRouter } from "next/router";
+import { UserMenu } from "./user-menu";
 
 const NavLink: React.FC<LinkProps> = (props) => (
-  <Link {...props} style={{ textDecoration: 'none' }}
+  <Link
+    {...props}
+    style={{ textDecoration: "none" }}
     variant="button"
-    color="text.primary" sx={{ my: 1, mx: 1.5 }}>
+    color="text.primary"
+    sx={{ my: 1, mx: 1.5 }}
+  >
     {props.children}
-  </Link >
+  </Link>
 );
 
 export const Header: React.FC = () => {
   const { i18n } = useI18n();
-  const { loading, isAdmin, isEditor } = useFetchUser();
+  const { user } = useFetchUser();
   const { pathname } = useRouter();
   const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
-  const isHome = pathname === '/';
+  const isHome = pathname === "/";
 
   return (
-    <Toolbar sx={{ flexWrap: 'wrap', alignItems: 'center' }}>
-      <Box sx={{
-        my: 1,
-        flexGrow: 1,
-        display: 'flex',
-      }}>
-        <Link href='/' style={{ textDecoration: 'none' }} scroll={false}
-          color="text.primary" sx={{ display: 'flex' }}>
+    <Toolbar sx={{ flexWrap: "wrap", alignItems: "center" }}>
+      <Box
+        sx={{
+          my: 1,
+          flexGrow: 1,
+          display: "flex",
+        }}
+      >
+        <Link
+          href="/"
+          style={{ textDecoration: "none" }}
+          scroll={false}
+          color="text.primary"
+          sx={{ display: "flex" }}
+        >
           <Image src="/assets/logo.png" width={30} height={30} />
           {/* <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' }, a: { textDecoration: 'none' } }} /> */}
           <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
@@ -40,45 +52,41 @@ export const Header: React.FC = () => {
           </Typography>
         </Link>
       </Box>
-      <Box sx={{
-        display: 'flex',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        justifyContent: 'right',
-      }}>
-        <NavLink href="/#about">
-          {i18n.strings.header.about}
-        </NavLink>
-        {isHome && <>
-          <NavLink href="/#partners">
-            {i18n.strings.header.partners}
-          </NavLink>
-        </>}
-        <NavLink href={isHome ? "/#podcast" : '/podcast'}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          flexWrap: "wrap",
+          justifyContent: "right",
+        }}
+      >
+        <NavLink href="/#about">{i18n.strings.header.about}</NavLink>
+        {isHome && (
+          <>
+            <NavLink href="/#partners">{i18n.strings.header.partners}</NavLink>
+          </>
+        )}
+        <NavLink href={isHome ? "/#podcast" : "/podcast"}>
           {i18n.strings.header.podcast}
         </NavLink>
-        <NavLink href={isHome ? "/#subscribe" : '/newsletters'}>
+        <NavLink href={isHome ? "/#subscribe" : "/newsletters"}>
           {i18n.strings.header.subscribe}
         </NavLink>
-        {isHome && <>
-          <NavLink href="/#follow">
-            {i18n.strings.header.follow}
-          </NavLink>
-          <NavLink href="/#join">
-            {i18n.strings.header.join}
-          </NavLink>
-        </>}
+        {isHome && (
+          <>
+            <NavLink href="/#follow">{i18n.strings.header.follow}</NavLink>
+            <NavLink href="/#join">{i18n.strings.header.join}</NavLink>
+          </>
+        )}
         <NavLink href="/#donate">
-          <Button variant="contained">
-            {i18n.strings.header.donate}
-          </Button>
+          <Button variant="contained">{i18n.strings.header.donate}</Button>
         </NavLink>
-        {isAdmin || isEditor &&
+        {user && (
           <>
             <NavLink href="/posts">文章</NavLink>
-            <NavLink href="/api/logout" target="_self">Logout</NavLink>
+            <UserMenu />
           </>
-        }
+        )}
         <Box sx={{ my: 1 }}>
           <LocaleSwitcher />
         </Box>
@@ -88,5 +96,5 @@ export const Header: React.FC = () => {
         </IconButton> */}
       </Box>
     </Toolbar>
-  )
+  );
 };
