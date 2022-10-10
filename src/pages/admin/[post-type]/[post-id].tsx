@@ -155,7 +155,7 @@ const PostEditor: React.FC<{
       )
     ),
   });
-  const [savedPost, setSavedPost] = useState(postNonNull);
+  const [savedPost, setSavedPost] = useState(updatedPost);
   const [uploadingCoverImage, setUploadingCoverImage] = useState(false);
   const [publishedTime, setPublishedTime] = useState<Dayjs | null>(
     dayjs(post?.publishedTime)
@@ -179,7 +179,6 @@ const PostEditor: React.FC<{
   }, [publishedTime]);
 
   useEffect(() => {
-    console.log(updatedPost.title);
     if (state === State.DRAFT && updated && !isActioning) {
       if (timeout) {
         clearTimeout(timeout);
@@ -336,7 +335,7 @@ const PostEditor: React.FC<{
               margin="dense"
               variant="standard"
               label="Cover Image"
-              value={updatedPost.imageSource}
+              value={updatedPost.imageSource || ""}
               onChange={(e) =>
                 setUpdatedPost({ ...updatedPost, imageSource: e.target.value })
               }
@@ -416,7 +415,7 @@ const PostEditor: React.FC<{
             margin="dense"
             variant="standard"
             label="Post URL (Allowed characters: English characters, numbers, _ and -)"
-            value={updatedPost.slug}
+            value={updatedPost.slug || ""}
             placeholder={updatedPost.id}
             onChange={(e) =>
               setUpdatedPost({
@@ -431,7 +430,7 @@ const PostEditor: React.FC<{
             variant="standard"
             multiline
             label="Description"
-            value={updatedPost.preview}
+            value={updatedPost.preview || ""}
             onChange={(e) =>
               setUpdatedPost({ ...updatedPost, preview: e.target.value })
             }

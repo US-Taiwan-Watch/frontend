@@ -27,14 +27,14 @@ const PostPage: NextPageWithApollo<PostPageProps> = ({ post, statusCode }) => {
 
   return (
     <Layout
-      title={post.title || undefined}
+      title={post.title?.text || undefined}
       description={post.preview || ""}
       image={post.imageSource || undefined}
     >
       <Banner>
         <Container>
           <Typography component="h1" variant="h4" gutterBottom>
-            {post.title}
+            {post.title?.text}
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
             {post.publishedTime &&
@@ -47,7 +47,7 @@ const PostPage: NextPageWithApollo<PostPageProps> = ({ post, statusCode }) => {
   );
 };
 
-PostPage.getInitialProps = async ({ query, apolloClient }) => {
+PostPage.getInitialProps = async ({ query, apolloClient, locale }) => {
   console.log("!!");
   const type = getPostType(query["post-type"]);
   if (!type) {
@@ -56,7 +56,7 @@ PostPage.getInitialProps = async ({ query, apolloClient }) => {
   try {
     const data = await apolloClient?.query({
       query: PublicPostDocument,
-      variables: { slug: query.slug as string },
+      variables: { slug: query.slug as string, lang: locale },
       fetchPolicy: "network-only",
     });
     const post = data?.data.getPublicArticle;
