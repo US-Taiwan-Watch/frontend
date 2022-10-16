@@ -1,13 +1,8 @@
-import { ApolloError } from "@apollo/client";
 import { Container, Typography } from "@mui/material";
-import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { getPostType } from "..";
 import { Banner } from "../../../../components/banner";
 import { Layout } from "../../../../components/layout";
-import { Loading } from "../../../../components/loading";
 import { PostContent } from "../../../../components/post-content";
-import { ArticleType } from "../../../../generated/graphql-types";
-import { EditorPageDocument } from "../../../../lib/page-graphql/query-post.graphql.interface";
 import {
   PublicPostQuery,
   PublicPostDocument,
@@ -28,7 +23,7 @@ const PostPage: NextPageWithApollo<PostPageProps> = ({ post, statusCode }) => {
   return (
     <Layout
       title={post.title?.text || undefined}
-      description={post.preview || ""}
+      description={post.preview?.text || ""}
       image={post.imageSource || undefined}
     >
       <Banner>

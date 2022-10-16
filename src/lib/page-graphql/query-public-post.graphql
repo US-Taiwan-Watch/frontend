@@ -6,7 +6,9 @@ query PublicPost($slug: String!, $lang: String) {
     }
     content
     slug
-    preview
+    preview {
+      text
+    }
     isPublished
     publishedTime
     createdTime

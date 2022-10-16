@@ -24,7 +24,7 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
   return (
     <Layout
       title={post.title?.text || undefined}
-      description={post.preview || ""}
+      description={post.preview?.text || ""}
       image={post.imageSource || undefined}
     >
       <Banner>

@@ -6,7 +6,9 @@ query PublicPosts($lang: String) {
     }
     content
     slug
-    preview
+    preview {
+      text
+    }
     isPublished
     publishedTime
     imageSource

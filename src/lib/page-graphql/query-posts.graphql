@@ -8,7 +8,11 @@ query AdminAllPosts {
     }
     content
     slug
-    preview
+    preview {
+      zh
+      en
+      text
+    }
     isPublished
     publishedTime
     createdTime

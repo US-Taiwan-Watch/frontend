@@ -37,7 +37,7 @@ const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
           .map((p) => ({
             title: p.title?.text || "",
             displayDate: new Date(p.publishedTime || 0).toLocaleDateString(), // change to pub date
-            content: p.preview || "",
+            content: p.preview?.text || "",
             url: getPostUrl(p),
             image: p.imageSource || undefined,
           }))

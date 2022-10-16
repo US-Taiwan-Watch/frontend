@@ -37,7 +37,11 @@ export const AdminPage: NextPage = () => {
       <Container>
         <List>
           {links.map((link) => (
-            <Link href={link.href} sx={{ textDecoration: "none" }}>
+            <Link
+              href={link.href}
+              sx={{ textDecoration: "none" }}
+              key={link.href}
+            >
               <ListItem>
                 <ListItemButton>
                   <ListItemText primary={link.text} />

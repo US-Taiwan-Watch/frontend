@@ -13,6 +13,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControl,
+  FormHelperText,
   IconButton,
   InputLabel,
   MenuItem,
@@ -154,6 +156,11 @@ const PostEditor: React.FC<{
         ([k, _]) => k !== "__typename"
       )
     ),
+    preview: Object.fromEntries(
+      Object.entries(postNonNull.preview || {}).filter(
+        ([k, _]) => k !== "__typename"
+      )
+    ),
   });
   const [savedPost, setSavedPost] = useState(updatedPost);
   const [uploadingCoverImage, setUploadingCoverImage] = useState(false);
@@ -191,18 +198,19 @@ const PostEditor: React.FC<{
     }
   }, [updatedPost]);
 
-  const postType = getPostType(router.query["post-type"])?.toLowerCase();
+  const postType = getPostType(router.query["post-type"]);
+  const postTypeString = postType?.toLowerCase();
   const changeableType =
     updatedPost.type === ArticleType.Poster
       ? ArticleType.Article
       : ArticleType.Poster;
 
   const confirmationMessage = {
-    [Action.PUBLISH]: `Are you sure to publish this ${postType}? It will become public to everone.`,
-    [Action.UNPUBLISH]: `Are you sure to unpublish ${postType}? It will be taken down from the public and become a draft. You can publish it later again.`,
-    [Action.UPDATE]: `Are you sure to update the public ${postType}? This will update the public ${postType}`,
-    [Action.DELETE]: `Are you sure to delete this ${postType}? Please don't do it if you're not sure. You can always make it a draft instead. A draft ${postType} is not visible to public. If you delete it by accident, please reach out to jingwan@ustw.watch`,
-    [Action.CHANGE_TYPE]: `Are you sure to convert this ${postType} to ${changeableType.toLowerCase()}?`,
+    [Action.PUBLISH]: `Are you sure to publish this ${postTypeString}? It will become public to everone.`,
+    [Action.UNPUBLISH]: `Are you sure to unpublish ${postTypeString}? It will be taken down from the public and become a draft. You can publish it later again.`,
+    [Action.UPDATE]: `Are you sure to update the public ${postTypeString}? This will update the public ${postTypeString}`,
+    [Action.DELETE]: `Are you sure to delete this ${postTypeString}? Please don't do it if you're not sure. You can always make it a draft instead. A draft ${postTypeString} is not visible to public. If you delete it by accident, please reach out to jingwan@ustw.watch`,
+    [Action.CHANGE_TYPE]: `Are you sure to convert this ${postTypeString} to ${changeableType.toLowerCase()}?`,
   };
 
   const state = savedPost.isPublished ? State.PUBLISHED : State.DRAFT;
@@ -212,6 +220,10 @@ const PostEditor: React.FC<{
   const title = resolveI18NText(
     lang,
     new I18NText(Object.fromEntries(Object.entries(updatedPost.title || {})))
+  );
+  const preview = resolveI18NText(
+    lang,
+    new I18NText(Object.fromEntries(Object.entries(updatedPost.preview || {})))
   );
 
   const confirmAction = async () => {
@@ -288,6 +300,21 @@ const PostEditor: React.FC<{
     </Button>
   );
 
+  const langSeletor = (
+    <FormControl sx={{ width: 120 }} variant="filled">
+      <InputLabel id="demo-simple-select-label">Post Language</InputLabel>
+      <Select
+        labelId="demo-simple-select-label"
+        size="small"
+        value={lang}
+        onChange={(e) => setLang(e.target.value)}
+      >
+        <MenuItem value="zh">中文</MenuItem>
+        <MenuItem value="en">EN</MenuItem>
+      </Select>
+    </FormControl>
+  );
+
   return (
     <>
       <Backdrop
@@ -321,11 +348,14 @@ const PostEditor: React.FC<{
             "& > *": { my: 1.5 },
           }}
         >
-          <Typography variant="subtitle2">Preview</Typography>
+          <Typography variant="subtitle2" sx={{ marginBottom: 3 }}>
+            Preview
+          </Typography>
+          {langSeletor}
           <CardItem
-            url={postUrl}
+            url={`${process.env.NEXT_PUBLIC_BASE_URL}/${lang}${postUrl}`}
             title={title || ""}
-            content={updatedPost.preview || ""}
+            content={preview || ""}
             displayDate=""
             image={updatedPost.imageSource || undefined}
           />
@@ -401,38 +431,55 @@ const PostEditor: React.FC<{
               ))
             }
             renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="standard"
-                label="Authors"
-                placeholder="Authors"
-              />
+              <FormControl fullWidth>
+                <TextField
+                  {...params}
+                  variant="standard"
+                  label="Authors"
+                  placeholder="Authors"
+                />
+                {postType === ArticleType.Poster && (
+                  <FormHelperText error={true}>
+                    Authors won't be showing for posters
+                  </FormHelperText>
+                )}
+              </FormControl>
             )}
           />
-          <TextField
-            autoFocus
-            fullWidth
-            margin="dense"
-            variant="standard"
-            label="Post URL (Allowed characters: English characters, numbers, _ and -)"
-            value={updatedPost.slug || ""}
-            placeholder={updatedPost.id}
-            onChange={(e) =>
-              setUpdatedPost({
-                ...updatedPost,
-                slug: e.target.value.replace(/[^\w-]/g, ""),
-              })
-            }
-          />
+          <FormControl fullWidth>
+            <TextField
+              autoFocus
+              margin="dense"
+              variant="standard"
+              label="Post URL"
+              value={updatedPost.slug || ""}
+              placeholder={updatedPost.id}
+              onChange={(e) =>
+                setUpdatedPost({
+                  ...updatedPost,
+                  slug: e.target.value.replace(/[^\w-]/g, ""),
+                })
+              }
+            />
+            <FormHelperText>
+              Allowed characters: English characters, numbers, _ and -
+            </FormHelperText>
+          </FormControl>
           <TextField
             fullWidth
             margin="dense"
             variant="standard"
             multiline
             label="Description"
-            value={updatedPost.preview || ""}
+            value={preview}
             onChange={(e) =>
-              setUpdatedPost({ ...updatedPost, preview: e.target.value })
+              setUpdatedPost({
+                ...updatedPost,
+                preview: {
+                  ...updatedPost.preview,
+                  [lang]: e.target.value.replace(/\n/g, ""),
+                },
+              })
             }
           />
         </DialogContent>
@@ -529,18 +576,10 @@ const PostEditor: React.FC<{
             flexWrap: "wrap",
             justifyContent: "right",
             flexDirection: "row",
-            "& > *": { mx: 1.61 },
+            "& > *": { mx: 2 },
           }}
         >
-          <InputLabel>Post Language</InputLabel>
-          <Select
-            size="small"
-            value={lang}
-            onChange={(e) => setLang(e.target.value)}
-          >
-            <MenuItem value="zh">中文</MenuItem>
-            <MenuItem value="en">EN</MenuItem>
-          </Select>
+          {langSeletor}
           {actions.includes(Action.PUBLISH) && (
             <Button
               variant="contained"
@@ -613,8 +652,8 @@ export const PostEditorPage: NextPageWithApollo<PostPageProps> = ({
 }) => {
   const router = useRouter();
   const { i18n } = useI18n();
-  const type = getPostType(router.query["post-type"]);
-  if (statusCode === 404 || !type) {
+  const postType = getPostType(router.query["post-type"]);
+  if (statusCode === 404 || !postType) {
     return <Error statusCode={404} />;
   }
   if (!post && statusCode !== 403) {
@@ -626,7 +665,7 @@ export const PostEditorPage: NextPageWithApollo<PostPageProps> = ({
       title={
         i18n.formatString(
           i18n.strings.admin.posts.editPost,
-          i18n.strings.post[type]
+          i18n.strings.post[postType]
         ) as string
       }
     >

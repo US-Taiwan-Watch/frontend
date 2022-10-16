@@ -4,7 +4,7 @@ mutation UpdateArticleWithId(
   $title: I18NTextInput
   $content: String
   $slug: String
-  $preview: String
+  $preview: I18NTextInput
   $isPublished: Boolean
   $authors: [String!]
   $imageSource: String
