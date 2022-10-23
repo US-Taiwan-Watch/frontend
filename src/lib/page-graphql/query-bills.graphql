@@ -1,8 +1,19 @@
-query bills($offset: Float, $limit: Float) {
-  bills(offset: $offset, limit: $limit) {
+query Bills(
+  $offset: Float
+  $limit: Float
+  $sortFields: [String!]
+  $sortDirections: [Float!]
+) {
+  bills(
+    offset: $offset
+    limit: $limit
+    sortFields: $sortFields
+    sortDirections: $sortDirections
+  ) {
     total
     hasMore
     items {
+      id
       congress
       billType
       billNumber
