@@ -47,9 +47,10 @@ export type Bill = {
   congress: Scalars['Float'];
   cosponsors?: Maybe<Array<Member>>;
   cosponsorsCount?: Maybe<Scalars['Int']>;
+  id: Scalars['String'];
   introducedDate?: Maybe<Scalars['String']>;
   sponsor?: Maybe<Member>;
-  title: I18NText;
+  title?: Maybe<I18NText>;
   trackers?: Maybe<Array<BillTracker>>;
 };
 
@@ -112,6 +113,7 @@ export type MemberRole = {
 export type Mutation = {
   __typename?: 'Mutation';
   addArticle?: Maybe<Article>;
+  addBill?: Maybe<Bill>;
   createOrUpdateUser?: Maybe<Scalars['Boolean']>;
   deleteArticle: Scalars['Boolean'];
   emitGlobalEvent: Scalars['Boolean'];
@@ -213,6 +215,8 @@ export type QueryBillArgs = {
 export type QueryBillsArgs = {
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;
+  sortDirections?: InputMaybe<Array<Scalars['Float']>>;
+  sortFields?: InputMaybe<Array<Scalars['String']>>;
 };
 
 
