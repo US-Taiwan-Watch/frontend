@@ -78,6 +78,14 @@ export type BillQueryInput = {
   keywords: Array<Scalars['String']>;
 };
 
+export type BillInput = {
+  billNumber: Scalars['Float'];
+  billType: Scalars['String'];
+  congress: Scalars['Float'];
+  summary?: InputMaybe<I18NTextInput>;
+  title?: InputMaybe<I18NTextInput>;
+};
+
 export type BillTracker = {
   __typename?: 'BillTracker';
   selected: Scalars['Boolean'];

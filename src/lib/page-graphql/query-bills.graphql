@@ -37,6 +37,11 @@ query Bills(
       }
       id
       isSyncing
+      summary {
+        en
+        zh
+        text
+      }
     }
   }
 }

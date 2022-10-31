@@ -1,0 +1,17 @@
+mutation SyncBill($billId: String!) {
+  syncBill(billId: $billId) {
+    id
+    congress
+    billType
+    billNumber
+    introducedDate
+    title {
+      en
+      zh
+    }
+    summary {
+      en
+      zh
+    }
+  }
+}
