@@ -18,6 +18,14 @@ query Bills(
       billType
       billNumber
       introducedDate
+      title {
+        en
+        zh
+      }
+      summary {
+        en
+        zh
+      }
     }
   }
 }

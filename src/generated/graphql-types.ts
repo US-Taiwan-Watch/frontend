@@ -50,8 +50,17 @@ export type Bill = {
   id: Scalars['String'];
   introducedDate?: Maybe<Scalars['String']>;
   sponsor?: Maybe<Member>;
+  summary?: Maybe<I18NText>;
   title?: Maybe<I18NText>;
   trackers?: Maybe<Array<BillTracker>>;
+};
+
+export type BillInput = {
+  billNumber: Scalars['Float'];
+  billType: Scalars['String'];
+  congress: Scalars['Float'];
+  summary?: InputMaybe<I18NTextInput>;
+  title?: InputMaybe<I18NTextInput>;
 };
 
 export type BillTracker = {
@@ -118,7 +127,9 @@ export type Mutation = {
   deleteArticle: Scalars['Boolean'];
   emitGlobalEvent: Scalars['Boolean'];
   emitUserEvent: Scalars['Boolean'];
+  syncBill?: Maybe<Bill>;
   updateArticleWithId?: Maybe<Article>;
+  updateBill?: Maybe<Bill>;
   updateUser: User;
 };
 
@@ -133,6 +144,11 @@ export type MutationAddArticleArgs = {
   tags?: InputMaybe<Array<Scalars['String']>>;
   title?: InputMaybe<I18NTextInput>;
   type?: InputMaybe<ArticleType>;
+};
+
+
+export type MutationAddBillArgs = {
+  bill: BillInput;
 };
 
 
@@ -161,6 +177,11 @@ export type MutationEmitUserEventArgs = {
 };
 
 
+export type MutationSyncBillArgs = {
+  billId: Scalars['String'];
+};
+
+
 export type MutationUpdateArticleWithIdArgs = {
   authors?: InputMaybe<Array<Scalars['String']>>;
   content?: InputMaybe<Scalars['String']>;
@@ -173,6 +194,11 @@ export type MutationUpdateArticleWithIdArgs = {
   tags?: InputMaybe<Array<Scalars['String']>>;
   title?: InputMaybe<I18NTextInput>;
   type?: InputMaybe<ArticleType>;
+};
+
+
+export type MutationUpdateBillArgs = {
+  bill: BillInput;
 };
 
 
