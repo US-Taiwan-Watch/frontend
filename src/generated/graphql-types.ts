@@ -49,6 +49,7 @@ export type Bill = {
   cosponsorsCount?: Maybe<Scalars['Int']>;
   id: Scalars['String'];
   introducedDate?: Maybe<Scalars['String']>;
+  isSyncing: Scalars['Boolean'];
   sponsor?: Maybe<Member>;
   summary?: Maybe<I18NText>;
   title?: Maybe<I18NText>;

@@ -4,18 +4,20 @@ import {
   BillsDocument,
   BillsQuery,
 } from "../../../lib/page-graphql/query-bills.graphql.interface";
-import { Box, Button, ButtonGroup, IconButton, Link } from "@mui/material";
+import { Box, Button, ButtonGroup, Link } from "@mui/material";
 import { DataGridPro, GridColDef } from "@mui/x-data-grid-pro";
 import { AdminLayout } from "../../../components/admin-layout";
 import { Banner } from "../../../components/banner";
 import { useEffect, useRef, useState } from "react";
 import { GridSortModel } from "@mui/x-data-grid-pro";
-import { useI18n } from "../../../context/i18n";
-import router from "next/router";
 import { getPostUrl } from "../[post-type]";
 import { LoadingButton } from "@mui/lab";
 import SyncIcon from "@mui/icons-material/Sync";
-import { SyncBillDocument } from "../../../lib/page-graphql/mutation-sync-bill.graphql.interface";
+import {
+  SyncBillDocument,
+  SyncBillMutation,
+} from "../../../lib/page-graphql/mutation-sync-bill.graphql.interface";
+import { LocaleSwitcher } from "../../../components/locale-switcher";
 
 interface BillsPageProps {
   initialBills?: BillsQuery["bills"];
@@ -23,7 +25,10 @@ interface BillsPageProps {
 
 const PAGE_SIZE_OPTIONS = [20, 50, 100, 200, 500, 1000, 2000];
 
-const BillSyncButton: React.FC<{ billId: string }> = ({ billId }) => {
+const BillSyncButton: React.FC<{
+  billId: string;
+  onUpdateBill: (bill: SyncBillMutation["syncBill"]) => void;
+}> = ({ billId, onUpdateBill }) => {
   const [loading, setLoading] = useState(false);
   const client = useApolloClient();
 
@@ -31,7 +36,7 @@ const BillSyncButton: React.FC<{ billId: string }> = ({ billId }) => {
     <LoadingButton
       onClick={async () => {
         setLoading(true);
-        await client.mutate({
+        const res = await client.mutate({
           mutation: SyncBillDocument,
           variables: {
             billId,
@@ -39,6 +44,9 @@ const BillSyncButton: React.FC<{ billId: string }> = ({ billId }) => {
           fetchPolicy: "network-only",
         });
         setLoading(false);
+        if (res.data?.syncBill) {
+          onUpdateBill(res.data.syncBill);
+        }
       }}
       component="span"
       variant="contained"
@@ -52,7 +60,6 @@ const BillSyncButton: React.FC<{ billId: string }> = ({ billId }) => {
 // Page Component
 const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
   const client = useApolloClient();
-  const { displayI18NText } = useI18n();
   const [currentBills, setCurrentBills] = useState(initialBills);
   const [pageSize, setPageSize] = useState(PAGE_SIZE_OPTIONS[0]);
   const [page, setPage] = useState(0);
@@ -108,16 +115,30 @@ const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
     },
     {
       field: "title",
-      headerName: "Title",
+      headerName: "English Title",
       flex: 10,
-      valueFormatter: (param) => displayI18NText(param.value),
+      valueFormatter: (param) => param.value?.en || "",
+      sortable: false,
+    },
+    {
+      field: "title_zh",
+      headerName: "中文標題",
+      flex: 10,
+      valueGetter: (params) => params.row.title?.zh || "",
       sortable: false,
     },
     {
       field: "summary",
-      headerName: "Summary",
+      headerName: "English Summary",
       flex: 10,
-      valueFormatter: (param) => displayI18NText(param.value),
+      valueFormatter: (param) => param.value?.en || "",
+      sortable: false,
+    },
+    {
+      field: "summary_zh",
+      headerName: "中文總結",
+      flex: 10,
+      valueGetter: (params) => params.row.summary?.zh || "",
       sortable: false,
     },
     {
@@ -127,7 +148,17 @@ const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
       sortable: false,
       renderCell: (params) => (
         <ButtonGroup>
-          <BillSyncButton billId={params.id as string} />
+          <BillSyncButton
+            billId={params.id as string}
+            onUpdateBill={(bill) => {
+              setCurrentBills({
+                ...currentBills,
+                items: currentBills.items.map((b) =>
+                  b.id === bill?.id ? bill : b
+                ),
+              });
+            }}
+          />
           <Link
             role="button"
             href={getPostUrl(params.row)}
@@ -143,7 +174,9 @@ const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
 
   return (
     <AdminLayout title={"管理法案"}>
-      <Banner title={"管理法案"} />
+      <Banner title={"管理法案"}>
+        <LocaleSwitcher />
+      </Banner>
       <Box>
         <DataGridPro
           editMode="row"
