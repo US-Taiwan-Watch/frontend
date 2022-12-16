@@ -47,6 +47,7 @@ export type Bill = {
   congress: Scalars['Float'];
   cosponsors?: Maybe<Array<Member>>;
   cosponsorsCount?: Maybe<Scalars['Int']>;
+  createdTime?: Maybe<Scalars['Int']>;
   id: Scalars['String'];
   introducedDate?: Maybe<Scalars['String']>;
   isSyncing: Scalars['Boolean'];
@@ -60,6 +61,7 @@ export type BillInput = {
   billNumber: Scalars['Float'];
   billType: Scalars['String'];
   congress: Scalars['Float'];
+  introducedDate?: InputMaybe<Scalars['Int']>;
   summary?: InputMaybe<I18NTextInput>;
   title?: InputMaybe<I18NTextInput>;
 };
@@ -126,6 +128,7 @@ export type Mutation = {
   addBill?: Maybe<Bill>;
   createOrUpdateUser?: Maybe<Scalars['Boolean']>;
   deleteArticle: Scalars['Boolean'];
+  deleteBill: Scalars['Boolean'];
   emitGlobalEvent: Scalars['Boolean'];
   emitUserEvent: Scalars['Boolean'];
   syncBill?: Maybe<Bill>;
@@ -163,6 +166,11 @@ export type MutationCreateOrUpdateUserArgs = {
 
 
 export type MutationDeleteArticleArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationDeleteBillArgs = {
   id: Scalars['String'];
 };
 

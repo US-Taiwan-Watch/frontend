@@ -1,0 +1,16 @@
+mutation AddBill($bill: BillInput!) {
+  addBill(bill: $bill) {
+    congress
+    billType
+    billNumber
+    id
+    title {
+      zh
+      en
+    }
+    summary {
+      zh
+      en
+    }
+  }
+}

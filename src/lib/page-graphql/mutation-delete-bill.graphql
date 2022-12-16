@@ -1,0 +1,3 @@
+mutation DeleteBill($deleteBillId: String!) {
+  deleteBill(id: $deleteBillId)
+}

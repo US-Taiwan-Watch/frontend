@@ -1,0 +1,17 @@
+mutation UpdateBill($bill: BillInput!) {
+  updateBill(bill: $bill) {
+    id
+    congress
+    billType
+    billNumber
+    title {
+      en
+      zh
+    }
+    summary {
+      zh
+      en
+    }
+    introducedDate
+  }
+}

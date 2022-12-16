@@ -4,20 +4,50 @@ import {
   BillsDocument,
   BillsQuery,
 } from "../../../lib/page-graphql/query-bills.graphql.interface";
-import { Box, Button, ButtonGroup, Link } from "@mui/material";
-import { DataGridPro, GridColDef } from "@mui/x-data-grid-pro";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  Link,
+  TextField,
+  Tooltip,
+} from "@mui/material";
+import {
+  DataGridPro,
+  GridActionsCellItem,
+  GridColDef,
+  GridColumns,
+} from "@mui/x-data-grid-pro";
 import { AdminLayout } from "../../../components/admin-layout";
 import { Banner } from "../../../components/banner";
 import { useEffect, useRef, useState } from "react";
 import { GridSortModel } from "@mui/x-data-grid-pro";
 import { getPostUrl } from "../[post-type]";
 import { LoadingButton } from "@mui/lab";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
 import SyncIcon from "@mui/icons-material/Sync";
+import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import {
   SyncBillDocument,
   SyncBillMutation,
 } from "../../../lib/page-graphql/mutation-sync-bill.graphql.interface";
 import { LocaleSwitcher } from "../../../components/locale-switcher";
+import { BillInput } from "../../../generated/graphql-types";
+import { AddBillDocument } from "../../../lib/page-graphql/mutation-add-bill.graphql.interface";
+import { DeleteBillDocument } from "../../../lib/page-graphql/mutation-delete-bill.graphql.interface";
+import { UpdateBillDocument } from "../../../lib/page-graphql/mutation-update-bill.graphql.interface";
 
 interface BillsPageProps {
   initialBills?: BillsQuery["bills"];
@@ -33,7 +63,15 @@ const BillSyncButton: React.FC<{
   const client = useApolloClient();
 
   return (
-    <LoadingButton
+    <GridActionsCellItem
+      icon={
+        <Tooltip title="Sync">
+          <SyncIcon />
+        </Tooltip>
+      }
+      label="Sync"
+      className="textPrimary"
+      disabled={loading}
       onClick={async () => {
         setLoading(true);
         const res = await client.mutate({
@@ -48,12 +86,42 @@ const BillSyncButton: React.FC<{
           onUpdateBill(res.data.syncBill);
         }
       }}
-      component="span"
-      variant="contained"
-      loading={loading}
-    >
-      <SyncIcon />
-    </LoadingButton>
+      color="inherit"
+    />
+  );
+};
+
+const BillDeleteButton: React.FC<{
+  billId: string;
+  onComplete: (success: boolean) => void;
+}> = ({ billId, onComplete }) => {
+  const [loading, setLoading] = useState(false);
+  const client = useApolloClient();
+
+  return (
+    <GridActionsCellItem
+      icon={
+        <Tooltip title="Delete">
+          <DeleteIcon />
+        </Tooltip>
+      }
+      label="Delete"
+      className="textPrimary"
+      disabled={loading}
+      onClick={async () => {
+        setLoading(true);
+        const res = await client.mutate({
+          mutation: DeleteBillDocument,
+          variables: {
+            deleteBillId: billId,
+          },
+          fetchPolicy: "network-only",
+        });
+        setLoading(false);
+        onComplete(!!res.data?.deleteBill);
+      }}
+      color="inherit"
+    />
   );
 };
 
@@ -67,6 +135,14 @@ const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
   const [sortModel, setSortModel] = useState<GridSortModel>([
     { field: "congress", sort: "desc" },
   ]);
+  const [showEditingDialog, setShowEditingDialog] = useState(false);
+  const [editingBill, setEditingBill] = useState<BillInput>({
+    congress: 0,
+    billType: "",
+    billNumber: 0,
+  });
+  const [isSaving, setIsSaving] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const isMounted = useRef(false);
 
   useEffect(() => {
@@ -92,7 +168,7 @@ const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
     return null;
   }
 
-  const columns: GridColDef[] = [
+  const columns: GridColumns = [
     {
       field: "congress",
       headerName: "Congress",
@@ -143,34 +219,130 @@ const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
     },
     {
       field: "actions",
+      type: "actions",
       headerName: "Actions",
       width: 170,
       sortable: false,
-      renderCell: (params) => (
-        <ButtonGroup>
-          <BillSyncButton
-            billId={params.id as string}
-            onUpdateBill={(bill) => {
-              setCurrentBills({
-                ...currentBills,
-                items: currentBills.items.map((b) =>
-                  b.id === bill?.id ? bill : b
-                ),
-              });
-            }}
+      getActions: (params) => [
+        <BillSyncButton
+          billId={params.id as string}
+          onUpdateBill={(bill) => {
+            setCurrentBills({
+              ...currentBills,
+              items: currentBills.items.map((b) =>
+                b.id === bill?.id ? bill : b
+              ),
+            });
+          }}
+        />,
+        <GridActionsCellItem
+          icon={
+            <Tooltip title="Edit">
+              <EditIcon />
+            </Tooltip>
+          }
+          label="Edit"
+          className="textPrimary"
+          onClick={() => {
+            setEditingBill(params.row);
+            setIsEditing(true);
+            setShowEditingDialog(true);
+          }}
+          color="inherit"
+        />,
+        <BillDeleteButton
+          billId={params.id as string}
+          onComplete={(success) => {
+            if (!success) {
+              return;
+            }
+            setCurrentBills({
+              ...currentBills,
+              items: currentBills.items.filter((b) => b.id !== params.id),
+            });
+          }}
+        />,
+        <Link
+          href={getPostUrl(params.row)}
+          target="_blank"
+          sx={{ textDecoration: "none" }}
+        >
+          <GridActionsCellItem
+            icon={
+              <Tooltip title="Read More">
+                <ReadMoreIcon />
+              </Tooltip>
+            }
+            label="Read More"
+            // onClick={handleDeleteClick(id)}
+            color="inherit"
           />
-          <Link
-            role="button"
-            href={getPostUrl(params.row)}
-            target="_blank"
-            sx={{ textDecoration: "none" }}
-          >
-            <Button>Details</Button>
-          </Link>
-        </ButtonGroup>
-      ),
+        </Link>,
+      ],
     },
   ];
+
+  const updateBill = () => {
+    setIsSaving(true);
+    client
+      .mutate({
+        mutation: UpdateBillDocument,
+        variables: {
+          bill: {
+            ...Object.fromEntries(
+              Object.entries(editingBill).filter(
+                ([k, _]) => !["__typename", "id"].includes(k)
+              )
+            ),
+            title: Object.fromEntries(
+              Object.entries(editingBill.title || {}).filter(
+                ([k, _]) => k !== "__typename"
+              )
+            ),
+            summary: Object.fromEntries(
+              Object.entries(editingBill.summary || {}).filter(
+                ([k, _]) => k !== "__typename"
+              )
+            ),
+          } as BillInput,
+        },
+        fetchPolicy: "network-only",
+      })
+      .then((res) => {
+        if (res.data?.updateBill) {
+          setCurrentBills({
+            ...currentBills,
+            items: currentBills.items.map((b) =>
+              b.id === res.data?.updateBill?.id ? res.data.updateBill : b
+            ),
+          });
+        }
+        setShowEditingDialog(false);
+        setIsSaving(false);
+      });
+  };
+
+  const addNewBill = () => {
+    setIsSaving(true);
+    client
+      .mutate({
+        mutation: AddBillDocument,
+        variables: {
+          bill: editingBill,
+        },
+        fetchPolicy: "network-only",
+      })
+      .then((res) => {
+        if (res.data?.addBill) {
+          setCurrentBills({
+            ...currentBills,
+            items: [res.data.addBill, ...currentBills.items],
+          });
+        }
+        setShowEditingDialog(false);
+        setIsSaving(false);
+      });
+  };
 
   return (
     <AdminLayout title={"管理法案"}>
@@ -178,6 +350,200 @@ const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
         <LocaleSwitcher />
       </Banner>
       <Box>
+        <Dialog
+          fullWidth
+          maxWidth="lg"
+          open={showEditingDialog}
+          onClose={() => setShowEditingDialog(false)}
+        >
+          <DialogTitle>
+            {isEditing ? "Editing Bill" : "Add New Bill"}
+          </DialogTitle>
+          <DialogContent
+            sx={{
+              flexDirection: "row",
+              "& > *": { my: 1.5 },
+            }}
+          >
+            <FormControl>
+              <TextField
+                disabled={isEditing}
+                required
+                autoFocus
+                margin="dense"
+                variant="standard"
+                label="Congress"
+                type="number"
+                value={editingBill.congress || ""}
+                onChange={(e) =>
+                  setEditingBill({
+                    ...editingBill,
+                    congress: parseInt(e.target.value),
+                  })
+                }
+              />
+              <FormHelperText>
+                The congress number. For example, the value can be 117. This is
+                part of the identifier of a bill. Cannot change after added.
+              </FormHelperText>
+            </FormControl>
+            <FormControl>
+              <TextField
+                disabled={isEditing}
+                required
+                margin="dense"
+                variant="standard"
+                label="Bill Type"
+                value={editingBill.billType}
+                onChange={(e) =>
+                  setEditingBill({ ...editingBill, billType: e.target.value })
+                }
+              />
+              <FormHelperText>
+                The type of bill. Value can be hr, s, hjres, sjres, hconres,
+                sconres, hres, or sres. This is part of the identifier of a
+                bill. Cannot change after added.
+              </FormHelperText>
+            </FormControl>
+            <FormControl>
+              <TextField
+                disabled={isEditing}
+                required
+                margin="dense"
+                variant="standard"
+                label="Bill Number"
+                type="number"
+                value={editingBill.billNumber || ""}
+                onChange={(e) =>
+                  setEditingBill({
+                    ...editingBill,
+                    billNumber: parseInt(e.target.value),
+                  })
+                }
+              />
+              <FormHelperText>
+                The bill’s assigned number. For example, the value can be 3076.
+                This is part of the identifier of a bill. Cannot change after
+                added.
+              </FormHelperText>
+            </FormControl>
+            <FormControl fullWidth>
+              <TextField
+                autoFocus={isEditing}
+                margin="dense"
+                variant="standard"
+                label="English Title"
+                value={editingBill.title?.en || ""}
+                onChange={(e) =>
+                  setEditingBill({
+                    ...editingBill,
+                    title: {
+                      ...editingBill.title,
+                      en: e.target.value,
+                    },
+                  })
+                }
+              />
+              <FormHelperText>
+                This could be overwritten by the data sync from the official
+                website
+              </FormHelperText>
+            </FormControl>
+            <FormControl fullWidth>
+              <TextField
+                margin="dense"
+                variant="standard"
+                label="中文標題"
+                value={editingBill.title?.zh || ""}
+                onChange={(e) =>
+                  setEditingBill({
+                    ...editingBill,
+                    title: {
+                      ...editingBill.title,
+                      zh: e.target.value,
+                    },
+                  })
+                }
+              />
+              <FormHelperText></FormHelperText>
+            </FormControl>
+            <FormControl fullWidth>
+              <TextField
+                margin="dense"
+                variant="standard"
+                label="English Summary"
+                multiline
+                value={editingBill.summary?.en || ""}
+                onChange={(e) =>
+                  setEditingBill({
+                    ...editingBill,
+                    summary: {
+                      ...editingBill.summary,
+                      en: e.target.value,
+                    },
+                  })
+                }
+              />
+              <FormHelperText>
+                This could be overwritten by the data sync from the official
+                website
+              </FormHelperText>
+            </FormControl>
+            <FormControl fullWidth>
+              <TextField
+                margin="dense"
+                variant="standard"
+                label="中文 Summary"
+                multiline
+                value={editingBill.summary?.zh || ""}
+                onChange={(e) =>
+                  setEditingBill({
+                    ...editingBill,
+                    summary: {
+                      ...editingBill.summary,
+                      zh: e.target.value,
+                    },
+                  })
+                }
+              />
+              <FormHelperText></FormHelperText>
+            </FormControl>
+            <FormControl fullWidth>
+              <TextField
+                margin="dense"
+                variant="standard"
+                label="Internal Notes"
+                multiline
+              />
+              <FormHelperText>
+                This is internal only, not shown to public
+              </FormHelperText>
+            </FormControl>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setShowEditingDialog(false)}>Cancel</Button>
+            <LoadingButton
+              variant="contained"
+              onClick={() => (isEditing ? updateBill() : addNewBill())}
+              loading={isSaving}
+            >
+              Save
+            </LoadingButton>
+          </DialogActions>
+        </Dialog>
+        <IconButton
+          onClick={() => {
+            setIsEditing(false);
+            setEditingBill({
+              congress: 0,
+              billType: "",
+              billNumber: 0,
+            });
+            setShowEditingDialog(true);
+          }}
+        >
+          <AddCircleIcon />
+        </IconButton>
         <DataGridPro
           editMode="row"
           pagination={true}
