@@ -3,12 +3,14 @@ query Bills(
   $limit: Float
   $sortFields: [String!]
   $sortDirections: [Float!]
+  $query: BillQueryInput!
 ) {
   bills(
     offset: $offset
     limit: $limit
     sortFields: $sortFields
     sortDirections: $sortDirections
+    query: $query
   ) {
     total
     hasMore

@@ -6,6 +6,7 @@ export type BillsQueryVariables = Types.Exact<{
   limit?: Types.InputMaybe<Types.Scalars['Float']>;
   sortFields?: Types.InputMaybe<Array<Types.Scalars['String']> | Types.Scalars['String']>;
   sortDirections?: Types.InputMaybe<Array<Types.Scalars['Float']> | Types.Scalars['Float']>;
+  query: Types.BillQueryInput;
 }>;
 
 
