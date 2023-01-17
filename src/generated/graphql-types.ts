@@ -66,6 +66,10 @@ export type BillInput = {
   title?: InputMaybe<I18NTextInput>;
 };
 
+export type BillQueryInput = {
+  keywords: Array<Scalars['String']>;
+};
+
 export type BillTracker = {
   __typename?: 'BillTracker';
   selected: Scalars['Boolean'];
@@ -250,6 +254,7 @@ export type QueryBillArgs = {
 export type QueryBillsArgs = {
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;
+  query: BillQueryInput;
   sortDirections?: InputMaybe<Array<Scalars['Float']>>;
   sortFields?: InputMaybe<Array<Scalars['String']>>;
 };

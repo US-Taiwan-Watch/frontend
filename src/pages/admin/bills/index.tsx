@@ -7,14 +7,12 @@ import {
 import {
   Box,
   Button,
-  ButtonGroup,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
   FormHelperText,
-  IconButton,
   Link,
   TextField,
   Tooltip,
@@ -22,8 +20,10 @@ import {
 import {
   DataGridPro,
   GridActionsCellItem,
-  GridColDef,
   GridColumns,
+  GridFilterModel,
+  GridToolbarContainer,
+  GridToolbarQuickFilter,
 } from "@mui/x-data-grid-pro";
 import { AdminLayout } from "../../../components/admin-layout";
 import { Banner } from "../../../components/banner";
@@ -31,12 +31,9 @@ import { useEffect, useRef, useState } from "react";
 import { GridSortModel } from "@mui/x-data-grid-pro";
 import { getPostUrl } from "../[post-type]";
 import { LoadingButton } from "@mui/lab";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
 import SyncIcon from "@mui/icons-material/Sync";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import {
@@ -125,6 +122,15 @@ const BillDeleteButton: React.FC<{
   );
 };
 
+const ToolBar: React.FC<{ onAddClick: () => void }> = ({ onAddClick }) => (
+  <GridToolbarContainer>
+    <Button color="primary" startIcon={<AddIcon />} onClick={onAddClick}>
+      Add bill
+    </Button>
+    <GridToolbarQuickFilter key="search" />
+  </GridToolbarContainer>
+);
+
 // Page Component
 const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
   const client = useApolloClient();
@@ -144,6 +150,7 @@ const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const isMounted = useRef(false);
+  const [queryKeywords, setQueryKeywords] = useState<string[]>([]);
 
   useEffect(() => {
     if (!isMounted.current) {
@@ -151,18 +158,18 @@ const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
       return;
     }
     setIsLoading(true);
-    console.log(page, pageSize);
     getBills(
       page,
       pageSize,
       sortModel.map((sm) => sm.field),
       sortModel.map((sm) => (sm.sort === "asc" ? 1 : -1)),
+      queryKeywords,
       client
     ).then((bills) => {
       setCurrentBills(bills);
       setIsLoading(false);
     });
-  }, [pageSize, page, sortModel]);
+  }, [pageSize, page, sortModel, queryKeywords]);
 
   if (!currentBills) {
     return null;
@@ -531,19 +538,6 @@ const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
             </LoadingButton>
           </DialogActions>
         </Dialog>
-        <IconButton
-          onClick={() => {
-            setIsEditing(false);
-            setEditingBill({
-              congress: 0,
-              billType: "",
-              billNumber: 0,
-            });
-            setShowEditingDialog(true);
-          }}
-        >
-          <AddCircleIcon />
-        </IconButton>
         <DataGridPro
           editMode="row"
           pagination={true}
@@ -560,6 +554,24 @@ const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
           onPageSizeChange={(pageSize) => setPageSize(pageSize)}
           sortingMode={currentBills.total > pageSize ? "server" : "client"}
           sortModel={sortModel}
+          components={{
+            Toolbar: ToolBar,
+          }}
+          componentsProps={{
+            toolbar: {
+              onAddClick: () => {
+                setIsEditing(false);
+                setEditingBill({
+                  congress: 0,
+                  billType: "",
+                  billNumber: 0,
+                });
+                setShowEditingDialog(true);
+              },
+              showQuickFilter: true,
+              quickFilterProps: { debounceMs: 500 },
+            },
+          }}
           onSortModelChange={(sortModel) => {
             if (currentBills.total > pageSize) {
               setSortModel(sortModel);
@@ -568,6 +580,10 @@ const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
           }}
           disableColumnFilter={currentBills.total > pageSize}
           // checkboxSelection
+          filterMode="server"
+          onFilterModelChange={(filterModel: GridFilterModel) =>
+            setQueryKeywords(filterModel.quickFilterValues || [])
+          }
           disableSelectionOnClick
           // components={{
           //   Pagination: () => (
@@ -590,6 +606,7 @@ const getBills = async (
   pageSize: number,
   sortFields?: string[],
   sortDirections?: number[],
+  keywords?: string[],
   apolloClient?: ApolloClient<object>
 ) => {
   const res = await apolloClient?.query({
@@ -599,8 +616,9 @@ const getBills = async (
       limit: pageSize,
       sortFields,
       sortDirections,
+      query: { keywords: keywords || [] },
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-first",
   });
   return res?.data.bills;
 };
@@ -611,6 +629,7 @@ BillsPage.getInitialProps = async ({ apolloClient }) => {
     PAGE_SIZE_OPTIONS[0],
     ["congress"],
     [-1],
+    undefined,
     apolloClient
   );
   return {
