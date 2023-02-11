@@ -40,11 +40,49 @@ export enum Auth0RoleName {
   S2S = 'S2S'
 }
 
-export type Bill = {
-  __typename?: 'Bill';
+export type DenormalizedArticle = {
+  __typename?: 'DenormalizedArticle';
+  authorInfos: Array<User>;
+  authors?: Maybe<Array<Scalars['String']>>;
+  content?: Maybe<Scalars['String']>;
+  createdTime?: Maybe<Scalars['Float']>;
+  id: Scalars['String'];
+  imageSource?: Maybe<Scalars['String']>;
+  isPublished?: Maybe<Scalars['Boolean']>;
+  lastModifiedTime?: Maybe<Scalars['Float']>;
+  preview?: Maybe<Scalars['String']>;
+  pusblishTime?: Maybe<Scalars['Float']>;
+  slug?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Scalars['String']>>;
+  title?: Maybe<Scalars['String']>;
+};
+
+export type BillAction = {
+  __typename?: 'BillAction';
+  chamber?: Maybe<Scalars['String']>;
+  date: Scalars['String'];
+  description: Scalars['String'];
+};
+
+export type BillTracker = {
+  __typename?: 'BillTracker';
+  selected: Scalars['Boolean'];
+  stepName: Scalars['String'];
+};
+
+export type CosponsorInfo = {
+  __typename?: 'CosponsorInfo';
+  date: Scalars['String'];
+  memberId: Scalars['String'];
+};
+
+export type DenormalizedBill = {
+  __typename?: 'DenormalizedBill';
+  actions?: Maybe<Array<BillAction>>;
   billNumber: Scalars['Float'];
   billType: Scalars['String'];
   congress: Scalars['Float'];
+  cosponsorInfos?: Maybe<Array<CosponsorInfo>>;
   cosponsors?: Maybe<Array<Member>>;
   cosponsorsCount?: Maybe<Scalars['Int']>;
   createdTime?: Maybe<Scalars['Int']>;
@@ -54,6 +92,7 @@ export type Bill = {
   sponsor?: Maybe<Member>;
   summary?: Maybe<I18NText>;
   title?: Maybe<I18NText>;
+  sponsorId: Scalars['String'];
   trackers?: Maybe<Array<BillTracker>>;
 };
 

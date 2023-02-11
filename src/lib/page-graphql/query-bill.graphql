@@ -1,0 +1,38 @@
+query Bill($billId: String!) {
+  bill(id: $billId) {
+    congress
+    billType
+    billNumber
+    title {
+      zh
+      en
+      text
+    }
+    introducedDate
+    trackers {
+      stepName
+      selected
+    }
+    actions {
+      description
+      date
+      chamber
+    }
+    sponsorId
+    sponsor {
+      id
+      firstName
+      lastName
+      nickname
+      firstName_zh
+      lastName_zh
+    }
+    cosponsorsCount
+    cosponsors {
+      firstName
+      lastName
+      firstName_zh
+      lastName_zh
+    }
+  }
+}
