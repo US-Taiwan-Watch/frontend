@@ -40,31 +40,8 @@ export enum Auth0RoleName {
   S2S = 'S2S'
 }
 
-export type BillTracker = {
-  __typename?: 'BillTracker';
-  selected: Scalars['Boolean'];
-  stepName: Scalars['String'];
-};
-
-export type DenormalizedArticle = {
-  __typename?: 'DenormalizedArticle';
-  authorInfos: Array<User>;
-  authors?: Maybe<Array<Scalars['String']>>;
-  content?: Maybe<Scalars['String']>;
-  createdTime?: Maybe<Scalars['Float']>;
-  id: Scalars['String'];
-  imageSource?: Maybe<Scalars['String']>;
-  isPublished?: Maybe<Scalars['Boolean']>;
-  lastModifiedTime?: Maybe<Scalars['Float']>;
-  preview?: Maybe<Scalars['String']>;
-  pusblishTime?: Maybe<Scalars['Float']>;
-  slug?: Maybe<Scalars['String']>;
-  tags?: Maybe<Array<Scalars['String']>>;
-  title?: Maybe<Scalars['String']>;
-};
-
-export type DenormalizedBill = {
-  __typename?: 'DenormalizedBill';
+export type Bill = {
+  __typename?: 'Bill';
   billNumber: Scalars['Float'];
   billType: Scalars['String'];
   congress: Scalars['Float'];

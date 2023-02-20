@@ -85,6 +85,10 @@ export default {
     title: "Updates",
     desc: "Posters page!",
   },
+  bills: {
+    title: "Bills",
+    desc: "Bills page",
+  },
   admin: {
     posts: {
       managePosts: "Manage {0}",

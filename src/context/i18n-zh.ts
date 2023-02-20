@@ -85,6 +85,10 @@ export default {
     title: "公告訊息",
     desc: "公告！",
   },
+  bills: {
+    title: "法案",
+    desc: "法案瀏覽",
+  },
   admin: {
     posts: {
       managePosts: "管理{0}",

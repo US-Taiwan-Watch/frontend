@@ -20,7 +20,10 @@ import {
   Step,
   StepLabel
 } from '@mui/material';
-import { BillTracker } from "../generated/graphql-types";
+import { BillTracker, Member } from "../generated/graphql-types";
+
+const stepsForSenate = ['Introduced', 'Pass Senate', 'Pass House', 'Resolving Differences', 'To President', 'Became Law'];
+const stepsForHouse = ['Introduced', 'Pass House', 'Pass Senate', 'Resolving Differences', 'To President', 'Became Law'];
 
 export type BillCardProps = {
   billNumber: number,
@@ -29,7 +32,7 @@ export type BillCardProps = {
   title?: string,
   introducedDate?: string,
   tags?: string[],
-  sponsor?: string,
+  sponsor?: Member,
   cosponsorCount?: number,
   cosponsors?: string[],
   trackers?: BillTracker[]
@@ -59,6 +62,20 @@ export const BillCard: React.FC<BillCardProps> = (props) => {
   const congress = props.congress;
   const billType = props.billType;
   const billNumber = props.billNumber;
+  let steps = null;
+  let selectedStepNum = -1;
+  if (props.trackers) {
+    steps = billType[0] == 's' ? stepsForSenate : stepsForHouse;
+    const latestStep = props.trackers[props.trackers.length - 1].stepName;
+    for (var i = 0; i < steps.length; i += 1) {
+      const step = steps[i];
+      if (latestStep == step) {
+        selectedStepNum = i;
+      }
+    }
+  }
+  const sponsorNameZh = props.sponsor?.firstName_zh ? "" + props.sponsor?.firstName_zh + "．" + props.sponsor?.lastName_zh : "";
+  const sponsorNameEn = "" + props.sponsor?.firstName + " " + props.sponsor?.lastName;
   return (
     <Container maxWidth="lg">
       <Box
@@ -95,12 +112,13 @@ export const BillCard: React.FC<BillCardProps> = (props) => {
               </Stack>
             </Box>
 
-            <Typography variant="h6">
-              {props.title}
-            </Typography>
+            <Box width="100%">
+              <Typography variant="h6">
+                {props.title}
+              </Typography>
+            </Box>
 
-            <Box>
-
+            <Box width="100%">
               <Typography variant="subtitle1">
                 提案人
               </Typography>
@@ -110,67 +128,68 @@ export const BillCard: React.FC<BillCardProps> = (props) => {
                     <Avatar>X</Avatar>
                   </ListItemAvatar>
                   <ListItemText
-                    primary={props.sponsor}
+                    primary={sponsorNameZh + " " + sponsorNameEn}
                   />
                 </ListItem>
 
               </List>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  <Box>
-                    <Typography variant="subtitle1">
-                      國會屆數
-                    </Typography>
-                    <Typography variant="body1">
-                      {congress}
-                    </Typography>
-                  </Box>
+              <Box sx={{ flexGrow: 1 }}>
+                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                  <Grid item xs={2} sm={4} md={4}>
+                    <Box>
+                      <Typography variant="subtitle1">
+                        國會屆數
+                      </Typography>
+                      <Typography variant="body1">
+                        {congress}
+                      </Typography>
+                    </Box>
 
-                </Grid>
-                <Grid item xs={4}>
-                  <Box>
-                    <Typography variant="subtitle1">
-                      提案日
-                    </Typography>
-                    <Typography variant="body1">
-                      {props.introducedDate}
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={4}>
-                  {props.cosponsorCount && <Box>
+                  </Grid>
+                  <Grid item xs={2} sm={4} md={4}>
+                    <Box>
+                      <Typography variant="subtitle1">
+                        提案日
+                      </Typography>
+                      <Typography variant="body1">
+                        {props.introducedDate}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={2} sm={4} md={4}>
+                    {props.cosponsorCount && <Box>
 
-                    <Typography variant="subtitle1">
-                      連署人數
-                    </Typography>
-                    <Typography variant="body1">
-                      {props.cosponsorCount}
-                    </Typography>
-                  </Box>}
+                      <Typography variant="subtitle1">
+                        連署人數
+                      </Typography>
+                      <Typography variant="body1">
+                        {props.cosponsorCount}
+                      </Typography>
+                    </Box>}
+                  </Grid>
+                  <Grid item xs={12}>
+                    {props.trackers && steps && selectedStepNum != -1 && <Box width="100%" mr={3}>
+                      <Typography variant="subtitle1">
+                        法案進度
+                      </Typography>
+                      <Stepper activeStep={selectedStepNum} alternativeLabel sx={{ margin: 2 }}>
+                        {steps.map((label) => (
+                          <Step key={label}>
+                            <StepLabel>{label}</StepLabel>
+                          </Step>
+                        ))}
+                      </Stepper>
+                    </Box>}
+                  </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  {props.trackers && <Box width="100%" mr={3}>
-                    <Typography variant="subtitle1">
-                      法案進度
-                    </Typography>
-                    {/* <Stepper activeStep={1} alternativeLabel sx={{ margin: 2 }}>
-                      {props.trackers.map((label) => (
-                        <Step key={label.stepName}>
-                          <StepLabel>{label}</StepLabel>
-                        </Step>
-                      ))}
-                    </Stepper> */}
-                  </Box>}
-                </Grid>
-              </Grid>
-
+              </Box>
             </Box>
 
           </CardContent>
-          <CardActions>
+          {/* <CardActions>
             <Button size="small">Share</Button>
             <Button size="small">Learn More</Button>
-          </CardActions>
+          </CardActions> */}
         </Card>
       </Box>
 

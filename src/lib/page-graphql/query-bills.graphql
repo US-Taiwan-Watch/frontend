@@ -7,6 +7,25 @@ query bills($offset: Float, $limit: Float) {
       billType
       billNumber
       introducedDate
+      cosponsorsCount
+      sponsor {
+        firstName
+        firstName_zh
+        id
+        lastName
+        lastName_zh
+      }
+      title {
+        zh
+        en
+        text
+      }
+      trackers {
+        stepName
+        selected
+      }
+      id
+      isSyncing
     }
   }
 }

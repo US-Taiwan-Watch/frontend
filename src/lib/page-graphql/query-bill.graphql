@@ -14,10 +14,22 @@ query Bill($billId: String!) {
       selected
     }
     sponsor {
-      id
+      congressRoles {
+        chamber
+        congressNumbers
+        endDate
+        parties {
+          party
+          startDate
+          endDate
+        }
+        startDate
+        state
+      }
       firstName
-      lastName
       firstName_zh
+      id
+      lastName
       lastName_zh
     }
     cosponsorsCount

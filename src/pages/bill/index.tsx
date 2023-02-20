@@ -1,62 +1,59 @@
-import { NextPageWithApollo, withApollo } from "../../lib/with-apollo";
-import { gql, useApolloClient } from "@apollo/client";
-import {
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Button,
-  Typography,
-  Box
-} from '@mui/material';
-import { Link } from "../../components/link";
 import { Layout } from "../../components/layout";
-import { BillCard } from "../../components/bill-card";
 import { useI18n } from "../../context/i18n";
-import { Bill } from "../../../common/models";
-import { useFetchUser } from "../../lib/user";
 import { GetStaticProps, NextPage } from "next";
-import { BillDocument, BillQueryVariables } from "../../lib/page-graphql/query-bill.graphql.interface";
+import { BillsDocument, BillsQuery, BillsQueryVariables } from "../../lib/page-graphql/query-bills.graphql.interface";
 import { createApolloClient } from "../../lib/apollo-client";
-import { DenormalizedBill } from "../../generated/graphql-types";
+import { CardList } from "../../components/card-list";
+import { Banner } from "../../components/banner";
 
-type BillPageProps = {
-  bill: DenormalizedBill,
+type BillListPageProps = {
+  bills: BillsQuery['bills']['items'],
 }
 
-const BillPage: NextPage<BillPageProps> = ({ bill }) => {
-  console.log(bill)
+const BillListPage: NextPage<BillListPageProps> = ({ bills }) => {
+  console.log(bills)
+  const { i18n } = useI18n();
   return (
-    <Layout>
-      <BillCard
-        billNumber={bill.billNumber}
-        billType={bill.billType}
-        congress={bill.congress}
-        title={bill.title.zh || undefined}
-        introducedDate={bill.introducedDate || undefined}
-        sponsor={"" + bill.sponsor?.firstName_zh + " " + bill.sponsor?.lastName_zh || undefined}
-        cosponsorCount={bill.cosponsorsCount || undefined}
-        trackers={bill.trackers || undefined}></BillCard>
+    <Layout
+      title={i18n.strings.bills.title}
+      description={i18n.strings.bills.desc}>
+      <Banner
+        title={i18n.strings.bills.title}
+        subtitle={i18n.strings.bills.desc}>
+      </Banner>
+      <CardList
+        cards={bills
+          .map((bill) => ({
+            title: bill.title?.text || "",
+            displayDate: new Date(bill.introducedDate || 0).toLocaleDateString(), // change to pub date
+            content: "",
+            url: `/bill/${bill.id}`,
+          }))}
+      />
     </Layout>
-    // <pre></pre>
   );
 };
 
-export const getStaticProps: GetStaticProps<BillPageProps> = async ({ req, query }) => {
-  const client = createApolloClient();
-  console.log(client);
-  const data = await client.query({
-    query: BillDocument,
-    variables: { billId: "116-hr-2002" as string },
-    fetchPolicy: "network-only"
-  });
-  const bill = data.data.bill;
-  console.log(bill);
+export const getStaticProps: GetStaticProps<BillListPageProps> = async () => {
   return {
     props: {
-      bill,
-    }
+      bills: await getStaticPaginatedBills(),
+    },
+    revalidate: 300, // In seconds
   }
 };
 
-export default BillPage;
+export const getStaticPaginatedBills = async (): Promise<BillsQuery['bills']['items']> => {
+  const client = createApolloClient();
+  const res = await client.query({
+    query: BillsDocument,
+    variables: { offset: 0 as number, limit: 20 as number },
+    fetchPolicy: "network-only",
+  });
+  return res.data.bills.items.map((bill) => ({
+    ...bill,
+  }));
+
+};
+
+export default BillListPage;
