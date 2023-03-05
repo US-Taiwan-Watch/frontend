@@ -1,17 +1,27 @@
-query EditorPageQuery($articleId: String!) {
-  article(id: $articleId) {
+query EditorPage($articleId: String!) {
+  getArticle(id: $articleId) {
     id
-    title
+    title {
+      zh
+      en
+    }
     content
     slug
-    preview
+    preview {
+      zh
+      en
+    }
     isPublished
-    authors
-    pusblishTime
+    publishedTime
     createdTime
     lastModifiedTime
     imageSource
     tags
+    type
+    authorInfos {
+      id
+      name
+    }
   }
   editors {
     id

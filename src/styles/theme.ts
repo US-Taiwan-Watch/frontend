@@ -13,6 +13,7 @@ import {
   TypographyStyle,
 } from "@mui/material/styles";
 import { createStyled } from "@mui/system";
+import type {} from "@mui/x-date-pickers/themeAugmentation";
 
 // Create a theme instance.
 const color = {
@@ -127,7 +128,7 @@ export const darkPalette: PaletteOptions = {
     default: color.blueGrey[900],
     // paper: color.blueGrey[1000],
   },
-}
+};
 
 export const lightPalette: PaletteOptions = {
   mode: "light",
@@ -154,7 +155,7 @@ export const lightPalette: PaletteOptions = {
     default: color.white[100],
     // paper: color.white[200],
   },
-}
+};
 
 const _theme: USTWThemeOptions = {
   color: {
@@ -189,6 +190,15 @@ const _theme: USTWThemeOptions = {
     sidebarMobilePadding: 8,
     participantBorderWidth: 0,
     mobileTopBarHeight: 52,
+  },
+  components: {
+    MuiDatePicker: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "red",
+        },
+      },
+    },
   },
 };
 

@@ -1,24 +1,17 @@
-query AdminAllPosts {
-  getAllArticles {
+query PublicPosts($lang: String) {
+  getAllArticles(lang: $lang) {
     id
     title {
-      zh
-      en
       text
     }
     content
     slug
     preview {
-      zh
-      en
       text
     }
     isPublished
     publishedTime
-    createdTime
-    lastModifiedTime
     imageSource
-    tags
     type
   }
 }

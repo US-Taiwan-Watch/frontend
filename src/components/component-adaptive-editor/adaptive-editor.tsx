@@ -69,6 +69,7 @@ export interface AdaptiveEditorProps {
   onSave?: (value_raw: string) => void;
   viewOnly?: boolean;
   classNameForRootComponent?: string;
+  postLang?: string;
 }
 
 export const AdaptiveEditor = React.memo<AdaptiveEditorProps>(
@@ -77,7 +78,9 @@ export const AdaptiveEditor = React.memo<AdaptiveEditorProps>(
     onSave,
     viewOnly = false,
     classNameForRootComponent,
+    postLang,
   }) => {
+    console.log(postLang);
     const classes = useStyles();
     const { lang } = useI18n();
     const [value, setValue] = React.useState<Value | null>(
@@ -114,8 +117,8 @@ export const AdaptiveEditor = React.memo<AdaptiveEditorProps>(
       (defaultUrl) => (file, reportProgress) =>
         new Promise((resolve, reject) => {
           uploadPostImage(file)
-            .then(url => resolve({ url }))
-            .catch(err => reject(err));
+            .then((url) => resolve({ url }))
+            .catch((err) => reject(err));
         });
 
     const cellPlugins = [
@@ -153,7 +156,7 @@ export const AdaptiveEditor = React.memo<AdaptiveEditorProps>(
         <Editor
           cellPlugins={cellPlugins}
           value={value}
-          lang={lang}
+          lang={postLang || lang}
           // components={{
           //   BottomToolbar: CustomToolbar,
           // }}

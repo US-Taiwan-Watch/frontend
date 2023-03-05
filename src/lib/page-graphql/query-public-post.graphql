@@ -1,16 +1,21 @@
-query PublicPost($slug: String!) {
-  publicArticle(slug: $slug) {
+query PublicPost($slug: String!, $lang: String) {
+  getPublicArticle(slug: $slug, lang: $lang) {
     id
-    title
+    title {
+      text
+    }
     content
     slug
-    preview
+    preview {
+      text
+    }
     isPublished
-    pusblishTime
+    publishedTime
     createdTime
     lastModifiedTime
     imageSource
     tags
+    type
     authorInfos {
       name
       picture
