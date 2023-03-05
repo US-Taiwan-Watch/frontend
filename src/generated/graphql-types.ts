@@ -47,10 +47,27 @@ export type Bill = {
   congress: Scalars['Float'];
   cosponsors?: Maybe<Array<Member>>;
   cosponsorsCount?: Maybe<Scalars['Int']>;
+  createdTime?: Maybe<Scalars['Int']>;
+  id: Scalars['String'];
   introducedDate?: Maybe<Scalars['String']>;
+  isSyncing: Scalars['Boolean'];
   sponsor?: Maybe<Member>;
-  title: I18NText;
+  summary?: Maybe<I18NText>;
+  title?: Maybe<I18NText>;
   trackers?: Maybe<Array<BillTracker>>;
+};
+
+export type BillInput = {
+  billNumber: Scalars['Float'];
+  billType: Scalars['String'];
+  congress: Scalars['Float'];
+  introducedDate?: InputMaybe<Scalars['Int']>;
+  summary?: InputMaybe<I18NTextInput>;
+  title?: InputMaybe<I18NTextInput>;
+};
+
+export type BillQueryInput = {
+  keywords: Array<Scalars['String']>;
 };
 
 export type BillTracker = {
@@ -103,7 +120,7 @@ export type MemberRole = {
   congressNumbers: Array<Scalars['Int']>;
   district?: Maybe<Scalars['Int']>;
   endDate: Scalars['String'];
-  party: Scalars['String'];
+  parties: Array<PartyRecord>;
   senatorClass?: Maybe<Scalars['Int']>;
   startDate: Scalars['String'];
   state: Scalars['String'];
@@ -112,11 +129,15 @@ export type MemberRole = {
 export type Mutation = {
   __typename?: 'Mutation';
   addArticle?: Maybe<Article>;
+  addBill?: Maybe<Bill>;
   createOrUpdateUser?: Maybe<Scalars['Boolean']>;
   deleteArticle: Scalars['Boolean'];
+  deleteBill: Scalars['Boolean'];
   emitGlobalEvent: Scalars['Boolean'];
   emitUserEvent: Scalars['Boolean'];
+  syncBill?: Maybe<Bill>;
   updateArticleWithId?: Maybe<Article>;
+  updateBill?: Maybe<Bill>;
   updateUser: User;
 };
 
@@ -134,6 +155,11 @@ export type MutationAddArticleArgs = {
 };
 
 
+export type MutationAddBillArgs = {
+  bill: BillInput;
+};
+
+
 export type MutationCreateOrUpdateUserArgs = {
   email: Scalars['String'];
   name?: InputMaybe<Scalars['String']>;
@@ -148,6 +174,11 @@ export type MutationDeleteArticleArgs = {
 };
 
 
+export type MutationDeleteBillArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationEmitGlobalEventArgs = {
   data: Scalars['String'];
 };
@@ -156,6 +187,11 @@ export type MutationEmitGlobalEventArgs = {
 export type MutationEmitUserEventArgs = {
   data: Scalars['String'];
   userIdx: Array<Scalars['String']>;
+};
+
+
+export type MutationSyncBillArgs = {
+  billId: Scalars['String'];
 };
 
 
@@ -174,6 +210,11 @@ export type MutationUpdateArticleWithIdArgs = {
 };
 
 
+export type MutationUpdateBillArgs = {
+  bill: BillInput;
+};
+
+
 export type MutationUpdateUserArgs = {
   name?: InputMaybe<Scalars['String']>;
   nickname?: InputMaybe<Scalars['String']>;
@@ -185,6 +226,13 @@ export type PaginatedBills = {
   hasMore: Scalars['Boolean'];
   items: Array<Bill>;
   total: Scalars['Int'];
+};
+
+export type PartyRecord = {
+  __typename?: 'PartyRecord';
+  endDate: Scalars['String'];
+  party: Scalars['String'];
+  startDate: Scalars['String'];
 };
 
 export type Query = {
@@ -213,6 +261,9 @@ export type QueryBillArgs = {
 export type QueryBillsArgs = {
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;
+  query?: InputMaybe<BillQueryInput>;
+  sortDirections?: InputMaybe<Array<Scalars['Float']>>;
+  sortFields?: InputMaybe<Array<Scalars['String']>>;
 };
 
 
