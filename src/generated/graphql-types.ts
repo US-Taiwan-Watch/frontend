@@ -54,7 +54,6 @@ export type Bill = {
   sponsor?: Maybe<Member>;
   summary?: Maybe<I18NText>;
   title?: Maybe<I18NText>;
-  sponsorId: Scalars['String'];
   trackers?: Maybe<Array<BillTracker>>;
 };
 
@@ -113,6 +112,12 @@ export type Member = {
   twitterId?: Maybe<Scalars['String']>;
   website?: Maybe<Scalars['String']>;
   youtubeId?: Maybe<Scalars['String']>;
+};
+
+export type MemberFiltersInput = {
+  bioGuideIds?: InputMaybe<Array<Scalars['String']>>;
+  congress?: InputMaybe<Scalars['Float']>;
+  state?: InputMaybe<Scalars['String']>;
 };
 
 export type MemberRole = {
@@ -229,6 +234,13 @@ export type PaginatedBills = {
   total: Scalars['Int'];
 };
 
+export type PaginatedMembers = {
+  __typename?: 'PaginatedMembers';
+  hasMore: Scalars['Boolean'];
+  items: Array<Member>;
+  total: Scalars['Int'];
+};
+
 export type PartyRecord = {
   __typename?: 'PartyRecord';
   endDate: Scalars['String'];
@@ -249,7 +261,7 @@ export type Query = {
   imUser?: Maybe<User>;
   isAdmin: Scalars['Boolean'];
   member?: Maybe<Member>;
-  members: Array<Member>;
+  members: PaginatedMembers;
   myRoles?: Maybe<Array<Auth0RoleName>>;
 };
 
@@ -300,7 +312,11 @@ export type QueryMemberArgs = {
 
 
 export type QueryMembersArgs = {
-  bioGuideIds?: InputMaybe<Array<Scalars['String']>>;
+  filters: MemberFiltersInput;
+  limit?: InputMaybe<Scalars['Float']>;
+  offset?: InputMaybe<Scalars['Float']>;
+  sortDirections?: InputMaybe<Array<Scalars['Float']>>;
+  sortFields?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type Subscription = {

@@ -1,0 +1,28 @@
+query Members($offset: Float, $filters: MemberFiltersInput!, $limit: Float) {
+  members(offset: $offset, filters: $filters, limit: $limit) {
+    total
+    hasMore
+    items {
+      id
+      firstName
+      firstName_zh
+      lastName
+      lastName_zh
+      profilePictureUri
+      congressRoles {
+        chamber
+        congressNumbers
+        district
+        startDate
+        state
+        senatorClass
+        parties {
+          party
+          startDate
+          endDate
+        }
+        endDate
+      }
+    }
+  }
+}
