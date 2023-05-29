@@ -21,7 +21,10 @@ import { MemberFiltersInput } from "../../generated/graphql-types";
 const PAGE_SIZE = 10;
 
 type MemberListPageProps = {
-  preFetchedPaginatedMembers: MembersQuery["members"];
+  paginatedMembers: MembersQuery["members"];
+  page: number;
+  pageSize: number;
+  filters: MemberFiltersInput;
 };
 
 const ALL_CONGRESS_NUMBERS = Array.from(
@@ -31,23 +34,15 @@ const ALL_CONGRESS_NUMBERS = Array.from(
 
 const ALL_STATES = [...STATES, ...TERRITORIES, ...REGIONS];
 
-const firstStates: [number, number, MemberFiltersInput] = [
-  1,
-  PAGE_SIZE,
-  { congress: CongressUtils.getCurrentCongress() },
-];
-
-const MemberListPage: NextPage<MemberListPageProps> = ({
-  preFetchedPaginatedMembers,
-}) => {
+const MemberListPage: NextPage<MemberListPageProps> = (prefetched) => {
   const { i18n } = useI18n();
-  const [page, setPage] = useState(firstStates[0]);
-  const [pageSize, setPageSize] = useState(firstStates[1]);
-  const [filters, setFilters] = useState(firstStates[2]);
+  const [page, setPage] = useState(prefetched.page);
+  const [pageSize, setPageSize] = useState(prefetched.pageSize);
+  const [filters, setFilters] = useState(prefetched.filters);
   const [totalCount, setTotalCount] = useState(
-    preFetchedPaginatedMembers.total
+    prefetched.paginatedMembers.total
   );
-  const [members, setMembers] = useState(preFetchedPaginatedMembers.items);
+  const [members, setMembers] = useState(prefetched.paginatedMembers.items);
   const initialRender = useRef(true);
 
   useEffect(() => {
@@ -124,9 +119,13 @@ const MemberListPage: NextPage<MemberListPageProps> = ({
 export const getServerSideProps: GetServerSideProps<
   MemberListPageProps
 > = async () => {
+  const filters = { congress: CongressUtils.getCurrentCongress() };
   return {
     props: {
-      preFetchedPaginatedMembers: await getPaginatedMembers(...firstStates),
+      paginatedMembers: await getPaginatedMembers(1, PAGE_SIZE, filters),
+      page: 1,
+      pageSize: PAGE_SIZE,
+      filters,
     },
   };
 };
