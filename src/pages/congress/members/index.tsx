@@ -1,22 +1,22 @@
-import { Layout } from "../../components/layout";
-import { useI18n } from "../../context/i18n";
+import { Layout } from "../../../components/layout";
+import { useI18n } from "../../../context/i18n";
 import { GetServerSideProps, NextPage } from "next";
-import { createApolloClient } from "../../lib/apollo-client";
-import { CardList } from "../../components/card-list";
-import { Banner } from "../../components/banner";
+import { createApolloClient } from "../../../lib/apollo-client";
+import { CardList } from "../../../components/card-list";
+import { Banner } from "../../../components/banner";
 import { Autocomplete, Pagination, TextField } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { CongressUtils } from "../../../common/utils/congress-utils";
+import { CongressUtils } from "../../../../common/utils/congress-utils";
 import {
   MembersDocument,
   MembersQuery,
-} from "../../lib/page-graphql/query-members.graphql.interface";
+} from "../../../lib/page-graphql/query-members.graphql.interface";
 import {
   REGIONS,
   STATES,
   TERRITORIES,
-} from "../../../common/constants/member-constants";
-import { MemberFiltersInput } from "../../generated/graphql-types";
+} from "../../../../common/constants/member-constants";
+import { MemberFiltersInput } from "../../../generated/graphql-types";
 
 const PAGE_SIZE = 10;
 
