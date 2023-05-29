@@ -1,21 +1,26 @@
 import { Layout } from "../../components/layout";
 import { BillCard } from "../../components/bill-card";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import { BillDocument, BillQueryVariables, BillQuery } from "../../lib/page-graphql/query-bill.graphql.interface";
+import {
+  BillDocument,
+  BillQuery,
+} from "../../lib/page-graphql/query-bill.graphql.interface";
 import { createApolloClient } from "../../lib/apollo-client";
 import { getStaticPaginatedBills } from ".";
 import { Loading } from "../../components/loading";
 import { Banner } from "../../components/banner";
+import { USStatesMap } from "../../components/us-states-map";
+import { useState } from "react";
 
 type BillPageProps = {
-  bill: BillQuery['bill'],
-}
+  bill: BillQuery["bill"];
+};
 
 const BillPage: NextPage<BillPageProps> = ({ bill }) => {
   if (!bill) {
     return <Loading />;
   }
-  console.log(bill)
+  console.log(bill);
   return (
     <Layout>
       <Banner>
@@ -27,9 +32,15 @@ const BillPage: NextPage<BillPageProps> = ({ bill }) => {
           introducedDate={bill.introducedDate || undefined}
           sponsor={bill.sponsor || undefined}
           cosponsorCount={bill.cosponsorsCount || undefined}
-          trackers={bill.trackers || undefined}>
-        </BillCard>
+          trackers={bill.trackers || undefined}
+        ></BillCard>
       </Banner>
+      <USStatesMap
+        heatData={{ CA: 2, WA: 1, NY: 3 }}
+        onStateClick={(code) => {
+          console.log(code);
+        }}
+      />
     </Layout>
   );
 };
@@ -41,14 +52,16 @@ export const getStaticPaths: GetStaticPaths<{ id: string }> = async () => {
         params: {
           id: bill.id as string,
         },
-      }
+      };
     }),
     fallback: true,
   };
 };
 
-export const getStaticProps: GetStaticProps<BillPageProps> = async ({ params }) => {
-  console.log(params)
+export const getStaticProps: GetStaticProps<BillPageProps> = async ({
+  params,
+}) => {
+  console.log(params);
   const id = params?.id;
   if (!id) {
     return { notFound: true };
@@ -58,15 +71,15 @@ export const getStaticProps: GetStaticProps<BillPageProps> = async ({ params }) 
     const data = await client.query({
       query: BillDocument,
       variables: { billId: id as string },
-      fetchPolicy: "network-only"
+      fetchPolicy: "network-only",
     });
     const bill = data.data.bill;
     console.log(bill);
     return {
       props: {
         bill,
-      }
-    }
+      },
+    };
   } catch (error) {
     console.error(error);
     return { notFound: true };

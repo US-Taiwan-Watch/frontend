@@ -312,7 +312,7 @@ export type QueryMemberArgs = {
 
 
 export type QueryMembersArgs = {
-  filters: MemberFiltersInput;
+  filters?: InputMaybe<MemberFiltersInput>;
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;
   sortDirections?: InputMaybe<Array<Scalars['Float']>>;
