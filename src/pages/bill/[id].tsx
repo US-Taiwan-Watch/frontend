@@ -10,17 +10,50 @@ import { getStaticPaginatedBills } from ".";
 import { Loading } from "../../components/loading";
 import { Banner } from "../../components/banner";
 import { USStatesMap } from "../../components/us-states-map";
-import { useState } from "react";
+import {
+  Avatar,
+  Box,
+  Chip,
+  Container,
+  ListItemButton,
+  Paper,
+  styled,
+} from "@mui/material";
+import CircleIcon from "@mui/icons-material/Circle";
+import { Link } from "../../components/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { initApolloClient } from "../../lib/with-apollo";
 
 type BillPageProps = {
   bill: BillQuery["bill"];
 };
 
+const ListItem = styled("li")(({ theme }) => ({
+  margin: theme.spacing(0.5),
+}));
+
 const BillPage: NextPage<BillPageProps> = ({ bill }) => {
   if (!bill) {
     return <Loading />;
   }
-  console.log(bill);
+
+  let cosponsorStates = Object.fromEntries(
+    bill.cosponsors
+      .reduce((map, member) => {
+        const state = member.congressRoleSnapshot?.state;
+        if (!state) {
+          return map;
+        }
+        if (map.has(state)) {
+          map.set(state, map.get(state)! + 1);
+        } else {
+          map.set(state, 1);
+        }
+        return map;
+      }, new Map<string, number>())
+      .entries()
+  );
   return (
     <Layout>
       <Banner>
@@ -35,14 +68,62 @@ const BillPage: NextPage<BillPageProps> = ({ bill }) => {
           trackers={bill.trackers || undefined}
         ></BillCard>
       </Banner>
-      <USStatesMap
-        heatData={{ CA: 2, WA: 1, NY: 3 }}
-        onStateClick={(code) => {
-          console.log(code);
-        }}
-      />
+      <Container maxWidth="md">
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            listStyle: "none",
+            p: 0.5,
+            m: 0,
+            border: 0,
+          }}
+          component="ul"
+        >
+          {bill.cosponsors?.map((member) => (
+            <ListItem key={member.id}>
+              <Link href={`/congress/members/${member.id}`}>
+                <Chip
+                  onClick={() => {}}
+                  avatar={
+                    <Avatar
+                      sx={{
+                        background: getPartyColor(
+                          member.congressRoleSnapshot?.party
+                        ),
+                      }}
+                    >
+                      {member.congressRoleSnapshot?.state}
+                    </Avatar>
+                  }
+                  label={member.firstName}
+                />
+              </Link>
+            </ListItem>
+          ))}
+        </Box>
+        <USStatesMap
+          heatData={cosponsorStates}
+          onStateClick={(code) => {
+            console.log(code);
+          }}
+          // sameHeat={true}
+        />
+      </Container>
     </Layout>
   );
+};
+
+const getPartyColor = (party?: string | null) => {
+  switch (party) {
+    case "Republican":
+      return "red";
+    case "Democrat":
+      return "blue";
+    default:
+      return null;
+  }
 };
 
 export const getStaticPaths: GetStaticPaths<{ id: string }> = async () => {
@@ -61,7 +142,6 @@ export const getStaticPaths: GetStaticPaths<{ id: string }> = async () => {
 export const getStaticProps: GetStaticProps<BillPageProps> = async ({
   params,
 }) => {
-  console.log(params);
   const id = params?.id;
   if (!id) {
     return { notFound: true };
@@ -74,7 +154,6 @@ export const getStaticProps: GetStaticProps<BillPageProps> = async ({
       fetchPolicy: "network-only",
     });
     const bill = data.data.bill;
-    console.log(bill);
     return {
       props: {
         bill,

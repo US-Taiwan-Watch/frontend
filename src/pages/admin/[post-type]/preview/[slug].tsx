@@ -43,7 +43,6 @@ const PostPage: NextPageWithApollo<PostPageProps> = ({ post, statusCode }) => {
 };
 
 PostPage.getInitialProps = async ({ query, apolloClient, locale }) => {
-  console.log("!!");
   const type = getPostType(query["post-type"]);
   if (!type) {
     return { statusCode: 404 };

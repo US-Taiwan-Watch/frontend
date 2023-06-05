@@ -80,7 +80,6 @@ export const AdaptiveEditor = React.memo<AdaptiveEditorProps>(
     classNameForRootComponent,
     postLang,
   }) => {
-    console.log(postLang);
     const classes = useStyles();
     const { lang } = useI18n();
     const [value, setValue] = React.useState<Value | null>(

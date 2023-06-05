@@ -45,7 +45,7 @@ export type Bill = {
   billNumber: Scalars['Float'];
   billType: Scalars['String'];
   congress: Scalars['Float'];
-  cosponsors?: Maybe<Array<Member>>;
+  cosponsors: Array<Member>;
   cosponsorsCount?: Maybe<Scalars['Int']>;
   createdTime?: Maybe<Scalars['Int']>;
   id: Scalars['String'];
@@ -96,6 +96,7 @@ export type I18NTextInput = {
 export type Member = {
   __typename?: 'Member';
   birthday?: Maybe<Scalars['String']>;
+  congressRoleSnapshot?: Maybe<MemberRoleSnapshot>;
   congressRoles: Array<MemberRole>;
   cspanId?: Maybe<Scalars['String']>;
   facebookId?: Maybe<Scalars['String']>;
@@ -129,6 +130,16 @@ export type MemberRole = {
   parties: Array<PartyRecord>;
   senatorClass?: Maybe<Scalars['Int']>;
   startDate: Scalars['String'];
+  state: Scalars['String'];
+};
+
+export type MemberRoleSnapshot = {
+  __typename?: 'MemberRoleSnapshot';
+  chamber: Scalars['String'];
+  congressNumber: Scalars['Int'];
+  district?: Maybe<Scalars['Int']>;
+  party?: Maybe<Scalars['String']>;
+  senatorClass?: Maybe<Scalars['Int']>;
   state: Scalars['String'];
 };
 
@@ -308,6 +319,7 @@ export type QueryGetUsersArgs = {
 
 export type QueryMemberArgs = {
   bioGuideId: Scalars['String'];
+  snapshotDate?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -315,6 +327,7 @@ export type QueryMembersArgs = {
   filters?: InputMaybe<MemberFiltersInput>;
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;
+  snapshotDate?: InputMaybe<Scalars['String']>;
   sortDirections?: InputMaybe<Array<Scalars['Float']>>;
   sortFields?: InputMaybe<Array<Scalars['String']>>;
 };

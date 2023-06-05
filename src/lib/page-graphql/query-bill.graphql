@@ -33,5 +33,14 @@ query Bill($billId: String!) {
       lastName_zh
     }
     cosponsorsCount
+    cosponsors {
+      id
+      firstName
+      profilePictureUri
+      congressRoleSnapshot {
+        state
+        party
+      }
+    }
   }
 }
