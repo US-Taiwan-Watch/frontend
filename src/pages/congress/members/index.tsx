@@ -105,7 +105,7 @@ const MemberListPage: NextPage<MemberListPageProps> = (prefetched) => {
       />
       <CardList
         cards={members.map((member) => ({
-          title: `${member.firstName} ${member.lastName}`,
+          title: member.displayName?.text || "",
           displayDate: "", // change to pub date
           content: "",
           image: member.profilePictureUri || undefined,

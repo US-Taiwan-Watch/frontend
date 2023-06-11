@@ -1,11 +1,10 @@
 query Bill($billId: String!) {
   bill(id: $billId) {
+    id
     congress
     billType
     billNumber
     title {
-      zh
-      en
       text
     }
     introducedDate
@@ -26,16 +25,17 @@ query Bill($billId: String!) {
         startDate
         state
       }
-      firstName
-      firstName_zh
       id
-      lastName
-      lastName_zh
+      displayName {
+        text
+      }
     }
     cosponsorsCount
     cosponsors {
       id
-      firstName
+      displayName {
+        text
+      }
       profilePictureUri
       congressRoleSnapshot {
         state

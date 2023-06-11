@@ -127,9 +127,7 @@ export const BillCard: React.FC<BillCardProps> = (props) => {
                   <ListItemAvatar>
                     <Avatar>X</Avatar>
                   </ListItemAvatar>
-                  <ListItemText
-                    primary={sponsorNameZh + " " + sponsorNameEn}
-                  />
+                  <ListItemText primary={props.sponsor?.displayName?.text} />
                 </ListItem>
 
               </List>

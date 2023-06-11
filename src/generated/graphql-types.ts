@@ -99,6 +99,7 @@ export type Member = {
   congressRoleSnapshot?: Maybe<MemberRoleSnapshot>;
   congressRoles: Array<MemberRole>;
   cspanId?: Maybe<Scalars['String']>;
+  displayName?: Maybe<I18NText>;
   facebookId?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
   firstName_zh?: Maybe<Scalars['String']>;

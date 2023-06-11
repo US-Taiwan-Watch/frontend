@@ -33,12 +33,14 @@ const heatColor = "#044564";
 type USStatesMapProps = {
   heatData: string[] | { [state: string]: number };
   maxHeat?: number;
+  sameHeat?: boolean;
   onStateClick?: (state: string) => void;
 };
 
 export const USStatesMap: React.FC<USStatesMapProps> = ({
   heatData,
   maxHeat,
+  sameHeat,
   onStateClick,
 }) => {
   let heatMap: { [state: string]: number };
@@ -56,6 +58,8 @@ export const USStatesMap: React.FC<USStatesMapProps> = ({
     onStateClick && onStateClick(code);
   };
   const cursor = onStateClick ? "pointer" : "default";
+
+  // const getStateColor = () =>
 
   return (
     <ComposableMap projection="geoAlbersUsa">
@@ -88,7 +92,9 @@ export const USStatesMap: React.FC<USStatesMapProps> = ({
                         },
                       }}
                       fillOpacity={
-                        (heatMap[geo.code]
+                        (!!sameHeat
+                          ? "100%"
+                          : heatMap[geo.code]
                           ? (heatMap[geo.code] * 100.0) / realMaxHeat
                           : "100") + "%"
                       }

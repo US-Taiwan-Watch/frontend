@@ -4,10 +4,9 @@ query Members($offset: Float, $filters: MemberFiltersInput!, $limit: Float) {
     hasMore
     items {
       id
-      firstName
-      firstName_zh
-      lastName
-      lastName_zh
+      displayName {
+        text
+      }
       profilePictureUri
       congressRoles {
         chamber

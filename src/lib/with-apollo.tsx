@@ -11,7 +11,7 @@ import React from "react";
 import { createApolloClient, requestAccessToken } from "./apollo-client";
 import { getS2SToken } from "./ustw-api-s2s";
 import { auth0 } from "./auth0";
-import { PHASE_PRODUCTION_BUILD } from 'next/constants';
+import { useI18n } from "../context/i18n";
 
 // On the client, we store the Apollo Client in the following variable.
 // This prevents the client from reinitializing between page transitions.
@@ -78,6 +78,10 @@ export const getHeaders = async (
       };
 };
 
+export const initApolloClientWithLocale = (locale?: string) => {
+  return initApolloClient(undefined, undefined, undefined, locale);
+};
+
 /**
  * Always creates a new apollo client on the server
  * Creates or reuses apollo client in the browser.
@@ -87,8 +91,11 @@ export const getHeaders = async (
 export const initApolloClient = (
   headers?: any,
   initialState?: NormalizedCacheObject,
-  authLink?: ApolloLink
+  authLink?: ApolloLink,
+  locale?: string
 ) => {
+  headers = { ...headers, ...(locale && { "content-language": locale }) };
+
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   // but allow using the same client in build time
@@ -136,6 +143,7 @@ export const useInitApolloClient = (
   apolloClient?: ApolloClient<NormalizedCacheObject>,
   apolloState?: NormalizedCacheObject
 ) => {
+  const i18n = useI18n();
   let _client: ApolloClient<NormalizedCacheObject>;
   if (apolloClient) {
     // Happens on: getDataFromTree & next.js ssr
@@ -143,7 +151,7 @@ export const useInitApolloClient = (
   } else {
     // Happens on: next.js csr
     // client = initApolloClient(apolloState, undefined);
-    _client = initApolloClient(undefined, apolloState);
+    _client = initApolloClient(undefined, apolloState, undefined, i18n.lang);
   }
 
   const [client, setClient] = React.useState(_client);
@@ -167,12 +175,17 @@ export const useInitApolloClient = (
           );
 
           globalApolloClient = undefined;
-          const c = initApolloClient(undefined, apolloState, authLink);
+          const c = initApolloClient(
+            undefined,
+            apolloState,
+            authLink,
+            i18n.lang
+          );
           setClient(c);
         }
       })();
     }
-  }, [apolloClient, apolloState]);
+  }, [apolloClient, apolloState, i18n.lang]);
 
   return client;
 };
@@ -207,7 +220,12 @@ export const withApollo =
         // Initialize ApolloClient, add it to the ctx object so
         // we can use it in `PageComponent.getInitialProp`.
         const headers = await getHeaders(ctx, s2s);
-        const apolloClient = initApolloClient(headers);
+        const apolloClient = initApolloClient(
+          headers,
+          undefined,
+          undefined,
+          ctx.locale
+        );
         ctx.apolloClient = apolloClient;
 
         // Run wrapped getInitialProps methods

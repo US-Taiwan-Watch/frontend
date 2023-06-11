@@ -22,11 +22,9 @@ export const requestAccessToken = async () => {
   const res = await fetch(`/api/session`);
   if (res.ok) {
     const json = await res.json();
-    accessToken = json.idToken;
-  } else {
-    accessToken = "public";
+    return json.idToken;
   }
-  return accessToken;
+  return null;
 };
 
 const createHttpLink = (headers?: any) => {

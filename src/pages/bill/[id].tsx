@@ -5,25 +5,14 @@ import {
   BillDocument,
   BillQuery,
 } from "../../lib/page-graphql/query-bill.graphql.interface";
-import { createApolloClient } from "../../lib/apollo-client";
 import { getStaticPaginatedBills } from ".";
 import { Loading } from "../../components/loading";
 import { Banner } from "../../components/banner";
 import { USStatesMap } from "../../components/us-states-map";
-import {
-  Avatar,
-  Box,
-  Chip,
-  Container,
-  ListItemButton,
-  Paper,
-  styled,
-} from "@mui/material";
-import CircleIcon from "@mui/icons-material/Circle";
+import { Avatar, Box, Chip, Container, styled } from "@mui/material";
 import { Link } from "../../components/link";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { initApolloClient } from "../../lib/with-apollo";
+import { initApolloClientWithLocale } from "../../lib/with-apollo";
+import { useApolloClient } from "@apollo/client";
 
 type BillPageProps = {
   bill: BillQuery["bill"];
@@ -37,6 +26,7 @@ const BillPage: NextPage<BillPageProps> = ({ bill }) => {
   if (!bill) {
     return <Loading />;
   }
+  const client = useApolloClient();
 
   let cosponsorStates = Object.fromEntries(
     bill.cosponsors
@@ -61,7 +51,7 @@ const BillPage: NextPage<BillPageProps> = ({ bill }) => {
           billNumber={bill.billNumber}
           billType={bill.billType}
           congress={bill.congress}
-          title={bill.title?.zh || undefined}
+          title={bill.title?.text || ""}
           introducedDate={bill.introducedDate || undefined}
           sponsor={bill.sponsor || undefined}
           cosponsorCount={bill.cosponsorsCount || undefined}
@@ -97,7 +87,7 @@ const BillPage: NextPage<BillPageProps> = ({ bill }) => {
                       {member.congressRoleSnapshot?.state}
                     </Avatar>
                   }
-                  label={member.firstName}
+                  label={member.displayName?.text}
                 />
               </Link>
             </ListItem>
@@ -141,12 +131,13 @@ export const getStaticPaths: GetStaticPaths<{ id: string }> = async () => {
 
 export const getStaticProps: GetStaticProps<BillPageProps> = async ({
   params,
+  locale,
 }) => {
   const id = params?.id;
   if (!id) {
     return { notFound: true };
   }
-  const client = createApolloClient();
+  const client = initApolloClientWithLocale(locale);
   try {
     const data = await client.query({
       query: BillDocument,
