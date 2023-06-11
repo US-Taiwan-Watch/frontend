@@ -1,5 +1,5 @@
-query PublicPosts($lang: String) {
-  getAllArticles(lang: $lang) {
+query PublicPosts {
+  getAllArticles {
     id
     title {
       text

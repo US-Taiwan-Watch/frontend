@@ -117,21 +117,30 @@ export default function MyApp(props: MyAppProps) {
         {loading ? (
           <Loading />
         ) : (
-          <ApolloProvider client={client}>
-            <StylesProvider generateClassName={generateClassName}>
-              <ThemeProviderV4 theme={themeV4}>
-                <ThemeProviderV5 theme={themeV5}>
-                  <I18nProvider>
-                    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                    <CssBaseline />
-                    <Component {...pageProps} />
-                  </I18nProvider>
-                </ThemeProviderV5>
-              </ThemeProviderV4>
-            </StylesProvider>
-          </ApolloProvider>
+          <StylesProvider generateClassName={generateClassName}>
+            <ThemeProviderV4 theme={themeV4}>
+              <ThemeProviderV5 theme={themeV5}>
+                <I18nProvider>
+                  <MyAppI18nInternal {...props} />
+                </I18nProvider>
+              </ThemeProviderV5>
+            </ThemeProviderV4>
+          </StylesProvider>
         )}
       </CacheProvider>
     </ColorModeContext.Provider>
+  );
+}
+
+function MyAppI18nInternal(props: AppProps) {
+  const { Component, pageProps } = props;
+  const client = useInitApolloClient();
+
+  return (
+    <ApolloProvider client={client}>
+      {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+      <CssBaseline />
+      <Component {...pageProps} />
+    </ApolloProvider>
   );
 }

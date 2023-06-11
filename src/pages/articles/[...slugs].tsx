@@ -15,6 +15,7 @@ import { ArticleType } from "../../generated/graphql-types";
 import { getPostPublishDate, getPostUrl } from "../admin/[post-type]";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { initApolloClientWithLocale } from "../../lib/with-apollo";
 
 export type PostPageProps = {
   post?: PublicPostQuery["getPublicArticle"];
@@ -118,11 +119,11 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
   if (!slugs) {
     return { notFound: true };
   }
-  const apolloClient = createApolloClient();
+  const apolloClient = initApolloClientWithLocale(locale);
   try {
     const data = await apolloClient.query({
       query: PublicPostDocument,
-      variables: { slug: slugs[slugs.length - 1], lang: locale },
+      variables: { slug: slugs[slugs.length - 1] },
       fetchPolicy: "network-only",
     });
     const post = data.data.getPublicArticle;

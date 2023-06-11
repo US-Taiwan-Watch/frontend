@@ -3,7 +3,10 @@ import { Layout } from "../../components/layout";
 import { Banner } from "../../components/banner";
 import { CardList } from "../../components/card-list";
 import { ArticleType } from "../../generated/graphql-types";
-import { initApolloClient } from "../../lib/with-apollo";
+import {
+  initApolloClient,
+  initApolloClientWithLocale,
+} from "../../lib/with-apollo";
 import { getPostUrl } from "../admin/[post-type]";
 import { useI18n } from "../../context/i18n";
 import {
@@ -60,11 +63,10 @@ export const getPublishedPosts = async (
   type: ArticleType,
   lang?: string
 ): Promise<PublicPostsQuery["getAllArticles"]> => {
-  const apolloClient = initApolloClient();
+  const apolloClient = initApolloClientWithLocale(lang);
 
   const res = await apolloClient.query({
     query: PublicPostsDocument,
-    variables: { lang },
     fetchPolicy: "network-only",
   });
   return res.data.getAllArticles

@@ -78,6 +78,13 @@ export const getHeaders = async (
       };
 };
 
+
+/**
+ * Use this to create a client on server side with locale set
+ * 
+ * @param {?string} [locale]
+ * @returns {*}
+ */
 export const initApolloClientWithLocale = (locale?: string) => {
   return initApolloClient(undefined, undefined, undefined, locale);
 };
@@ -143,7 +150,7 @@ export const useInitApolloClient = (
   apolloClient?: ApolloClient<NormalizedCacheObject>,
   apolloState?: NormalizedCacheObject
 ) => {
-  const i18n = useI18n();
+  const { lang } = useI18n();
   let _client: ApolloClient<NormalizedCacheObject>;
   if (apolloClient) {
     // Happens on: getDataFromTree & next.js ssr
@@ -151,7 +158,7 @@ export const useInitApolloClient = (
   } else {
     // Happens on: next.js csr
     // client = initApolloClient(apolloState, undefined);
-    _client = initApolloClient(undefined, apolloState, undefined, i18n.lang);
+    _client = initApolloClient(undefined, apolloState, undefined, lang);
   }
 
   const [client, setClient] = React.useState(_client);
@@ -159,33 +166,26 @@ export const useInitApolloClient = (
     if (!apolloClient) {
       (async () => {
         const accessToken = await requestAccessToken();
-        if (accessToken) {
-          const authorization = `Bearer ${accessToken}`;
-          const authLink = new ApolloLink(
-            (operation: Operation, forward: NextLink) => {
-              const ticket = localStorage.getItem("currentTicket");
-              operation.setContext({
-                headers: {
-                  ...(authorization && { authorization }),
-                  ...(ticket && { ticket }),
-                },
-              });
-              return forward(operation);
-            }
-          );
+        const authorization = `Bearer ${accessToken}`;
+        const authLink = new ApolloLink(
+          (operation: Operation, forward: NextLink) => {
+            const ticket = localStorage.getItem("currentTicket");
+            operation.setContext({
+              headers: {
+                ...(accessToken && { authorization }),
+                ...(ticket && { ticket }),
+              },
+            });
+            return forward(operation);
+          }
+        );
 
-          globalApolloClient = undefined;
-          const c = initApolloClient(
-            undefined,
-            apolloState,
-            authLink,
-            i18n.lang
-          );
-          setClient(c);
-        }
+        globalApolloClient = undefined;
+        const c = initApolloClient(undefined, apolloState, authLink, lang);
+        setClient(c);
       })();
     }
-  }, [apolloClient, apolloState, i18n.lang]);
+  }, [apolloClient, apolloState, lang]);
 
   return client;
 };

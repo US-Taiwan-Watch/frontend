@@ -42,7 +42,7 @@ const PostPage: NextPageWithApollo<PostPageProps> = ({ post, statusCode }) => {
   );
 };
 
-PostPage.getInitialProps = async ({ query, apolloClient, locale }) => {
+PostPage.getInitialProps = async ({ query, apolloClient }) => {
   const type = getPostType(query["post-type"]);
   if (!type) {
     return { statusCode: 404 };
@@ -50,7 +50,7 @@ PostPage.getInitialProps = async ({ query, apolloClient, locale }) => {
   try {
     const data = await apolloClient?.query({
       query: PublicPostDocument,
-      variables: { slug: query.slug as string, lang: locale },
+      variables: { slug: query.slug as string },
       fetchPolicy: "network-only",
     });
     const post = data?.data.getPublicArticle;

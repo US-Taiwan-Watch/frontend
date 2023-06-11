@@ -17,6 +17,8 @@ import {
   TERRITORIES,
 } from "../../../../common/constants/member-constants";
 import { MemberFiltersInput } from "../../../generated/graphql-types";
+import { ApolloClient, useApolloClient } from "@apollo/client";
+import { initApolloClientWithLocale } from "../../../lib/with-apollo";
 
 const PAGE_SIZE = 10;
 
@@ -44,6 +46,7 @@ const MemberListPage: NextPage<MemberListPageProps> = (prefetched) => {
   );
   const [members, setMembers] = useState(prefetched.paginatedMembers.items);
   const initialRender = useRef(true);
+  const client = useApolloClient();
 
   useEffect(() => {
     // Skip the effect on the first render
@@ -51,10 +54,12 @@ const MemberListPage: NextPage<MemberListPageProps> = (prefetched) => {
       initialRender.current = false;
       return;
     }
-    getPaginatedMembers(page, pageSize, filters).then((paginatedMembers) => {
-      setMembers(paginatedMembers.items);
-      setTotalCount(paginatedMembers.total);
-    });
+    getPaginatedMembers(page, pageSize, filters, client).then(
+      (paginatedMembers) => {
+        setMembers(paginatedMembers.items);
+        setTotalCount(paginatedMembers.total);
+      }
+    );
   }, [page, filters]);
 
   return (
@@ -116,13 +121,19 @@ const MemberListPage: NextPage<MemberListPageProps> = (prefetched) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<
-  MemberListPageProps
-> = async () => {
+export const getServerSideProps: GetServerSideProps<MemberListPageProps> = async ({
+  locale,
+}) => {
   const filters = { congress: CongressUtils.getCurrentCongress() };
+  const client = initApolloClientWithLocale(locale);
   return {
     props: {
-      paginatedMembers: await getPaginatedMembers(1, PAGE_SIZE, filters),
+      paginatedMembers: await getPaginatedMembers(
+        1,
+        PAGE_SIZE,
+        filters,
+        client
+      ),
       page: 1,
       pageSize: PAGE_SIZE,
       filters,
@@ -133,9 +144,9 @@ export const getServerSideProps: GetServerSideProps<
 export const getPaginatedMembers = async (
   page: number,
   pageSize: number,
-  filters: MemberFiltersInput
+  filters: MemberFiltersInput,
+  client: ApolloClient<object>
 ): Promise<MembersQuery["members"]> => {
-  const client = createApolloClient();
   const res = await client.query({
     query: MembersDocument,
     variables: { offset: (page - 1) * pageSize, limit: pageSize, filters },

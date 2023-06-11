@@ -12,6 +12,7 @@ import {
 } from "../../lib/page-graphql/query-public-post.graphql.interface";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
 import { getPublishedPosts } from "../articles";
+import { initApolloClientWithLocale } from "../../lib/with-apollo";
 
 export type PostPageProps = {
   post?: PublicPostQuery["getPublicArticle"];
@@ -62,11 +63,11 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
   if (typeof params?.slug !== "string") {
     return { notFound: true };
   }
-  const apolloClient = createApolloClient();
+  const apolloClient = initApolloClientWithLocale(locale);
   try {
     const data = await apolloClient.query({
       query: PublicPostDocument,
-      variables: { slug: params.slug, lang: locale },
+      variables: { slug: params.slug },
       fetchPolicy: "network-only",
     });
     const post = data.data.getPublicArticle;
