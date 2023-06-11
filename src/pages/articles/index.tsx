@@ -1,4 +1,4 @@
-import type { GetStaticProps, NextPage } from "next";
+import type { GetServerSideProps, GetStaticProps, NextPage } from "next";
 import { Layout } from "../../components/layout";
 import { Banner } from "../../components/banner";
 import { CardList } from "../../components/card-list";
@@ -50,13 +50,12 @@ const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<PostsPageProps> = async ({
+export const getServerSideProps: GetServerSideProps<PostsPageProps> = async ({
   locale,
 }) => ({
   props: {
     posts: await getPublishedPosts(ArticleType.Article, locale),
   },
-  revalidate: 300, // In seconds
 });
 
 export const getPublishedPosts = async (
