@@ -16,11 +16,7 @@ export const resolveI18NText = (
 ): string | undefined => {
   if (src) {
     if (src.text && !ignoreServerLang) {
-      if (_.isString(src.text)) {
-        return src.text as unknown as string;
-      } else if (_.isFunction(src.text)) {
-        return src.text({ variableValues: { lang } });
-      }
+      return src.text;
     } else {
       let s = src.zh || src.en || "";
       switch (lang.toLowerCase().substring(0, 2)) {
