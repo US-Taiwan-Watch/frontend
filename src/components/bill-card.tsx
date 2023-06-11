@@ -67,7 +67,7 @@ export const BillCard: React.FC<BillCardProps> = (props) => {
   if (props.trackers) {
     steps = billType[0] == 's' ? stepsForSenate : stepsForHouse;
     const latestStep = props.trackers[props.trackers.length - 1].stepName;
-    for (var i = 0; i < steps.length; i += 1) {
+    for (let i = 0; i < steps.length; i += 1) {
       const step = steps[i];
       if (latestStep == step) {
         selectedStepNum = i;

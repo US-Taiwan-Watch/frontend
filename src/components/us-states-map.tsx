@@ -92,7 +92,7 @@ export const USStatesMap: React.FC<USStatesMapProps> = ({
                         },
                       }}
                       fillOpacity={
-                        (!!sameHeat
+                        (sameHeat
                           ? "100%"
                           : heatMap[geo.code]
                           ? (heatMap[geo.code] * 100.0) / realMaxHeat

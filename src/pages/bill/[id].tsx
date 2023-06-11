@@ -13,6 +13,7 @@ import { Avatar, Box, Chip, Container, styled } from "@mui/material";
 import { Link } from "../../components/link";
 import { initApolloClientWithLocale } from "../../lib/with-apollo";
 import { useApolloClient } from "@apollo/client";
+import { getStaticPathsWithLocale } from "../../utils/page-utils";
 
 type BillPageProps = {
   bill: BillQuery["bill"];
@@ -26,9 +27,8 @@ const BillPage: NextPage<BillPageProps> = ({ bill }) => {
   if (!bill) {
     return <Loading />;
   }
-  const client = useApolloClient();
 
-  let cosponsorStates = Object.fromEntries(
+  const cosponsorStates = Object.fromEntries(
     bill.cosponsors
       .reduce((map, member) => {
         const state = member.congressRoleSnapshot?.state;
@@ -75,7 +75,7 @@ const BillPage: NextPage<BillPageProps> = ({ bill }) => {
             <ListItem key={member.id}>
               <Link href={`/congress/members/${member.id}`}>
                 <Chip
-                  onClick={() => {}}
+                  // onClick={() => {}}
                   avatar={
                     <Avatar
                       sx={{
@@ -116,15 +116,20 @@ const getPartyColor = (party?: string | null) => {
   }
 };
 
-export const getStaticPaths: GetStaticPaths<{ id: string }> = async () => {
+export const getStaticPaths: GetStaticPaths<{ id: string }> = async ({
+  locales,
+}) => {
   return {
-    paths: (await getStaticPaginatedBills()).map((bill) => {
-      return {
-        params: {
-          id: bill.id as string,
-        },
-      };
-    }),
+    paths: getStaticPathsWithLocale(
+      (await getStaticPaginatedBills()).map((bill) => {
+        return {
+          params: {
+            id: bill.id as string,
+          },
+        };
+      }),
+      locales
+    ),
     fallback: true,
   };
 };
