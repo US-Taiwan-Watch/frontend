@@ -39,6 +39,7 @@
     "@react-page/renderer": "^0.30.0",
     "@types/accept-language-parser": "^1.5.3",
     "@types/react-simple-maps": "^3.0.0",
+    "@types/react-slick": "^0.23.10",
     "@types/xml2js": "^0.4.11",
     "accept-language-parser": "^1.5.0",
     "dayjs": "^1.11.5",
@@ -52,7 +53,9 @@
     "react-dom": "^17.0.2",
     "react-localization": "^1.0.17",
     "react-simple-maps": "^3.0.0",
+    "react-slick": "^0.29.0",
     "sass": "^1.45.1",
+    "slick-carousel": "^1.8.1",
     "subscriptions-transport-ws": "^0.11.0",
     "uuid": "^8.3.2",
     "xml2js": "^0.4.23"

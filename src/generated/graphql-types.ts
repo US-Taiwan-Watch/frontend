@@ -1,8 +1,14 @@
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -31,13 +37,13 @@ export type Article = {
 
 export enum ArticleType {
   Article = 'ARTICLE',
-  Poster = 'POSTER'
+  Poster = 'POSTER',
 }
 
 export enum Auth0RoleName {
   Admin = 'Admin',
   Editor = 'Editor',
-  S2S = 'S2S'
+  S2S = 'S2S',
 }
 
 export type Bill = {
@@ -159,7 +165,6 @@ export type Mutation = {
   updateUser: User;
 };
 
-
 export type MutationAddArticleArgs = {
   authors?: InputMaybe<Array<Scalars['String']>>;
   content?: InputMaybe<Scalars['String']>;
@@ -172,11 +177,9 @@ export type MutationAddArticleArgs = {
   type?: InputMaybe<ArticleType>;
 };
 
-
 export type MutationAddBillArgs = {
   bill: BillInput;
 };
-
 
 export type MutationCreateOrUpdateUserArgs = {
   email: Scalars['String'];
@@ -186,32 +189,26 @@ export type MutationCreateOrUpdateUserArgs = {
   user_id: Scalars['String'];
 };
 
-
 export type MutationDeleteArticleArgs = {
   id: Scalars['String'];
 };
-
 
 export type MutationDeleteBillArgs = {
   id: Scalars['String'];
 };
 
-
 export type MutationEmitGlobalEventArgs = {
   data: Scalars['String'];
 };
-
 
 export type MutationEmitUserEventArgs = {
   data: Scalars['String'];
   userIdx: Array<Scalars['String']>;
 };
 
-
 export type MutationSyncBillArgs = {
   billId: Scalars['String'];
 };
-
 
 export type MutationUpdateArticleWithIdArgs = {
   authors?: InputMaybe<Array<Scalars['String']>>;
@@ -227,11 +224,9 @@ export type MutationUpdateArticleWithIdArgs = {
   type?: InputMaybe<ArticleType>;
 };
 
-
 export type MutationUpdateBillArgs = {
   bill: BillInput;
 };
-
 
 export type MutationUpdateUserArgs = {
   name?: InputMaybe<Scalars['String']>;
@@ -277,11 +272,9 @@ export type Query = {
   myRoles?: Maybe<Array<Auth0RoleName>>;
 };
 
-
 export type QueryBillArgs = {
   id: Scalars['String'];
 };
-
 
 export type QueryBillsArgs = {
   limit?: InputMaybe<Scalars['Float']>;
@@ -291,32 +284,26 @@ export type QueryBillsArgs = {
   sortFields?: InputMaybe<Array<Scalars['String']>>;
 };
 
-
 export type QueryGetArticleArgs = {
   id: Scalars['String'];
 };
-
 
 export type QueryGetPublicArticleArgs = {
   slug: Scalars['String'];
 };
 
-
 export type QueryGetUserArgs = {
   user_id: Scalars['String'];
 };
-
 
 export type QueryGetUsersArgs = {
   user_id: Array<Scalars['String']>;
 };
 
-
 export type QueryMemberArgs = {
   bioGuideId: Scalars['String'];
   snapshotDate?: InputMaybe<Scalars['String']>;
 };
-
 
 export type QueryMembersArgs = {
   filters?: InputMaybe<MemberFiltersInput>;
@@ -332,7 +319,6 @@ export type Subscription = {
   onGlobalEvent: EventPayloadPublish;
   onUserEvent: EventPayloadPublish;
 };
-
 
 export type SubscriptionOnUserEventArgs = {
   userId: Scalars['String'];
