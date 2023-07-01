@@ -88,28 +88,31 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
 
 export const getStaticPaths: GetStaticPaths<{ slugs: string[] }> = async ({
   locales,
-}) => ({
-  paths: getStaticPathsWithLocale(
-    // language!
-    (await getPublishedPosts(ArticleType.Article)).map((post) => {
-      if (!post.publishedTime) {
+}) => {
+  const posts = await getPublishedPosts(ArticleType.Article);
+  return {
+    paths: getStaticPathsWithLocale(
+      // language!
+      posts.slice(0, 100).map((post) => {
+        if (!post.publishedTime) {
+          return {
+            params: {
+              slugs: [post.slug as string],
+            },
+          };
+        }
+        const date = getPostPublishDate(post.publishedTime);
         return {
           params: {
-            slugs: [post.slug as string],
+            slugs: [date?.year, date?.month, post.slug as string],
           },
         };
-      }
-      const date = getPostPublishDate(post.publishedTime);
-      return {
-        params: {
-          slugs: [date?.year, date?.month, post.slug as string],
-        },
-      };
-    }),
-    locales
-  ),
-  fallback: true,
-});
+      }),
+      locales
+    ),
+    fallback: true,
+  };
+};
 
 export const getStaticProps: GetStaticProps<PostPageProps> = async ({
   params,

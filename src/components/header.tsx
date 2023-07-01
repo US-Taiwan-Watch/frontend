@@ -45,7 +45,12 @@ export const Header: React.FC = () => {
           color="text.primary"
           sx={{ display: "flex" }}
         >
-          <Image src="/assets/logo.png" width={30} height={30} />
+          <Image
+            src="/assets/logo.png"
+            width={30}
+            height={30}
+            alt="US Taiwan Watch"
+          />
           {/* <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' }, a: { textDecoration: 'none' } }} /> */}
           <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
             {i18n.strings.brand.fullName}

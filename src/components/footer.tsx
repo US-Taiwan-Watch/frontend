@@ -14,26 +14,39 @@ export const Footer: React.FC = () => (
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        backgroundColor: "rgba(0, 0, 0, 0.6)",
         borderRadius: 0,
       }}
     >
-      <Container maxWidth="sm" sx={{
-        marginBottom: 1,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: "center"
-      }}>
+      <Container
+        maxWidth="sm"
+        sx={{
+          marginBottom: 1,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+        }}
+      >
         <Box sx={{ marginRight: 2 }}>
-          <Image src="/assets/logo-long-white.png" width={200} height={34} />
+          <Image
+            src="/assets/logo-long-white.png"
+            width={200}
+            height={34}
+            alt="US Taiwan Watch"
+          />
         </Box>
-        {socialMedias.map(media => (
-          <IconButton target="_blank" aria-label={media.name} href={media.link} key={media.name}>
+        {socialMedias.map((media) => (
+          <IconButton
+            target="_blank"
+            aria-label={media.name}
+            href={media.link}
+            key={media.name}
+          >
             <SocialMediaIcon type={media.type} bw={true} />
           </IconButton>
         ))}
-        <IconButton aria-label='email' href={`mailto:${Constants.links.email}`}>
+        <IconButton aria-label="email" href={`mailto:${Constants.links.email}`}>
           <EmailRoundedIcon />
         </IconButton>
       </Container>

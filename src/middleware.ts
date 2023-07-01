@@ -13,7 +13,7 @@ export function middleware(request: NextRequest) {
   if (shouldHandleLocale) {
     let langs = [];
     if (request.cookies.has('preferred-language')) {
-      langs.push(request.cookies.get('preferred-language') as string);
+      langs.push(request.cookies.get("preferred-language")!.value);
     }
     const acceptLang = request.headers.get("accept-language");
     if (acceptLang) {

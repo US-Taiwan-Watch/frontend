@@ -33,7 +33,12 @@ export const AdminHeader: React.FC<{ title: string }> = ({ title }) => {
           display: "flex",
         }}
       >
-        <Image src="/assets/logo.png" width={30} height={30} />
+        <Image
+          src="/assets/logo.png"
+          width={30}
+          height={30}
+          alt="US Taiwan Watch"
+        />
         <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
           [{title}] {i18n.strings.brand.fullName}
         </Typography>

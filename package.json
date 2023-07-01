@@ -46,11 +46,12 @@
     "graphql": "^16.2.0",
     "graphql-ws": "^5.6.3",
     "lodash": "^4.17.21",
-    "next": "^12.3.0",
+    "next": "13.3.2",
     "next-sitemap": "^3.1.21",
-    "react": "latest",
+    "next-transpile-modules": "^10.0.0",
+    "react": "^18.2.0",
     "react-device-detect": "^2.1.2",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.2.0",
     "react-localization": "^1.0.17",
     "react-simple-maps": "^3.0.0",
     "react-slick": "^0.29.0",
@@ -75,7 +76,7 @@
     "@typescript-eslint/parser": "^5.8.1",
     "concurrently": "^6.5.1",
     "eslint": "latest",
-    "eslint-config-next": "latest",
+    "eslint-config-next": "^12.0.7",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-unicorn": "^39.0.0",
     "graphql-config": "^4.1.0",
@@ -83,5 +84,11 @@
     "rimraf": "^3.0.2",
     "type-graphql": "^1.1.1",
     "typescript": "latest"
-  }
+  },
+  "resolutions": {
+    "react-dnd": "^16.0.1",
+    "@react-page/editor@^4.1.1": "patch:@react-page/editor@npm%3A4.11.2#./.yarn/patches/@react-page-editor-npm-4.11.2-792c573d47.patch",
+    "@react-page/editor@^4.11.2": "patch:@react-page/editor@npm%3A4.11.2#./.yarn/patches/@react-page-editor-npm-4.11.2-792c573d47.patch"
+  },
+  "packageManager": "yarn@3.6.1"
 }

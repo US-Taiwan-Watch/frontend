@@ -1,13 +1,10 @@
 import React from "react";
 import { Box } from "@mui/material";
-import { USTWTheme, styled } from "../../styles";
+import { USTWTheme } from "../../styles";
 import { cellPlugins as defaultCellPlugins } from "./plugins/cell-plugins";
 import type { Value } from "@react-page/editor";
-import Editor, {
-  CellPlugin,
-  BottomToolbarProps,
-  BottomToolbar,
-} from "@react-page/editor";
+import Editor, { CellPlugin } from "@react-page/editor";
+// import Editor, { CellPlugin } from "@react-page/editor/lib-es";
 
 import background, { ModeEnum } from "@react-page/plugins-background";
 import { imagePlugin, ImageUploadType } from "@react-page/plugins-image";
@@ -15,9 +12,7 @@ import { imagePlugin, ImageUploadType } from "@react-page/plugins-image";
 import { useI18n } from "../../context/i18n";
 import { EditorLanguage, ZhLanguage, EnLanguage } from "./i18n";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { v4 as uuidv4 } from "uuid";
 import clsx from "clsx";
-import { useApolloClient } from "@apollo/client";
 import { makeStyles, createStyles } from "@mui/styles";
 import { uploadPostImage } from "../../utils/image-upload-utils";
 
