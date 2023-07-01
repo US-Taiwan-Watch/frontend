@@ -19,14 +19,142 @@ import { FeaturedNewsLetters, getNewsLetters, NewsLetter } from "./newsletters";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import { Section } from "../components/section";
 import { getPodcastEpisodes, PodcastEpisode } from "./api/podcast-episodes";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 interface HomeProps {
   newsLetters: NewsLetter[];
   podcasts: PodcastEpisode[];
+  draftMode: boolean;
 }
 
-const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
+const Home: NextPage<HomeProps> = ({ newsLetters, podcasts, draftMode }) => {
   const { i18n } = useI18n();
+  if (draftMode) {
+    const settings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+    };
+    const podcastCarouselSetting = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 2,
+      slidesToScroll: 2,
+    };
+    const banners = [
+      { url: "/assets/ustw_book.png" },
+      { url: "/assets/test_banner.png" },
+    ];
+    return (
+      <Layout draftMode={draftMode}>
+        <Slider {...settings}>
+          {banners?.map((banner, i) => (
+            <Box key={i}>
+              <img
+                src={banner?.url}
+                style={{
+                  objectFit: "contain",
+                  width: "100%",
+                  margin: "0 auto",
+                }}
+              />
+            </Box>
+          ))}
+        </Slider>
+        {/* <Banner
+          title={i18n.strings.brand.fullName}
+          subtitle={i18n.strings.header.subtitle}
+          actions={[{ text: i18n.strings.header.donate, url: '#donate' }]}
+        /> */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            // justifyContent: 'center',
+            // gridTemplateRows: '1fr 2fr',
+            // textAlign: 'center',
+            // alignItems: 'center',
+            // width: '100%',
+            // height: '380px ',
+            background: `url(/assets/home_pc_1.svg) no-repeat center / contain`,
+          }}
+        >
+          <Box
+            sx={{
+              width: "75%",
+              marginTop: "32px",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              height: "380px ",
+            }}
+          >
+            <Typography
+              variant="subtitle1"
+              style={{ fontFamily: "Inter, sans-serif" }}
+            >
+              USTW is...
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              style={{ fontFamily: "Inter, sans-serif" }}
+            >
+              US Taiwan Watch is a 501c(3) non-profit organization that aims to
+              strengthen U.S.-Taiwan relations through civil society and civil
+              engagement. US Taiwan Watch was founded in June 2017 by a group of
+              U.S.-based Taiwanese engineers. The founders’ initial objective
+              was to synthesize data on Taiwan-related bills in Congress on a
+              website to facilitate greater Taiwanese understanding of U.S.
+              policy. We later expanded to a series of other initiatives. This
+              included providing more comprehensive analysis on U.S. foreign
+              policy and U.S.-Taiwan relations and recording weekly podcast
+              episodes to discuss U.S.-Taiwan relations.
+            </Typography>
+          </Box>
+          {/* <img src={`/assets/home_pc_1.svg`} alt={`icon`} width="100%" /> */}
+        </Box>
+        <Typography>Podcasts</Typography>
+        <Box
+          sx={{
+            width: "75%",
+            margin: "24px auto",
+          }}
+        >
+          <Slider {...podcastCarouselSetting}>
+            {podcasts.map((podcast, i) => (
+              <Box
+                key={i}
+                sx={{
+                  padding: "0 8px",
+                }}
+              >
+                <iframe
+                  src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${podcast.id}`}
+                  style={{
+                    marginBottom: 20,
+                    height: "140px",
+                    width: "100%",
+                    border: "none",
+                    borderRadius: "4px",
+                    boxShadow: "0 1px 8px rgba(0, 0, 0, .2)",
+                  }}
+                />
+              </Box>
+            ))}
+          </Slider>
+        </Box>
+        <Typography>Latest Posts</Typography>
+        <style jsx global>{`
+          @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+        `}</style>
+      </Layout>
+    );
+  }
   return (
     <Layout>
       <Banner
@@ -201,13 +329,16 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcasts }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+export const getStaticProps: GetStaticProps<HomeProps> = async ({
+  draftMode,
+}) => {
   const letters = await getNewsLetters();
   const podcasts = await getPodcastEpisodes();
   return {
     props: {
       newsLetters: letters.slice(0, 4),
       podcasts: [podcasts[0], podcasts[1]],
+      draftMode: !!draftMode,
     },
     revalidate: 300, // In seconds
   };

@@ -21,7 +21,9 @@ const NavLink: React.FC<LinkProps> = (props) => (
   </Link>
 );
 
-export const Header: React.FC = () => {
+export const Header: React.FC<{
+  draftMode: boolean;
+}> = ({ draftMode }) => {
   const { i18n } = useI18n();
   const { user } = useFetchUser();
   const { pathname } = useRouter();
@@ -53,6 +55,7 @@ export const Header: React.FC = () => {
           />
           {/* <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' }, a: { textDecoration: 'none' } }} /> */}
           <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
+            {draftMode && "[DRAFT MODE] "}
             {i18n.strings.brand.fullName}
           </Typography>
         </Link>
