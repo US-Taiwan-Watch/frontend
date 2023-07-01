@@ -1,0 +1,91 @@
+diff --git a/lib/core/Provider/DndProvider.js b/lib/core/Provider/DndProvider.js
+index e6be911b0e31287e308d31ca9f14905362122992..6426a12e003981966dc415bbfc5db14adb92e32f 100644
+--- a/lib/core/Provider/DndProvider.js
++++ b/lib/core/Provider/DndProvider.js
+@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ var react_1 = __importDefault(require("react"));
+-var react_dnd_1 = require("react-dnd");
++var react_dnd_1 = import("react-dnd");
+ var hooks_1 = require("../components/hooks");
+ // eslint-disable-next-line @typescript-eslint/no-explicit-any
+ var DndProvider = function (_a) {
+diff --git a/lib/core/components/Cell/Draggable/useDragHandle.js b/lib/core/components/Cell/Draggable/useDragHandle.js
+index 5cddb4594e358d7f16364d94bf4f7ca044737583..6be056109c6e85fcc479f1206bdcbb3ac9441b91 100644
+--- a/lib/core/components/Cell/Draggable/useDragHandle.js
++++ b/lib/core/components/Cell/Draggable/useDragHandle.js
+@@ -20,7 +20,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.useDragHandle = exports.dragIcon = void 0;
+-var react_dnd_1 = require("react-dnd");
++var react_dnd_1 = import("react-dnd");
+ var hooks_1 = require("../../hooks");
+ var react_1 = __importDefault(require("react"));
+ exports.dragIcon = 
+diff --git a/lib/core/components/Cell/Droppable/index.js b/lib/core/components/Cell/Droppable/index.js
+index 155e3c19d29fc6cb6801e0edda1dbe05036cecc9..4dcfe01b5aaf31f52221d0946486abc015e3abaf 100644
+--- a/lib/core/components/Cell/Droppable/index.js
++++ b/lib/core/components/Cell/Droppable/index.js
+@@ -45,7 +45,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.useCellDrop = void 0;
+ var classnames_1 = __importDefault(require("classnames"));
+ var react_1 = __importStar(require("react"));
+-var react_dnd_1 = require("react-dnd");
++var react_dnd_1 = import("react-dnd");
+ var reduxConnect_1 = require("../../../reduxConnect");
+ var hooks_1 = require("../../hooks");
+ var dnd_1 = require("./helper/dnd");
+diff --git a/lib/core/components/Cell/InsertNew.js b/lib/core/components/Cell/InsertNew.js
+index 4924cba37943d6d9ee10a0d5ab3150f02524261b..dc7836cadc01707a21e2b22a34e20fdd4a94e919 100644
+--- a/lib/core/components/Cell/InsertNew.js
++++ b/lib/core/components/Cell/InsertNew.js
+@@ -20,7 +20,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ var react_1 = __importDefault(require("react"));
+-var react_dnd_1 = require("react-dnd");
++var react_dnd_1 = import("react-dnd");
+ var hooks_1 = require("../hooks");
+ var InsertNew = function (_a) {
+     var parentCellId = _a.parentCellId;
+diff --git a/lib/core/components/Editable/FallbackDropArea.js b/lib/core/components/Editable/FallbackDropArea.js
+index 241e804df191abb634419d05391aff854814c6e3..810293eb20c957fb570468310fbbd0ada30f3280 100644
+--- a/lib/core/components/Editable/FallbackDropArea.js
++++ b/lib/core/components/Editable/FallbackDropArea.js
+@@ -21,7 +21,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+ Object.defineProperty(exports, "__esModule", { value: true });
+ var react_1 = __importDefault(require("react"));
+ var react_2 = require("react");
+-var react_dnd_1 = require("react-dnd");
++var react_dnd_1 = import("react-dnd");
+ var hooks_1 = require("../hooks");
+ var FallbackDropArea = function (_a) {
+     var children = _a.children;
+diff --git a/lib/core/components/hooks/nodeActions.js b/lib/core/components/hooks/nodeActions.js
+index 55890ea59c24211e3fe73b6d019c51efcfd98e46..8638ac6a8b30cf727cf1e5364a2b8d4fc7401b48 100644
+--- a/lib/core/components/hooks/nodeActions.js
++++ b/lib/core/components/hooks/nodeActions.js
+@@ -13,7 +13,7 @@ var __assign = (this && this.__assign) || function () {
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.useTrashDrop = exports.useInsertNew = exports.useBlurAllCells = exports.useBlurCell = exports.useFocusCell = exports.useFocusCellById = exports.useSetDisplayReferenceNodeId = exports.useDuplicateCell = exports.useDuplicateMultipleCells = exports.useInsertAfter = exports.useDuplicateCellById = exports.useRemoveMultipleNodeIds = exports.useRemoveCell = exports.useRemoveCellById = exports.useUpdateCellData = exports.useSetLang = exports.useResizeCell = exports.useResizeCellById = exports.useSetDraft = void 0;
+ var react_1 = require("react");
+-var react_dnd_1 = require("react-dnd");
++var react_dnd_1 = import("react-dnd");
+ var ancestorTree_1 = require("../../utils/ancestorTree");
+ var cell_1 = require("../../actions/cell");
+ var core_1 = require("../../actions/cell/core");
+diff --git a/lib/ui/PluginDrawer/Draggable/index.js b/lib/ui/PluginDrawer/Draggable/index.js
+index 5625ec0f2f97ec2099c4affe2ed02e75f8a551b6..c22717d4f959fe99033d99b7aae29e5f0b29797a 100644
+--- a/lib/ui/PluginDrawer/Draggable/index.js
++++ b/lib/ui/PluginDrawer/Draggable/index.js
+@@ -21,7 +21,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+ Object.defineProperty(exports, "__esModule", { value: true });
+ var classnames_1 = __importDefault(require("classnames"));
+ var react_1 = __importDefault(require("react"));
+-var react_dnd_1 = require("react-dnd");
++var react_dnd_1 = import("react-dnd");
+ var useDragHandle_1 = require("../../../core/components/Cell/Draggable/useDragHandle");
+ var displayMode_1 = require("../../../core/components/hooks/displayMode");
+ var Draggable = function (_a) {
