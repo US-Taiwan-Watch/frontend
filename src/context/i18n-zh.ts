@@ -14,6 +14,7 @@ export default {
     donate: "支持我們",
     subscribe: "訂閱電子報",
     podcast: "Podcast",
+    articles: "文章",
   },
   landing: {
     testI18n: "I18n - 中文內容",

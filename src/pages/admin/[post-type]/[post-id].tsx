@@ -38,7 +38,7 @@ import {
 } from "../../../lib/page-graphql/query-post.graphql.interface";
 import { UpdateArticleWithIdDocument } from "../../../lib/page-graphql/mutation-update-post.graphql.interface";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { CardItem } from "../../../components/card-list";
+import { CardListItem } from "../../../components/card-list";
 import { uploadPostImage } from "../../../utils/image-upload-utils";
 import { revalidatePage } from "../../../utils/revalidte-page";
 import { ArticleType, User } from "../../../generated/graphql-types";
@@ -352,7 +352,7 @@ const PostEditor: React.FC<{
             Preview
           </Typography>
           {langSeletor}
-          <CardItem
+          <CardListItem
             url={`${process.env.NEXT_PUBLIC_BASE_URL}/${lang}${postUrl}`}
             title={title || ""}
             content={preview || ""}

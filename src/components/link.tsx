@@ -108,7 +108,10 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         className={className}
         ref={ref}
         to={href}
-        {...other}
+        {...{
+          ...other,
+          sx: { textDecoration: "none", textTransform: "none", ...other.sx },
+        }}
       />
     );
   }

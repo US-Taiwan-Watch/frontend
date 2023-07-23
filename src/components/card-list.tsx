@@ -10,22 +10,26 @@ export type CardProps = {
   image?: string,
 }
 
-export const CardItem: React.FC<CardProps> = (props) => {
+export const CardListItem: React.FC<CardProps> = (props) => {
   const { i18n } = useI18n();
   return (
     <Grid item xs={12} md={12} sx={{ my: 3 }}>
-      <Link href={props.url} sx={{ textDecoration: 'none' }}>
+      <Link href={props.url} sx={{ textDecoration: "none" }}>
         <CardActionArea>
-          <Card sx={{
-            display: 'flex',
-            alignItems: 'center',
-          }}>
-            {props.image && <CardMedia
-              component="img"
-              sx={{ width: 180, display: { xs: 'none', sm: 'block' } }}
-              image={props.image}
-              alt={props.title}
-            />}
+          <Card
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {props.image && (
+              <CardMedia
+                component="img"
+                sx={{ width: 180, display: { xs: "none", sm: "block" } }}
+                image={props.image}
+                alt={props.title}
+              />
+            )}
             <CardContent sx={{ flex: 1 }}>
               <Typography component="h2" variant="h5">
                 {props.title}
@@ -44,26 +48,82 @@ export const CardItem: React.FC<CardProps> = (props) => {
         </CardActionArea>
       </Link>
     </Grid>
-  )
-}
+  );
+};
 
-function getGridSize(count: number, size: 'sm' | 'md') {
-  if (size === 'md') {
-    if (count <= 1) { return 12; }
-    if (count <= 2) { return 6; }
-    if (count <= 3) { return 4; }
+export const SmallCardItem: React.FC<CardProps> = (props) => (
+  <Grid item xs={12} md={12} sx={{ my: 3 }}>
+    <Link href={props.url} sx={{ textDecoration: "none" }}>
+      <Card sx={{ width: 300, boxShadow: "none" }}>
+        <CardActionArea>
+          <div
+            style={{
+              height: 200,
+              backgroundPosition: "center",
+              width: "100%",
+              overflow: "hidden",
+              borderRadius: 3,
+            }}
+          >
+            {props.image && (
+              <CardMedia
+                component="img"
+                image={props.image}
+                alt={props.title}
+              />
+            )}
+          </div>
+          <CardContent>
+            <Typography
+              sx={{ display: "flex", direction: "rtl" }}
+              variant="subtitle1"
+              color="text.secondary"
+            >
+              {props.displayDate}
+            </Typography>
+            <hr />
+            <Typography component="h2" variant="h5">
+              {props.title}
+            </Typography>
+            <Typography variant="subtitle1" paragraph>
+              {props.content}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </Link>
+  </Grid>
+);
+
+function getGridSize(count: number, size: "sm" | "md") {
+  if (size === "md") {
+    if (count <= 1) {
+      return 12;
+    }
+    if (count <= 2) {
+      return 6;
+    }
+    if (count <= 3) {
+      return 4;
+    }
     return 3;
   }
-  if (count <= 1) { return 12; }
-  if (count <= 2) { return 12; }
-  if (count <= 3) { return 12; }
+  if (count <= 1) {
+    return 12;
+  }
+  if (count <= 2) {
+    return 12;
+  }
+  if (count <= 3) {
+    return 12;
+  }
   return 6;
 }
 
-export const FeaturedCards: React.FC<{ cards: CardProps[]; noBreak?: boolean }> = ({
-  cards,
-  noBreak,
-}) => (
+export const FeaturedCards: React.FC<{
+  cards: CardProps[];
+  noBreak?: boolean;
+}> = ({ cards, noBreak }) => (
   <Grid container spacing={4}>
     {cards.map((card, i) => (
       <Grid
@@ -112,6 +172,8 @@ export const FeaturedCards: React.FC<{ cards: CardProps[]; noBreak?: boolean }> 
 
 export const CardList: React.FC<{ cards: CardProps[] }> = ({ cards }) => (
   <Container>
-    {cards.map(card => (<CardItem key={card.url} {...card} />))}
+    {cards.map((card) => (
+      <CardListItem key={card.url} {...card} />
+    ))}
   </Container>
 );

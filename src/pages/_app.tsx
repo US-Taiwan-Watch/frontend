@@ -10,11 +10,11 @@ import "../styles/global.scss";
 import { I18nProvider } from "../context/i18n";
 import { useInitApolloClient } from "../lib/with-apollo";
 import { ApolloProvider } from "@apollo/client";
-import { useMediaQuery } from "@mui/material";
+import { GlobalStyles, useMediaQuery } from "@mui/material";
 import { LicenseInfo } from "@mui/x-license-pro";
 import { useRouter } from "next/router";
 import { createGenerateClassName } from "@material-ui/core/styles";
-import { createMuiTheme as createThemeV4 } from "@material-ui/core/styles";
+import { createTheme as createThemeV4 } from "@material-ui/core/styles";
 import { createTheme as createThemeV5 } from "@mui/material/styles";
 import { ThemeProvider as ThemeProviderV5 } from "@mui/material/styles";
 import {
@@ -26,9 +26,17 @@ import { Loading } from "../components/loading";
 // Fix the glitches on react-page according to: https://react-page.github.io/beta/docs/#/quick-start?id=using-material-ui-4-in-parallel
 const themeV4Light = createThemeV4({
   palette: lightPalette,
+  overrides: {
+    MuiButton: {
+      root: {
+        textTransform: "none",
+      },
+    },
+  },
 });
 
 const themeV4Dark = createThemeV4({
+  ...themeV4Light,
   palette: darkPalette,
 });
 
@@ -128,6 +136,11 @@ export default function MyApp(props: MyAppProps) {
           </StylesProvider>
         )}
       </CacheProvider>
+      <GlobalStyles
+        styles={{
+          ul: { margin: 0, padding: 0, listStyle: "none" },
+        }}
+      />
     </ColorModeContext.Provider>
   );
 }

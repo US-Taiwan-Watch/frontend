@@ -12,7 +12,6 @@ import { UserMenu } from "./user-menu";
 const NavLink: React.FC<LinkProps> = (props) => (
   <Link
     {...props}
-    style={{ textDecoration: "none" }}
     variant="button"
     color="text.primary"
     sx={{ my: 1, mx: 1.5 }}
@@ -30,6 +29,81 @@ export const Header: React.FC<{
   const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
   const isHome = pathname === "/";
+
+  if (draftMode) {
+    return (
+      <Toolbar
+        sx={{
+          flexWrap: "wrap",
+          alignItems: "center",
+          px: 2,
+          boxShadow:
+            "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          sx={{
+            my: 1,
+            flexGrow: 1,
+            display: "flex",
+          }}
+        >
+          <Link
+            href="/"
+            style={{ textDecoration: "none" }}
+            scroll={false}
+            color="text.primary"
+            sx={{ display: "flex" }}
+          >
+            <Image
+              src="/assets/logo.png"
+              width={30}
+              height={30}
+              alt="US Taiwan Watch"
+            />
+            <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
+              {draftMode && "[DRAFT MODE] "}
+              {i18n.strings.brand.fullName}
+            </Typography>
+          </Link>
+        </Box>
+        <Box
+          sx={{
+            position: "absolute",
+            display: "flex",
+            flexWrap: "wrap",
+          }}
+        >
+          <NavLink href="/#about">{i18n.strings.header.about}</NavLink>
+          <NavLink href="/podcast">{i18n.strings.header.podcast}</NavLink>
+          <NavLink href="/posts">{i18n.strings.header.articles}</NavLink>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+          }}
+        >
+          <Box sx={{ marginTop: 1 }}>
+            <LocaleSwitcher />
+          </Box>
+          <NavLink href="/#donate">
+            <Button variant="contained">{i18n.strings.header.donate}</Button>
+          </NavLink>
+          {user && (
+            <>
+              <UserMenu />
+            </>
+          )}
+          {/* Enable dark mode switch later after addressing all possible issues */}
+          {/* <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+              </IconButton> */}
+        </Box>
+      </Toolbar>
+    );
+  }
 
   return (
     <Toolbar sx={{ flexWrap: "wrap", alignItems: "center" }}>
@@ -100,8 +174,8 @@ export const Header: React.FC<{
         </Box>
         {/* Enable dark mode switch later after addressing all possible issues */}
         {/* <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-          {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-        </IconButton> */}
+                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+              </IconButton> */}
       </Box>
     </Toolbar>
   );
