@@ -1,17 +1,32 @@
-query PublicPosts {
-  getAllArticles {
-    id
-    title {
-      text
+query PublicPosts(
+  $offset: Float
+  $limit: Float
+  $sortFields: [String!]
+  $sortDirections: [Float!]
+  $type: ArticleType!
+) {
+  getPostsWithType(
+    offset: $offset
+    limit: $limit
+    sortFields: $sortFields
+    sortDirections: $sortDirections
+    type: $type
+  ) {
+    total
+    hasMore
+    items {
+      id
+      title {
+        text
+      }
+      content
+      slug
+      preview {
+        text
+      }
+      publishedTime
+      imageSource
+      type
     }
-    content
-    slug
-    preview {
-      text
-    }
-    isPublished
-    publishedTime
-    imageSource
-    type
   }
 }

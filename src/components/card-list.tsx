@@ -52,47 +52,46 @@ export const CardListItem: React.FC<CardProps> = (props) => {
 };
 
 export const SmallCardItem: React.FC<CardProps> = (props) => (
-  <Grid item xs={12} md={12} sx={{ my: 3 }}>
-    <Link href={props.url} sx={{ textDecoration: "none" }}>
-      <Card sx={{ width: 300, boxShadow: "none" }}>
-        <CardActionArea>
-          <div
-            style={{
-              height: 200,
-              backgroundPosition: "center",
-              width: "100%",
-              overflow: "hidden",
-              borderRadius: 3,
-            }}
+  <Link href={props.url} sx={{ textDecoration: "none" }}>
+    <Card sx={{ width: "100%", boxShadow: "none" }}>
+      <CardActionArea>
+        <div
+          style={{
+            position: "relative",
+            paddingTop: "70%",
+            backgroundPosition: "center",
+            overflow: "hidden",
+            borderRadius: 3,
+          }}
+        >
+          {props.image && (
+            <CardMedia
+              component="img"
+              image={props.image}
+              alt={props.title}
+              sx={{ position: "absolute", left: 0, top: 0 }}
+            />
+          )}
+        </div>
+        <CardContent>
+          <Typography
+            sx={{ display: "flex", direction: "rtl" }}
+            variant="subtitle1"
+            color="text.secondary"
           >
-            {props.image && (
-              <CardMedia
-                component="img"
-                image={props.image}
-                alt={props.title}
-              />
-            )}
-          </div>
-          <CardContent>
-            <Typography
-              sx={{ display: "flex", direction: "rtl" }}
-              variant="subtitle1"
-              color="text.secondary"
-            >
-              {props.displayDate}
-            </Typography>
-            <hr />
-            <Typography component="h2" variant="h5">
-              {props.title}
-            </Typography>
-            <Typography variant="subtitle1" paragraph>
-              {props.content}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    </Link>
-  </Grid>
+            {props.displayDate}
+          </Typography>
+          <hr />
+          <Typography component="h2" variant="h5">
+            {props.title}
+          </Typography>
+          <Typography variant="subtitle1" paragraph>
+            {props.content}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
+  </Link>
 );
 
 function getGridSize(count: number, size: "sm" | "md") {

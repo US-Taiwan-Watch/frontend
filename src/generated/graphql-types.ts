@@ -55,6 +55,7 @@ export type Bill = {
   summary?: Maybe<I18NText>;
   title?: Maybe<I18NText>;
   trackers?: Maybe<Array<BillTracker>>;
+  versions: Array<TextVersionWithFiles>;
 };
 
 export type BillInput = {
@@ -239,6 +240,13 @@ export type MutationUpdateUserArgs = {
   picture?: InputMaybe<Scalars['String']>;
 };
 
+export type PaginatedArticles = {
+  __typename?: 'PaginatedArticles';
+  hasMore: Scalars['Boolean'];
+  items: Array<Article>;
+  total: Scalars['Int'];
+};
+
 export type PaginatedBills = {
   __typename?: 'PaginatedBills';
   hasMore: Scalars['Boolean'];
@@ -267,6 +275,7 @@ export type Query = {
   editors: Array<User>;
   getAllArticles: Array<Article>;
   getArticle?: Maybe<Article>;
+  getPostsWithType: PaginatedArticles;
   getPublicArticle?: Maybe<Article>;
   getUser: User;
   getUsers: Array<User>;
@@ -294,6 +303,15 @@ export type QueryBillsArgs = {
 
 export type QueryGetArticleArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryGetPostsWithTypeArgs = {
+  limit?: InputMaybe<Scalars['Float']>;
+  offset?: InputMaybe<Scalars['Float']>;
+  sortDirections?: InputMaybe<Array<Scalars['Float']>>;
+  sortFields?: InputMaybe<Array<Scalars['String']>>;
+  type: ArticleType;
 };
 
 
@@ -336,6 +354,21 @@ export type Subscription = {
 
 export type SubscriptionOnUserEventArgs = {
   userId: Scalars['String'];
+};
+
+export type TextVersionFiles = {
+  __typename?: 'TextVersionFiles';
+  pdf?: Maybe<Scalars['String']>;
+  txt?: Maybe<Scalars['String']>;
+  xml?: Maybe<Scalars['String']>;
+};
+
+export type TextVersionWithFiles = {
+  __typename?: 'TextVersionWithFiles';
+  code: Scalars['String'];
+  date: Scalars['String'];
+  files?: Maybe<TextVersionFiles>;
+  name: Scalars['String'];
 };
 
 export type User = {

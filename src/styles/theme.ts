@@ -24,7 +24,7 @@ const color = {
     400: "#D4A002",
   },
   purple: {
-    100: "#D2D7F8",
+    100: "#D6D8EB",
     200: "#949FF2",
     300: "#6770E6",
     400: "#4D54AD",
@@ -142,9 +142,9 @@ export const lightPalette: PaletteOptions = {
     dark: color.yellow[300],
   },
   primary: {
-    light: color.purple[200],
-    main: color.purple[300],
-    dark: color.purple[400],
+    light: color.purple[100],
+    main: color.purple[400],
+    dark: color.purple[500],
   },
   info: {
     light: color.blueGrey[100],

@@ -11,7 +11,7 @@ import {
   PublicPostQuery,
 } from "../../lib/page-graphql/query-public-post.graphql.interface";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
-import { getPublishedPosts } from "../articles";
+import { getPaginatedPublishedPosts } from "../articles";
 import { initApolloClientWithLocale } from "../../lib/with-apollo";
 
 export type PostPageProps = {
@@ -48,7 +48,7 @@ export const getStaticPaths: GetStaticPaths<{ slug: string }> = async ({
   locales,
 }) => ({
   paths: getStaticPathsWithLocale(
-    (await getPublishedPosts(ArticleType.Poster)).map((post) => ({
+    (await getPaginatedPublishedPosts(ArticleType.Poster)).map((post) => ({
       params: { slug: post.slug as string },
     })),
     locales
