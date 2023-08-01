@@ -5,7 +5,6 @@ import { Layout } from "../../components/layout";
 import { Loading } from "../../components/loading";
 import { PostContent } from "../../components/post-content";
 import { ArticleType } from "../../generated/graphql-types";
-import { createApolloClient } from "../../lib/apollo-client";
 import {
   PublicPostDocument,
   PublicPostQuery,
@@ -46,15 +45,25 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
 
 export const getStaticPaths: GetStaticPaths<{ slug: string }> = async ({
   locales,
-}) => ({
-  paths: getStaticPathsWithLocale(
-    (await getPaginatedPublishedPosts(ArticleType.Poster)).map((post) => ({
-      params: { slug: post.slug as string },
-    })),
-    locales
-  ),
-  fallback: true,
-});
+}) => {
+  const apolloClient = initApolloClientWithLocale();
+  return {
+    paths: getStaticPathsWithLocale(
+      (
+        await getPaginatedPublishedPosts(
+          ArticleType.Poster,
+          1,
+          20,
+          apolloClient
+        )
+      ).items.map((post) => ({
+        params: { slug: post.slug as string },
+      })),
+      locales
+    ),
+    fallback: true,
+  };
+};
 
 export const getStaticProps: GetStaticProps<PostPageProps> = async ({
   params,

@@ -7,15 +7,16 @@ import { useI18n } from "../../context/i18n";
 import { ArticleType } from "../../generated/graphql-types";
 import { PublicPostsQuery } from "../../lib/page-graphql/query-public-posts.graphql.interface";
 import { getPostUrl } from "../admin/[post-type]";
-import { getPublishedPosts } from "../articles";
+import { getPaginatedPublishedPosts } from "../articles";
+import { initApolloClientWithLocale } from "../../lib/with-apollo";
 
 export type PostsPageProps = {
-  posts: PublicPostsQuery["getAllArticles"];
+  paginatedPosts: PublicPostsQuery["getPostsWithType"];
 };
 
-const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
+const PostsPage: NextPage<PostsPageProps> = ({ paginatedPosts }) => {
   const { i18n } = useI18n();
-  const cards = posts
+  const cards = paginatedPosts.items
     .map((p) => ({
       title: p.title?.text || "",
       displayDate: new Date(p.publishedTime || 0).toLocaleDateString(), // change to pub date
@@ -49,13 +50,19 @@ const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<PostsPageProps> = async ({
-  locale,
-}) => ({
-  props: {
-    posts: await getPublishedPosts(ArticleType.Poster, locale),
-  },
-  revalidate: 300, // In seconds
-});
+export const getStaticProps: GetStaticProps<PostsPageProps> = async ({ locale }) => {
+  const apolloClient = initApolloClientWithLocale(locale);
+  return {
+    props: {
+      paginatedPosts: await getPaginatedPublishedPosts(
+        ArticleType.Poster,
+        1,
+        20,
+        apolloClient
+      ),
+    },
+    revalidate: 300, // In seconds
+  };
+};
 
 export default PostsPage;

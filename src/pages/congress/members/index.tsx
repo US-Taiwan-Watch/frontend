@@ -1,11 +1,10 @@
 import { Layout } from "../../../components/layout";
 import { useI18n } from "../../../context/i18n";
 import { GetServerSideProps, NextPage } from "next";
-import { createApolloClient } from "../../../lib/apollo-client";
 import { CardList } from "../../../components/card-list";
 import { Banner } from "../../../components/banner";
-import { Autocomplete, Pagination, TextField } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { Autocomplete, TextField } from "@mui/material";
+import { useState } from "react";
 import { CongressUtils } from "../../../../common/utils/congress-utils";
 import {
   MembersDocument,
@@ -19,6 +18,7 @@ import {
 import { MemberFiltersInput } from "../../../generated/graphql-types";
 import { ApolloClient, useApolloClient } from "@apollo/client";
 import { initApolloClientWithLocale } from "../../../lib/with-apollo";
+import { PaginationControl } from "../../../components/pagination-control";
 
 const PAGE_SIZE = 10;
 
@@ -39,28 +39,9 @@ const ALL_STATES = [...STATES, ...TERRITORIES, ...REGIONS];
 const MemberListPage: NextPage<MemberListPageProps> = (prefetched) => {
   const { i18n } = useI18n();
   const [page, setPage] = useState(prefetched.page);
-  const [pageSize, setPageSize] = useState(prefetched.pageSize);
   const [filters, setFilters] = useState(prefetched.filters);
-  const [totalCount, setTotalCount] = useState(
-    prefetched.paginatedMembers.total
-  );
   const [members, setMembers] = useState(prefetched.paginatedMembers.items);
-  const initialRender = useRef(true);
   const client = useApolloClient();
-
-  useEffect(() => {
-    // Skip the effect on the first render
-    if (initialRender.current) {
-      initialRender.current = false;
-      return;
-    }
-    getPaginatedMembers(page, pageSize, filters, client).then(
-      (paginatedMembers) => {
-        setMembers(paginatedMembers.items);
-        setTotalCount(paginatedMembers.total);
-      }
-    );
-  }, [page, filters]);
 
   return (
     <Layout
@@ -103,10 +84,21 @@ const MemberListPage: NextPage<MemberListPageProps> = (prefetched) => {
           });
         }}
       />
-      <Pagination
-        page={page}
-        count={Math.ceil(totalCount / pageSize)}
-        onChange={(_e, page) => setPage(page)}
+      <PaginationControl
+        defaultPage={page}
+        defaultPageSize={PAGE_SIZE}
+        total={prefetched.paginatedMembers.total}
+        params={filters}
+        updateItems={async (page, pageSize) => {
+          const paginatedMembers = await getPaginatedMembers(
+            page,
+            pageSize,
+            filters,
+            client
+          );
+          setMembers(paginatedMembers.items);
+          setPage(page);
+        }}
       />
       <CardList
         cards={members.map((member) => ({

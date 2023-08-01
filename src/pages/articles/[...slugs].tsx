@@ -132,12 +132,12 @@ export const getStaticPaths: GetStaticPaths<{ slugs: string[] }> = async ({
 }) => {
   const apolloClient = initApolloClientWithLocale();
   const posts = (
-    await getPaginatedPublishedPosts(ArticleType.Article, 0, 100, apolloClient)
+    await getPaginatedPublishedPosts(ArticleType.Article, 1, 20, apolloClient)
   ).items;
   return {
     paths: getStaticPathsWithLocale(
       // language!
-      posts.slice(0, 100).map((post) => {
+      posts.map((post) => {
         if (!post.publishedTime) {
           return {
             params: {

@@ -11,42 +11,21 @@ import {
   PublicPostsQuery,
 } from "../../lib/page-graphql/query-public-posts.graphql.interface";
 import { ApolloClient, useApolloClient } from "@apollo/client";
-import { Pagination } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { PaginationControl } from "../../components/pagination-control";
 
 const PAGE_SIZE = 20;
 
-type PostsPageProps = {
+type ArticleListPageProps = {
   paginatedPosts: PublicPostsQuery["getPostsWithType"];
   page: number;
   pageSize: number;
 };
 
-const PostsPage: NextPage<PostsPageProps> = (prefetched) => {
+const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
   const { i18n } = useI18n();
-  const [page, setPage] = useState(prefetched.page);
-  const [pageSize, setPageSize] = useState(prefetched.pageSize);
-  const [totalCount, setTotalCount] = useState(prefetched.paginatedPosts.total);
-  const [items, setItems] = useState(prefetched.paginatedPosts.items);
-  const initialRender = useRef(true);
+  const [articles, setArticles] = useState(prefetched.paginatedPosts.items);
   const client = useApolloClient();
-
-  useEffect(() => {
-    // Skip the effect on the first render
-    if (initialRender.current) {
-      initialRender.current = false;
-      return;
-    }
-    getPaginatedPublishedPosts(
-      ArticleType.Article,
-      page,
-      pageSize,
-      client
-    ).then((paginatedMembers) => {
-      setItems(paginatedMembers.items);
-      setTotalCount(paginatedMembers.total);
-    });
-  }, [page]);
 
   return (
     <Layout
@@ -62,14 +41,22 @@ const PostsPage: NextPage<PostsPageProps> = (prefetched) => {
           <Button variant="contained">Manage Posts</Button>
         </Link>
       </>} */}
-
-      <Pagination
-        page={page}
-        count={Math.ceil(totalCount / pageSize)}
-        onChange={(_e, page) => setPage(page)}
+      <PaginationControl
+        defaultPage={1}
+        defaultPageSize={PAGE_SIZE}
+        total={prefetched.paginatedPosts.total}
+        updateItems={async (page, pageSize) => {
+          const paginatedPosts = await getPaginatedPublishedPosts(
+            ArticleType.Article,
+            page,
+            pageSize,
+            client
+          );
+          setArticles(paginatedPosts.items);
+        }}
       />
       <CardList
-        cards={items.map((p) => ({
+        cards={articles.map((p) => ({
           title: p.title?.text || "",
           displayDate: new Date(p.publishedTime || 0).toLocaleDateString(), // change to pub date
           content: p.preview?.text || "",
@@ -81,9 +68,9 @@ const PostsPage: NextPage<PostsPageProps> = (prefetched) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<PostsPageProps> = async ({
-  locale,
-}) => {
+export const getServerSideProps: GetServerSideProps<
+  ArticleListPageProps
+> = async ({ locale }) => {
   const apolloClient = initApolloClientWithLocale(locale);
   return {
     props: {
@@ -113,9 +100,8 @@ export const getPaginatedPublishedPosts = async (
       sortFields: ["publishedTime"],
       sortDirections: [-1],
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-first",
   });
-  console.log(res.data.getPostsWithType.items.map((i) => i.type));
   return {
     ...res.data.getPostsWithType,
     items: res.data.getPostsWithType.items.map((p) => ({
@@ -125,4 +111,4 @@ export const getPaginatedPublishedPosts = async (
   };
 };
 
-export default PostsPage;
+export default ArticleListPage;
