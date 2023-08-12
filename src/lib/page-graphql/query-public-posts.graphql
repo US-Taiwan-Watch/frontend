@@ -27,6 +27,7 @@ query PublicPosts(
       publishedTime
       imageSource
       type
+      isPublished
     }
   }
 }
