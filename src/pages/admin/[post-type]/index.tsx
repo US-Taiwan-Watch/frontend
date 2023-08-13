@@ -206,7 +206,7 @@ export const getPostType = (type?: any) => {
 };
 
 type PartialPost = {
-  id: string;
+  id?: string;
   isPublished?: boolean | null;
   publishedTime?: number | null;
   slug?: string | null;
