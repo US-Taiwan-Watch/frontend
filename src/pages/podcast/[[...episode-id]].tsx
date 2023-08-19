@@ -2,7 +2,12 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { Layout } from "../../components/layout";
 import { useI18n } from "../../context/i18n";
 import { Banner } from "../../components/banner";
-import { ListItem, ListItemButton, ListItemText, Typography } from "@mui/material";
+import {
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import { Section } from "../../components/section";
 import { useRouter } from "next/router";
 import { podcastPlatforms } from "../../components/social-media";
@@ -58,9 +63,9 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
     ? router.query["episode-id"][1]
     : partialEpisodes && partialEpisodes[0].id;
 
-  const nextEpIndex =
-    partialEpisodes.findIndex((ep) => ep.id === episodeID) + 1;
-  const nextEp = partialEpisodes[nextEpIndex];
+  const nextEpIndex = partialEpisodes
+    ? partialEpisodes.findIndex((ep) => ep.id === episodeID) + 1
+    : null;
 
   useEffect(() => {
     const episodesInSession = sessionStorage.getItem("podcast-episodes");
@@ -100,6 +105,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
         title={isIndex ? i18n.strings.podcast.name : episode.title}
         type={isIndex ? "music.album" : "music.song"}
         description={desc}
+        draftMode={draftMode}
         image="https://static.ustw.watch/public-image/website/podcast.jpg"
       >
         <MediaContainer
@@ -107,10 +113,15 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
           imageSrc={
             "https://static.ustw.watch/public-image/website/podcast.jpg"
           }
-          next={{
-            title: nextEp.title || "",
-            url: `/podcast/${EPISODE_PATH}/${nextEp.id}`,
-          }}
+          next={
+            nextEpIndex
+              ? {
+                  title: partialEpisodes[nextEpIndex].title || "",
+                  url: `/podcast/${EPISODE_PATH}/${partialEpisodes[nextEpIndex].id}`,
+                }
+              : null
+          }
+          breadcrumbs={[{ title: "Podcast", url: "/podcast" }]}
         >
           <iframe
             src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${episodeID}`}

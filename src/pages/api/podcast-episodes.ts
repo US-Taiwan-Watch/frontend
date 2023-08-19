@@ -2,12 +2,13 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { parseStringPromise } from "xml2js";
 
 export type PodcastEpisode = {
-  id: string,
-  title: string,
-  description: string,
-  encodedDesc: string,
-  pubDate: number,
-}
+  id: string;
+  title: string;
+  description: string;
+  encodedDesc: string;
+  pubDate: number;
+  imageSrc: string;
+};
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,14 +18,17 @@ export default async function handler(
 }
 
 export const getPodcastEpisodes = async (): Promise<PodcastEpisode[]> => {
-  const response = await fetch('https://feeds.soundon.fm/podcasts/6cdfccc6-7c47-4c35-8352-7f634b1b6f71.xml');
+  const response = await fetch(
+    "https://feeds.soundon.fm/podcasts/6cdfccc6-7c47-4c35-8352-7f634b1b6f71.xml"
+  );
   const text = await response.text();
   const xml = await parseStringPromise(text);
   return xml.rss.channel[0].item.map((item: any) => ({
-    id: item.guid[0]['_'],
+    id: item.guid[0]["_"],
     title: item.title[0],
     description: item.description[0],
-    encodedDesc: item['content:encoded'][0],
-    pubDate: new Date(item['pubDate'][0]).getTime(),
+    encodedDesc: item["content:encoded"][0],
+    pubDate: new Date(item["pubDate"][0]).getTime(),
+    imageSrc: item["itunes:image"][0].$.href,
   }));
-}
+};

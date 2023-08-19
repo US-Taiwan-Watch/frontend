@@ -4,7 +4,6 @@ import { getPaginatedPublishedPosts } from ".";
 import { Loading } from "../../components/loading";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
 import { PostContent } from "../../components/post-content";
-import { useTheme } from "@mui/material";
 import {
   PublicPostDocument,
   PublicPostQuery,
@@ -19,9 +18,10 @@ import { MediaContainer } from "../../components/media-container";
 export type PostPageProps = {
   post?: PublicPostQuery["getPublicArticle"];
   nextPost: Partial<PublicPostQuery["getPublicArticle"]>;
+  prevPost: Partial<PublicPostQuery["getPublicArticle"]>;
 };
 
-const PostPage: NextPage<PostPageProps> = ({ post, nextPost }) => {
+const PostPage: NextPage<PostPageProps> = ({ post, nextPost, prevPost }) => {
   const router = useRouter();
   useEffect(() => {
     if (!post?.publishedTime) {
@@ -38,7 +38,6 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost }) => {
     }
     router.replace(getPostUrl(post), undefined, { shallow: true });
   }, [post, router]);
-  const theme = useTheme();
 
   if (!post) {
     return <Loading />;
@@ -49,10 +48,12 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost }) => {
       type="article"
       description={post.preview?.text || ""}
       image={post.imageSource}
+      draftMode={true}
     >
       <MediaContainer
         title={post.title?.text}
         imageSrc={post.imageSource}
+        breadcrumbs={[{ title: "Articles", url: "/articles" }]}
         next={
           (nextPost && {
             title: nextPost.title?.text || "",
@@ -60,6 +61,13 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost }) => {
           }) ||
           undefined
         }
+        // prev={
+        //   (prevPost && {
+        //     title: prevPost.title?.text || "",
+        //     url: getPostUrl(prevPost),
+        //   }) ||
+        //   undefined
+        // }
       >
         <PostContent post={post} />
       </MediaContainer>
@@ -117,9 +125,14 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
     if (!post || post.type !== ArticleType.Article || !post.publishedTime) {
       return { notFound: true };
     }
-    const nextPosts = data.data.getPublicArticlesAfter.items;
+    const nextPosts = data.data.after.items;
+    const prevPosts = data.data.before.items;
     return {
-      props: { post, nextPost: nextPosts.length > 0 ? nextPosts[0] : null },
+      props: {
+        post,
+        nextPost: nextPosts.length > 0 ? nextPosts[0] : null,
+        prevPost: prevPosts.length > 0 ? prevPosts[0] : null,
+      },
       revalidate: 300,
     };
   } catch (err) {
