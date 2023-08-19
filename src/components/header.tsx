@@ -77,7 +77,9 @@ export const Header: React.FC<{
         >
           <NavLink href="/#about">{i18n.strings.header.about}</NavLink>
           <NavLink href="/podcast">{i18n.strings.header.podcast}</NavLink>
-          <NavLink href="/posts">{i18n.strings.header.articles}</NavLink>
+          <NavLink href="/articles/2023/7/312db44b-f335-4040-ab9c-0d5d11330b90">
+            {i18n.strings.header.articles}
+          </NavLink>
         </Box>
 
         <Box

@@ -10,15 +10,25 @@ module.exports = {
   //   workerThreads: false,
   //   cpus: 1,
   // },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "static.ustw.watch",
+        port: "",
+        pathname: "/public-image/**",
+      },
+    ],
+  },
   i18n: {
     locales: ["default", "en", "zh", "zh-TW"],
     defaultLocale: "default",
-    localeDetection: false
+    localeDetection: false,
   },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
-      use: ["@svgr/webpack"]
+      use: ["@svgr/webpack"],
     });
 
     config.resolve.alias = {
@@ -26,9 +36,9 @@ module.exports = {
       "type-graphql": path.join(
         __dirname,
         "src/hacks/type-grqphql-hack/mock-module.js"
-      )
+      ),
     };
 
     return config;
-  }
+  },
 };

@@ -295,7 +295,6 @@ export type QueryBillArgs = {
 
 
 export type QueryBillsArgs = {
-  after?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;
   query?: InputMaybe<BillQueryInput>;
@@ -310,7 +309,6 @@ export type QueryGetArticleArgs = {
 
 
 export type QueryGetPostsWithTypeArgs = {
-  after?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;
   sortDirections?: InputMaybe<Array<Scalars['Float']>>;
@@ -325,7 +323,6 @@ export type QueryGetPublicArticleArgs = {
 
 
 export type QueryGetPublicArticlesAfterArgs = {
-  after?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;
   slug: Scalars['String'];
@@ -351,7 +348,6 @@ export type QueryMemberArgs = {
 
 
 export type QueryMembersArgs = {
-  after?: InputMaybe<Scalars['String']>;
   filters?: InputMaybe<MemberFiltersInput>;
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;

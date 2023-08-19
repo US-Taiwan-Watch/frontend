@@ -22,14 +22,22 @@ import { getPodcastEpisodes, PodcastEpisode } from "./api/podcast-episodes";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { initApolloClient } from "../lib/with-apollo";
+import { BannersQueryDocument } from "../lib/page-graphql/query-banners.graphql.interface";
 
 interface HomeProps {
   newsLetters: NewsLetter[];
   podcasts: PodcastEpisode[];
+  banners: string[];
   draftMode: boolean;
 }
 
-const Home: NextPage<HomeProps> = ({ newsLetters, podcasts, draftMode }) => {
+const Home: NextPage<HomeProps> = ({
+  newsLetters,
+  podcasts,
+  banners,
+  draftMode,
+}) => {
   const { i18n } = useI18n();
   if (draftMode) {
     const settings = {
@@ -46,17 +54,13 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcasts, draftMode }) => {
       slidesToShow: 2,
       slidesToScroll: 2,
     };
-    const banners = [
-      { url: "/assets/ustw_book.png" },
-      { url: "/assets/test_banner.png" },
-    ];
     return (
       <Layout draftMode={draftMode}>
         <Slider {...settings}>
           {banners?.map((banner, i) => (
             <Box key={i}>
               <img
-                src={banner?.url}
+                src={banner}
                 style={{
                   objectFit: "contain",
                   width: "100%",
@@ -332,12 +336,15 @@ const Home: NextPage<HomeProps> = ({ newsLetters, podcasts, draftMode }) => {
 export const getStaticProps: GetStaticProps<HomeProps> = async ({
   draftMode,
 }) => {
+  const client = initApolloClient();
+  const bannersRes = await client.query({ query: BannersQueryDocument });
   const letters = await getNewsLetters();
   const podcasts = await getPodcastEpisodes();
   return {
     props: {
       newsLetters: letters.slice(0, 4),
       podcasts: [podcasts[0], podcasts[1]],
+      banners: bannersRes.data.banners,
       draftMode: !!draftMode,
     },
     revalidate: 300, // In seconds
