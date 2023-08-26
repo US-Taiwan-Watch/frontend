@@ -63,8 +63,7 @@ export const Header: React.FC<{
               alt="US Taiwan Watch"
             />
             <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
-              {draftMode && "[DRAFT MODE] "}
-              {i18n.strings.brand.fullName}
+              [DRAFT] {i18n.strings.brand.fullName}
             </Typography>
           </Link>
         </Box>
@@ -131,7 +130,6 @@ export const Header: React.FC<{
           />
           {/* <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' }, a: { textDecoration: 'none' } }} /> */}
           <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
-            {draftMode && "[DRAFT MODE] "}
             {i18n.strings.brand.fullName}
           </Typography>
         </Link>

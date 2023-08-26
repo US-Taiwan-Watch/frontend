@@ -25,6 +25,7 @@ export type Article = {
   publishedTime?: Maybe<Scalars['Float']>;
   slug?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Scalars['String']>>;
+  text?: Maybe<Scalars['String']>;
   title?: Maybe<I18NText>;
   type?: Maybe<ArticleType>;
 };

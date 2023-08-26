@@ -1,78 +1,134 @@
-import { Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Container,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { useI18n } from "../context/i18n";
 import { Link } from "./link";
 
 export type CardProps = {
-  url: string,
-  title: string,
-  content: string,
-  displayDate: string,
-  image?: string,
-}
+  url: string;
+  title: string;
+  content: string;
+  displayDate: string;
+  image?: string;
+};
 
 export const CardListItem: React.FC<CardProps> = (props) => {
   const { i18n } = useI18n();
   return (
-    <Grid item xs={12} md={12} sx={{ my: 3 }}>
-      <Link href={props.url} sx={{ textDecoration: "none" }}>
+    <Box sx={{ my: 3 }}>
+      <Box sx={{ display: { xs: "block", sm: "none" } }}>
+        <SmallCardItem
+          url={props.url}
+          title={props.title}
+          content={""}
+          displayDate={props.displayDate}
+          image={props.image}
+        />
+      </Box>
+      <Link href={props.url} sx={{ display: { xs: "none", sm: "block" } }}>
         <CardActionArea>
-          <Card
-            sx={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            {props.image && (
-              <CardMedia
-                component="img"
-                sx={{ width: 180, display: { xs: "none", sm: "block" } }}
-                image={props.image}
-                alt={props.title}
-              />
-            )}
-            <CardContent sx={{ flex: 1 }}>
-              <Typography component="h2" variant="h5">
-                {props.title}
-              </Typography>
-              <Typography variant="subtitle1" color="text.secondary">
-                {props.displayDate}
-              </Typography>
-              <Typography variant="subtitle1" paragraph>
-                {props.content}
-              </Typography>
-              <Typography variant="subtitle1" color="primary">
-                {i18n.strings.common.cardList.readMore}
-              </Typography>
-            </CardContent>
-          </Card>
+          <Box>
+            <Card
+              sx={{
+                display: "flex",
+                boxShadow: "none",
+                height: 144,
+              }}
+            >
+              {props.image && (
+                <Box style={{ width: 240 }}>
+                  <Box
+                    style={{
+                      position: "relative",
+                      paddingTop: "60%",
+                      backgroundPosition: "center",
+                      overflow: "hidden",
+                      borderRadius: 6,
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      image={props.image}
+                      alt={props.title}
+                      sx={{ position: "absolute", left: 0, top: 0 }}
+                    />
+                  </Box>
+                </Box>
+              )}
+              <CardContent sx={{ py: 0, flex: 1 }}>
+                <Typography
+                  component="h2"
+                  variant="h5"
+                  sx={{
+                    overflow: "hidden",
+                    lineBreak: "anywhere",
+                    display: "-webkit-box",
+                    WebkitBoxOrient: "vertical",
+                    WebkitLineClamp: 2,
+                    marginBottom: 1,
+                  }}
+                >
+                  {props.title}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  paragraph
+                  sx={{
+                    overflow: "hidden",
+                    lineBreak: "anywhere",
+                    display: "-webkit-box",
+                    WebkitBoxOrient: "vertical",
+                    WebkitLineClamp: 3,
+                  }}
+                >
+                  {props.content}
+                </Typography>
+              </CardContent>
+            </Card>
+            <Typography
+              component="span"
+              variant="subtitle1"
+              color="text.secondary"
+            >
+              {props.displayDate}
+            </Typography>
+          </Box>
         </CardActionArea>
       </Link>
-    </Grid>
+    </Box>
   );
 };
 
 export const SmallCardItem: React.FC<CardProps> = (props) => (
-  <Link href={props.url} sx={{ textDecoration: "none" }}>
+  <Link href={props.url}>
     <Card sx={{ width: "100%", boxShadow: "none" }}>
       <CardActionArea>
-        <div
-          style={{
-            position: "relative",
-            paddingTop: "70%",
-            backgroundPosition: "center",
-            overflow: "hidden",
-            borderRadius: 3,
-          }}
-        >
-          {props.image && (
+        {props.image && (
+          <div
+            style={{
+              position: "relative",
+              paddingTop: "60%",
+              backgroundPosition: "center",
+              overflow: "hidden",
+              borderRadius: 3,
+            }}
+          >
             <CardMedia
               component="img"
               image={props.image}
               alt={props.title}
               sx={{ position: "absolute", left: 0, top: 0 }}
             />
-          )}
-        </div>
+          </div>
+        )}
         <CardContent>
           <Typography
             sx={{ display: "flex", direction: "rtl" }}
@@ -82,10 +138,30 @@ export const SmallCardItem: React.FC<CardProps> = (props) => (
             {props.displayDate}
           </Typography>
           <hr />
-          <Typography component="h2" variant="h5">
+          <Typography
+            component="h2"
+            variant="h6"
+            sx={{
+              overflow: "hidden",
+              lineBreak: "anywhere",
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 2,
+            }}
+          >
             {props.title}
           </Typography>
-          <Typography variant="subtitle1" paragraph>
+          <Typography
+            variant="body1"
+            paragraph
+            sx={{
+              overflow: "hidden",
+              lineBreak: "anywhere",
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 3,
+            }}
+          >
             {props.content}
           </Typography>
         </CardContent>

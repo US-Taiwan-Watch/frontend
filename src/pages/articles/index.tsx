@@ -13,6 +13,8 @@ import {
 import { ApolloClient, useApolloClient } from "@apollo/client";
 import { useState } from "react";
 import { PaginationControl } from "../../components/pagination-control";
+import { Container, Grid, Typography } from "@mui/material";
+import { MediaCard } from "../../components/media-card";
 
 const PAGE_SIZE = 20;
 
@@ -31,39 +33,55 @@ const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
     <Layout
       title={i18n.strings.articles.title}
       description={i18n.strings.articles.desc}
+      draftMode={true}
     >
       <Banner
-        title={i18n.strings.articles.title}
-        subtitle={i18n.strings.articles.desc}
+      // title={i18n.strings.articles.title}
+      // subtitle={i18n.strings.articles.desc}
       ></Banner>
       {/* {isEditor && <>
         <Link href={`/admin/posts`}>
           <Button variant="contained">Manage Posts</Button>
         </Link>
       </>} */}
-      <PaginationControl
-        defaultPage={1}
-        defaultPageSize={PAGE_SIZE}
-        total={prefetched.paginatedPosts.total}
-        updateItems={async (page, pageSize) => {
-          const paginatedPosts = await getPaginatedPublishedPosts(
-            ArticleType.Article,
-            page,
-            pageSize,
-            client
-          );
-          setArticles(paginatedPosts.items);
-        }}
-      />
-      <CardList
-        cards={articles.map((p) => ({
-          title: p.title?.text || "",
-          displayDate: new Date(p.publishedTime || 0).toLocaleDateString(), // change to pub date
-          content: p.preview?.text || "",
-          url: getPostUrl(p),
-          image: p.imageSource || undefined,
-        }))}
-      />
+      <Container sx={{ my: 5 }}>
+        <Grid container spacing={2}>
+          <Grid item md={9}>
+            <Typography component="h5" variant="h5" gutterBottom>
+              相關文章
+            </Typography>
+            <hr />
+            <PaginationControl
+              defaultPage={1}
+              defaultPageSize={PAGE_SIZE}
+              total={prefetched.paginatedPosts.total}
+              updateItems={async (page, pageSize) => {
+                const paginatedPosts = await getPaginatedPublishedPosts(
+                  ArticleType.Article,
+                  page,
+                  pageSize,
+                  client
+                );
+                setArticles(paginatedPosts.items);
+              }}
+            />
+            <CardList
+              cards={articles.map((p) => ({
+                title: p.title?.text || "",
+                displayDate: new Date(
+                  p.publishedTime || 0
+                ).toLocaleDateString(), // change to pub date
+                content: p.text || "",
+                url: getPostUrl(p),
+                image: p.imageSource || undefined,
+              }))}
+            />
+          </Grid>
+          <Grid item md={3}>
+            <MediaCard />
+          </Grid>
+        </Grid>
+      </Container>
     </Layout>
   );
 };

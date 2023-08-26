@@ -76,18 +76,39 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       [activeClassName]: router.pathname === pathname && activeClassName,
     });
 
+    const sharedOther: { [key: string]: any } = {
+      ...other,
+      sx: { textDecoration: "none", textTransform: "none", ...other.sx },
+    };
+
     const isExternal =
       typeof href === "string" &&
-      (href.indexOf("http") === 0 || href.indexOf("mailto:") === 0 || href.indexOf('/api/') === 0);
+      (href.indexOf("http") === 0 ||
+        href.indexOf("mailto:") === 0 ||
+        href.indexOf("/api/") === 0);
 
     if (isExternal) {
       if (noLinkStyle) {
         return (
-          <Anchor className={className} href={href} ref={ref} target="_blank" {...other} />
+          <Anchor
+            className={className}
+            href={href}
+            ref={ref}
+            target="_blank"
+            {...sharedOther}
+          />
         );
       }
 
-      return <MuiLink className={className} href={href} ref={ref} target="_blank" {...other} />;
+      return (
+        <MuiLink
+          className={className}
+          href={href}
+          ref={ref}
+          target="_blank"
+          {...sharedOther}
+        />
+      );
     }
 
     if (noLinkStyle) {
@@ -96,7 +117,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
           className={className}
           ref={ref}
           to={href}
-          {...other}
+          {...sharedOther}
         />
       );
     }
@@ -108,10 +129,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         className={className}
         ref={ref}
         to={href}
-        {...{
-          ...other,
-          sx: { textDecoration: "none", textTransform: "none", ...other.sx },
-        }}
+        {...sharedOther}
       />
     );
   }
