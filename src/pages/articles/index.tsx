@@ -36,9 +36,9 @@ const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
       draftMode={true}
     >
       <Banner
-      // title={i18n.strings.articles.title}
-      // subtitle={i18n.strings.articles.desc}
-      ></Banner>
+        imageSrc="https://static.ustw.watch/public-image/website/banners/ustw_book.png"
+        draftMode={true}
+      />
       {/* {isEditor && <>
         <Link href={`/admin/posts`}>
           <Button variant="contained">Manage Posts</Button>
@@ -48,7 +48,7 @@ const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
         <Grid container spacing={2}>
           <Grid item md={9}>
             <Typography component="h5" variant="h5" gutterBottom>
-              相關文章
+              所有文章
             </Typography>
             <hr />
             <PaginationControl
