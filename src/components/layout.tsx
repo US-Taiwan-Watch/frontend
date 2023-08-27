@@ -73,7 +73,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
         <div>{props.children}</div>
       </main>
 
-      <Footer />
+      <Footer draftMode={props.draftMode} />
 
       <style jsx global>{`
         body {

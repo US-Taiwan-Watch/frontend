@@ -52,7 +52,7 @@ export const MediaCard: React.FC = () => {
             href={media.link}
             key={media.name}
           >
-            <SocialMediaIcon type={media.type} bw={true} />
+            <SocialMediaIcon size={30} type={media.type} bw={true} />
           </IconButton>
         ))}
       </Box>

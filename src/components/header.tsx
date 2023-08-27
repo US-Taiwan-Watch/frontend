@@ -13,12 +13,29 @@ const NavLink: React.FC<LinkProps> = (props) => (
   <Link
     {...props}
     variant="button"
-    color="text.primary"
+    color="primary.dark"
     sx={{ my: 1, mx: 1.5 }}
   >
     {props.children}
   </Link>
 );
+
+export const NavBar: React.FC = () => {
+  const { i18n } = useI18n();
+  return (
+    <Box
+      sx={{
+        position: "absolute",
+        display: "flex",
+        flexWrap: "wrap",
+      }}
+    >
+      <NavLink href="/#about">{i18n.strings.header.about}</NavLink>
+      <NavLink href="/podcast">{i18n.strings.header.podcast}</NavLink>
+      <NavLink href="/articles">{i18n.strings.header.articles}</NavLink>
+    </Box>
+  );
+};
 
 export const Header: React.FC<{
   draftMode: boolean;
@@ -41,6 +58,7 @@ export const Header: React.FC<{
             "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
           justifyContent: "center",
         }}
+        color="text.primary"
       >
         <Box
           sx={{
@@ -67,17 +85,7 @@ export const Header: React.FC<{
             </Typography>
           </Link>
         </Box>
-        <Box
-          sx={{
-            position: "absolute",
-            display: "flex",
-            flexWrap: "wrap",
-          }}
-        >
-          <NavLink href="/#about">{i18n.strings.header.about}</NavLink>
-          <NavLink href="/podcast">{i18n.strings.header.podcast}</NavLink>
-          <NavLink href="/articles">{i18n.strings.header.articles}</NavLink>
-        </Box>
+        <NavBar />
 
         <Box
           sx={{

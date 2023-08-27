@@ -272,7 +272,7 @@ const Home: NextPage<HomeProps> = ({
                   sx={{ height: "100%" }}
                 >
                   <CardHeader
-                    avatar={<SocialMediaIcon type={media.type} />}
+                    avatar={<SocialMediaIcon size={24} type={media.type} />}
                     title={media.name}
                     titleTypographyProps={{
                       variant: "h6",

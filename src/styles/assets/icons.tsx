@@ -1,4 +1,4 @@
-import { SvgIcon, SvgIconProps } from "@mui/material";
+import { SvgIcon, SvgIconProps, styled } from "@mui/material";
 
 export const LightBulbIcon = (props: SvgIconProps) => (
   <SvgIcon {...props}>
@@ -6,52 +6,65 @@ export const LightBulbIcon = (props: SvgIconProps) => (
   </SvgIcon>
 );
 
+const SizableSvgIcon = styled(SvgIcon)<any>(() => ({
+  width: "100%",
+  height: "100%",
+}));
+
 import SvgIconFB from "./icon-fb.svg";
 import SvgIconFBBW from "./icon-fb-bw.svg";
 export const IconFB = (props: SvgIconProps) => (
   <SvgIcon component={SvgIconFB} viewBox="0 0 512 512" {...props} />
 );
 export const IconFBBW = (props: SvgIconProps) => (
-  <SvgIcon component={SvgIconFBBW} viewBox="0 0 512 512" {...props} />
+  <SizableSvgIcon component={SvgIconFBBW} viewBox="0 0 512 512" {...props} />
 );
 
 import SvgIconIG from "./icon-ig.svg";
 import SvgIconIGBW from "./icon-ig-bw.svg";
 export const IconIG = (props: SvgIconProps) => (
-  <SvgIcon component={SvgIconIG} viewBox="0 0 1005 1005" {...props} />
+  <SizableSvgIcon component={SvgIconIG} viewBox="0 0 1005 1005" {...props} />
 );
 export const IconIGBW = (props: SvgIconProps) => (
-  <SvgIcon component={SvgIconIGBW} viewBox="0 0 512 512" {...props} />
+  <SizableSvgIcon component={SvgIconIGBW} viewBox="0 0 512 512" {...props} />
 );
 
 import SvgIconTwitter from "./icon-tw.svg";
 import SvgIconTwitterBW from "./icon-tw-bw.svg";
 export const IconTwitter = (props: SvgIconProps) => (
-  <SvgIcon component={SvgIconTwitter} viewBox="0 0 512 512" {...props} />
+  <SizableSvgIcon component={SvgIconTwitter} viewBox="0 0 512 512" {...props} />
 );
 export const IconTwitterBW = (props: SvgIconProps) => (
-  <SvgIcon component={SvgIconTwitterBW} viewBox="0 0 512 512" {...props} />
+  <SizableSvgIcon
+    component={SvgIconTwitterBW}
+    viewBox="0 0 512 512"
+    {...props}
+  />
 );
 
 import SvgIconYT from "./icon-yt.svg";
 import SvgIconYTBW from "./icon-yt-bw.svg";
 export const IconYT = (props: SvgIconProps) => (
-  <SvgIcon component={SvgIconYT} viewBox="0 0 512 512" {...props} />
+  <SizableSvgIcon component={SvgIconYT} viewBox="0 0 512 512" {...props} />
 );
 export const IconYTBW = (props: SvgIconProps) => (
-  <SvgIcon component={SvgIconYTBW} viewBox="0 0 512 512" {...props} />
+  <SizableSvgIcon component={SvgIconYTBW} viewBox="0 0 512 512" {...props} />
 );
 
 import SvgIconSpotify from "./icon-spotify.svg";
 import SvgIconSpotifyBW from "./icon-spotify-bw.svg";
 export const IconSpotify = (props: SvgIconProps) => (
-  <SvgIcon component={SvgIconSpotify} viewBox="0 0 128 128" {...props} />
+  <SizableSvgIcon component={SvgIconSpotify} viewBox="0 0 128 128" {...props} />
 );
 export const IconSpotifyBW = (props: SvgIconProps) => (
-  <SvgIcon component={SvgIconSpotifyBW} viewBox="0 0 24 24" {...props} />
+  <SizableSvgIcon component={SvgIconSpotifyBW} viewBox="0 0 24 24" {...props} />
 );
 
 import SvgIconApplePodcasts from "./icon-apple-podcasts.svg";
 export const IconApplePodcasts = (props: SvgIconProps) => (
-  <SvgIcon component={SvgIconApplePodcasts} viewBox="0 0 300 300" {...props} />
+  <SizableSvgIcon
+    component={SvgIconApplePodcasts}
+    viewBox="0 0 300 300"
+    {...props}
+  />
 );
