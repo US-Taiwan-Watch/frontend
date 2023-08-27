@@ -51,7 +51,7 @@ export const I18nProvider = React.memo(({ children }) => {
 
   React.useEffect(() => {
     setLang((currLang) => (currLang !== locale ? getLang(locale) : currLang));
-    document.cookie = `preferred-language=${locale}`;
+    document.cookie = `preferred-language=${locale};path=/;`;
   }, [locale]);
 
   i18n.setLanguage(lang);
