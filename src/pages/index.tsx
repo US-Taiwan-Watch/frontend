@@ -1,15 +1,18 @@
 import type { GetStaticProps, NextPage } from "next";
-import Typography from "@mui/material/Typography";
+import Typography, { TypographyProps } from "@mui/material/Typography";
 import { Link } from "../components/link";
 import { Layout } from "../components/layout";
 import {
   Box,
+  Button,
   Card,
   CardActionArea,
   CardContent,
   CardHeader,
+  Container,
   Grid,
   IconButton,
+  styled,
 } from "@mui/material";
 import { SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
@@ -24,19 +27,49 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { initApolloClient } from "../lib/with-apollo";
 import { BannersQueryDocument } from "../lib/page-graphql/query-banners.graphql.interface";
+import { SmallCardItem } from "../components/card-list";
+import { ArticleType } from "../generated/graphql-types";
+import { getPaginatedPublishedPosts } from "./articles";
+import { PublicPostsQuery } from "../lib/page-graphql/query-public-posts.graphql.interface";
+import { getPostUrl } from "./admin/[post-type]";
+import React from "react";
 
 interface HomeProps {
   newsLetters: NewsLetter[];
   podcasts: PodcastEpisode[];
   banners: string[];
   draftMode: boolean;
+  posts: PublicPostsQuery["getPostsWithType"]["items"];
 }
+
+// const SectionTitle = styled(Typography)(({ theme }) => ({
+//   my: 2,
+// }));
+
+// export const SectionTitle = React.forwardRef((props, ref) => {
+//   return <Typography {...props}>{ref}</Typography>;
+// });
+
+const SectionTitle = React.forwardRef<HTMLDivElement, TypographyProps>(
+  ({ children, ...props }, ref) => {
+    return (
+      <Typography
+        variant="h5"
+        component="h2"
+        sx={{ my: 5, textAlign: "center" }}
+      >
+        {children}
+      </Typography>
+    );
+  }
+);
 
 const Home: NextPage<HomeProps> = ({
   newsLetters,
   podcasts,
   banners,
   draftMode,
+  posts,
 }) => {
   const { i18n } = useI18n();
   if (draftMode) {
@@ -70,32 +103,23 @@ const Home: NextPage<HomeProps> = ({
             </Box>
           ))}
         </Slider>
-        {/* <Banner
-          title={i18n.strings.brand.fullName}
-          subtitle={i18n.strings.header.subtitle}
-          actions={[{ text: i18n.strings.header.donate, url: '#donate' }]}
-        /> */}
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
-            // justifyContent: 'center',
-            // gridTemplateRows: '1fr 2fr',
-            // textAlign: 'center',
-            // alignItems: 'center',
-            // width: '100%',
-            // height: '380px ',
-            background: `url(/assets/home_pc_1.svg) no-repeat center / contain`,
+            width: "100%",
+            backgroundImage: "url(/assets/home-upper-bg.svg)",
+            backgroundSize: "100% 100%",
           }}
         >
-          <Box
+          <Container
             sx={{
-              width: "75%",
               marginTop: "32px",
               justifyContent: "center",
               alignItems: "center",
               textAlign: "center",
-              height: "380px ",
+              height: "auto",
+              marginBottom: 10,
             }}
           >
             <Typography
@@ -119,16 +143,11 @@ const Home: NextPage<HomeProps> = ({
               policy and U.S.-Taiwan relations and recording weekly podcast
               episodes to discuss U.S.-Taiwan relations.
             </Typography>
-          </Box>
+          </Container>
           {/* <img src={`/assets/home_pc_1.svg`} alt={`icon`} width="100%" /> */}
         </Box>
-        <Typography>Podcasts</Typography>
-        <Box
-          sx={{
-            width: "75%",
-            margin: "24px auto",
-          }}
-        >
+        <Container>
+          <SectionTitle>Podcasts</SectionTitle>
           <Slider {...podcastCarouselSetting}>
             {podcasts.map((podcast, i) => (
               <Box
@@ -151,11 +170,38 @@ const Home: NextPage<HomeProps> = ({
               </Box>
             ))}
           </Slider>
-        </Box>
-        <Typography>Latest Posts</Typography>
-        <style jsx global>{`
-          @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
-        `}</style>
+          <SectionTitle>Latest Posts</SectionTitle>
+          <Grid container>
+            {posts.map((post) => (
+              <Grid key={post.id} item xs={12} sm={6} md={3} sx={{ px: 1 }}>
+                <SmallCardItem
+                  url={getPostUrl(post)}
+                  title={post.title?.text || ""}
+                  content={post.text || ""}
+                  displayDate={
+                    post.publishedTime
+                      ? new Date(post.publishedTime).toLocaleDateString()
+                      : ""
+                  }
+                  image={post.imageSource || undefined}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          <Box
+            sx={{
+              my: 4,
+              textAlign: "center",
+            }}
+          >
+            <Link variant="button" href="/articles">
+              <Button variant="contained">更多文章</Button>
+            </Link>
+          </Box>
+          <style jsx global>{`
+            @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+          `}</style>
+        </Container>
       </Layout>
     );
   }
@@ -340,12 +386,20 @@ export const getStaticProps: GetStaticProps<HomeProps> = async ({
   const bannersRes = await client.query({ query: BannersQueryDocument });
   const letters = await getNewsLetters();
   const podcasts = await getPodcastEpisodes();
+  const paginatedPosts = await getPaginatedPublishedPosts(
+    ArticleType.Article,
+    1,
+    4,
+    client
+  );
+
   return {
     props: {
       newsLetters: letters.slice(0, 4),
-      podcasts: [podcasts[0], podcasts[1]],
+      podcasts: podcasts.slice(0, 6),
       banners: bannersRes.data.banners,
       draftMode: !!draftMode,
+      posts: paginatedPosts.items,
     },
     revalidate: 300, // In seconds
   };
