@@ -26,6 +26,8 @@ const stepsForSenate = ['Introduced', 'Pass Senate', 'Pass House', 'Resolving Di
 const stepsForHouse = ['Introduced', 'Pass House', 'Pass Senate', 'Resolving Differences', 'To President', 'Became Law'];
 
 export type BillCardProps = {
+  url: string,
+  id: string,
   billNumber: number,
   billType: string,
   congress: number,
@@ -33,7 +35,7 @@ export type BillCardProps = {
   introducedDate?: string,
   tags?: string[],
   sponsor?: Member,
-  cosponsorCount?: number,
+  cosponsorsCount?: number,
   cosponsors?: string[],
   trackers?: BillTracker[]
 }
@@ -155,13 +157,13 @@ export const BillCard: React.FC<BillCardProps> = (props) => {
                     </Box>
                   </Grid>
                   <Grid item xs={2} sm={4} md={4}>
-                    {props.cosponsorCount && <Box>
+                    {props.cosponsorsCount && <Box>
 
                       <Typography variant="subtitle1">
                         連署人數
                       </Typography>
                       <Typography variant="body1">
-                        {props.cosponsorCount}
+                        {props.cosponsorsCount}
                       </Typography>
                     </Box>}
                   </Grid>

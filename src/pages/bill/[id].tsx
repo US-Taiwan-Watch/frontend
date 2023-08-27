@@ -5,7 +5,7 @@ import {
   BillDocument,
   BillQuery,
 } from "../../lib/page-graphql/query-bill.graphql.interface";
-import { getStaticPaginatedBills } from ".";
+import { getPaginatedBills } from ".";
 import { Loading } from "../../components/loading";
 import { Banner } from "../../components/banner";
 import { USStatesMap } from "../../components/us-states-map";
@@ -48,13 +48,15 @@ const BillPage: NextPage<BillPageProps> = ({ bill }) => {
     <Layout>
       <Banner>
         <BillCard
+          url={`/bill/${bill.id}`}
+          id={bill.id}
           billNumber={bill.billNumber}
           billType={bill.billType}
           congress={bill.congress}
           title={bill.title?.text || ""}
           introducedDate={bill.introducedDate || undefined}
           sponsor={bill.sponsor || undefined}
-          cosponsorCount={bill.cosponsorsCount || undefined}
+          cosponsorsCount={bill.cosponsorsCount || undefined}
           trackers={bill.trackers || undefined}
         ></BillCard>
       </Banner>
@@ -119,9 +121,10 @@ const getPartyColor = (party?: string | null) => {
 export const getStaticPaths: GetStaticPaths<{ id: string }> = async ({
   locales,
 }) => {
+  const client = initApolloClientWithLocale();
   return {
     paths: getStaticPathsWithLocale(
-      (await getStaticPaginatedBills()).map((bill) => {
+      (await getPaginatedBills(1, 10, client)).items.map((bill) => {
         return {
           params: {
             id: bill.id as string,
@@ -154,6 +157,7 @@ export const getStaticProps: GetStaticProps<BillPageProps> = async ({
       props: {
         bill,
       },
+      revalidate: 300,
     };
   } catch (error) {
     console.error(error);
