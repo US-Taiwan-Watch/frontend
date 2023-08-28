@@ -13,6 +13,7 @@ import {
   Container,
   Grid,
   IconButton,
+  useMediaQuery,
 } from "@mui/material";
 import { SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
@@ -35,6 +36,7 @@ import { getPostUrl } from "./admin/[post-type]";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { theme } from "../styles/theme";
 
 interface HomeProps {
   newsLetters: NewsLetter[];
@@ -86,6 +88,8 @@ const Home: NextPage<HomeProps> = ({
     };
   }, []);
 
+  const isSm = useMediaQuery(theme.breakpoints.down("md"));
+
   if (draftMode) {
     const buttonWidth = "100px";
     const podcastSlickEdgeWidth = 40;
@@ -95,7 +99,7 @@ const Home: NextPage<HomeProps> = ({
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      centerMode: true,
+      centerMode: !isSm,
       centerPadding: buttonWidth,
       className: "banner-slick",
       nextArrow: <></>,
@@ -105,8 +109,8 @@ const Home: NextPage<HomeProps> = ({
       dots: true,
       infinite: false,
       speed: 500,
-      slidesToShow: 2,
-      slidesToScroll: 2,
+      slidesToShow: isSm ? 1 : 2,
+      slidesToScroll: isSm ? 1 : 2,
       className: "podcast-slick",
       variableWidth: true,
       nextArrow: <></>,
@@ -116,35 +120,39 @@ const Home: NextPage<HomeProps> = ({
     };
     return (
       <Layout draftMode={draftMode}>
-        <Box sx={{ width: "100%", position: "relative" }}>
-          <Button
-            sx={{
-              position: "absolute",
-              left: 0,
-              width: buttonWidth,
-              height: "100%",
-              zIndex: 2,
-            }}
-            onClick={() => bannerSliderRef.current?.slickPrev()}
-          >
-            <Avatar sx={{ opacity: "50%" }}>
-              <ArrowBackIosNewIcon />
-            </Avatar>
-          </Button>
-          <Button
-            sx={{
-              position: "absolute",
-              right: 0,
-              width: buttonWidth,
-              height: "100%",
-              zIndex: 2,
-            }}
-            onClick={() => bannerSliderRef.current?.slickNext()}
-          >
-            <Avatar sx={{ opacity: "50%" }}>
-              <ArrowForwardIosIcon />
-            </Avatar>
-          </Button>
+        <Box sx={{ width: "100%", position: "relative", maxHeight: "100vh" }}>
+          {!isSm && (
+            <Button
+              sx={{
+                position: "absolute",
+                left: 0,
+                width: buttonWidth,
+                height: "100%",
+                zIndex: 2,
+              }}
+              onClick={() => bannerSliderRef.current?.slickPrev()}
+            >
+              <Avatar sx={{ opacity: "50%" }}>
+                <ArrowBackIosNewIcon />
+              </Avatar>
+            </Button>
+          )}
+          {!isSm && (
+            <Button
+              sx={{
+                position: "absolute",
+                right: 0,
+                width: buttonWidth,
+                height: "100%",
+                zIndex: 2,
+              }}
+              onClick={() => bannerSliderRef.current?.slickNext()}
+            >
+              <Avatar sx={{ opacity: "50%" }}>
+                <ArrowForwardIosIcon />
+              </Avatar>
+            </Button>
+          )}
           <Slider {...settings} ref={bannerSliderRef}>
             {banners?.map((banner, i) => (
               <Box key={i}>
@@ -229,7 +237,7 @@ const Home: NextPage<HomeProps> = ({
                   onClick={() => podcastSliderRef.current?.slickPrev()}
                 />
               )}
-              {podcastCurrentSlider + 1 < podcasts.length - 1 && (
+              {podcastCurrentSlider + (isSm ? 0 : 1) < podcasts.length - 1 && (
                 <span
                   style={{
                     position: "absolute",
@@ -250,7 +258,7 @@ const Home: NextPage<HomeProps> = ({
                     style={{
                       width:
                         (podcastSliderBoxWidth - podcastSlickEdgeWidth * 2) /
-                          2 +
+                          (isSm ? 1 : 2) +
                         "px",
                     }}
                   >
