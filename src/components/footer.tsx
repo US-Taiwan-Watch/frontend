@@ -30,7 +30,7 @@ export const Footer: React.FC<{ draftMode?: boolean }> = ({ draftMode }) => {
       >
         <Box
           sx={{
-            height: "30vh",
+            maxHeight: "25vh",
             width: "100%",
             backgroundImage: "url(/assets/footer-bg.svg)",
             backgroundSize: "100% 100%",
@@ -96,12 +96,22 @@ export const Footer: React.FC<{ draftMode?: boolean }> = ({ draftMode }) => {
               sm={3}
               xs={0}
               sx={{
-                backgroundImage: "url(/assets/raise.png)",
-                backgroundPosition: "bottom",
-                backgroundSize: "contain",
-                backgroundRepeat: "no-repeat",
+                display: "flex",
+                flexDirection: "column-reverse",
               }}
-            ></Grid>
+            >
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  maxHeight: "100px",
+                  backgroundImage: "url(/assets/raise.png)",
+                  backgroundPosition: "bottom",
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                }}
+              />
+            </Grid>
           </Grid>
         </Box>
         <Box
