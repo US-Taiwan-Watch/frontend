@@ -3,6 +3,7 @@ import Typography, { TypographyProps } from "@mui/material/Typography";
 import { Link } from "../components/link";
 import { Layout } from "../components/layout";
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -12,7 +13,6 @@ import {
   Container,
   Grid,
   IconButton,
-  styled,
 } from "@mui/material";
 import { SocialMediaIcon, socialMedias } from "../components/social-media";
 import { Constants } from "../utils/constants";
@@ -32,7 +32,9 @@ import { ArticleType } from "../generated/graphql-types";
 import { getPaginatedPublishedPosts } from "./articles";
 import { PublicPostsQuery } from "../lib/page-graphql/query-public-posts.graphql.interface";
 import { getPostUrl } from "./admin/[post-type]";
-import React from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 interface HomeProps {
   newsLetters: NewsLetter[];
@@ -42,15 +44,7 @@ interface HomeProps {
   posts: PublicPostsQuery["getPostsWithType"]["items"];
 }
 
-// const SectionTitle = styled(Typography)(({ theme }) => ({
-//   my: 2,
-// }));
-
-// export const SectionTitle = React.forwardRef((props, ref) => {
-//   return <Typography {...props}>{ref}</Typography>;
-// });
-
-const SectionTitle = React.forwardRef<HTMLDivElement, TypographyProps>(
+const SectionTitle = forwardRef<HTMLDivElement, TypographyProps>(
   ({ children, ...props }, ref) => {
     return (
       <Typography
@@ -72,37 +66,100 @@ const Home: NextPage<HomeProps> = ({
   posts,
 }) => {
   const { i18n } = useI18n();
+  const bannerSliderRef = useRef<Slider>(null);
+  const podcastSliderBoxRef = useRef<HTMLDivElement>(null);
+  const podcastSliderRef = useRef<Slider>(null);
+  const [podcastSliderBoxWidth, setPodcastSliderBoxWidth] = useState(0);
+  const [podcastCurrentSlider, setPodcastCurrentSlider] = useState(0);
+
+  useEffect(() => {
+    const updateContainerWidth = () => {
+      const width = podcastSliderBoxRef.current?.scrollWidth || 0;
+      setPodcastSliderBoxWidth(width);
+    };
+
+    updateContainerWidth(); // Initial width
+    window.addEventListener("resize", updateContainerWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateContainerWidth);
+    };
+  }, []);
+
   if (draftMode) {
+    const buttonWidth = "100px";
+    const podcastSlickEdgeWidth = 40;
     const settings = {
       dots: true,
       infinite: true,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
+      centerMode: true,
+      centerPadding: buttonWidth,
+      className: "banner-slick",
+      nextArrow: <></>,
+      prevArrow: <></>,
     };
     const podcastCarouselSetting = {
       dots: true,
-      infinite: true,
+      infinite: false,
       speed: 500,
       slidesToShow: 2,
       slidesToScroll: 2,
+      className: "podcast-slick",
+      variableWidth: true,
+      nextArrow: <></>,
+      prevArrow: <></>,
+      afterChange: (currentSlide: number) =>
+        setPodcastCurrentSlider(currentSlide),
     };
     return (
       <Layout draftMode={draftMode}>
-        <Slider {...settings}>
-          {banners?.map((banner, i) => (
-            <Box key={i}>
-              <img
-                src={banner}
-                style={{
-                  objectFit: "contain",
-                  width: "100%",
-                  margin: "0 auto",
-                }}
-              />
-            </Box>
-          ))}
-        </Slider>
+        <Box sx={{ width: "100%", position: "relative" }}>
+          <Button
+            sx={{
+              position: "absolute",
+              left: 0,
+              width: buttonWidth,
+              height: "100%",
+              zIndex: 2,
+            }}
+            onClick={() => bannerSliderRef.current?.slickPrev()}
+          >
+            <Avatar sx={{ opacity: "50%" }}>
+              <ArrowBackIosNewIcon />
+            </Avatar>
+          </Button>
+          <Button
+            sx={{
+              position: "absolute",
+              right: 0,
+              width: buttonWidth,
+              height: "100%",
+              zIndex: 2,
+            }}
+            onClick={() => bannerSliderRef.current?.slickNext()}
+          >
+            <Avatar sx={{ opacity: "50%" }}>
+              <ArrowForwardIosIcon />
+            </Avatar>
+          </Button>
+          <Slider {...settings} ref={bannerSliderRef}>
+            {banners?.map((banner, i) => (
+              <Box key={i}>
+                <img
+                  src={banner}
+                  style={{
+                    objectFit: "contain",
+                    width: "100%",
+                    margin: "0 auto",
+                  }}
+                />
+              </Box>
+            ))}
+          </Slider>
+        </Box>
         <Box
           sx={{
             display: "flex",
@@ -148,28 +205,82 @@ const Home: NextPage<HomeProps> = ({
         </Box>
         <Container>
           <SectionTitle>Podcasts</SectionTitle>
-          <Slider {...podcastCarouselSetting}>
-            {podcasts.map((podcast, i) => (
-              <Box
-                key={i}
-                sx={{
-                  padding: "0 8px",
-                }}
-              >
-                <iframe
-                  src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${podcast.id}`}
+          <Box>
+            <Box
+              ref={podcastSliderBoxRef}
+              sx={{
+                px: podcastSlickEdgeWidth + "px",
+                position: "relative",
+                height: "140px",
+                marginBottom: 8,
+              }}
+            >
+              {podcastCurrentSlider > 0 && (
+                <span
                   style={{
-                    marginBottom: 20,
-                    height: "140px",
-                    width: "100%",
-                    border: "none",
-                    borderRadius: "4px",
-                    boxShadow: "0 1px 8px rgba(0, 0, 0, .2)",
+                    position: "absolute",
+                    left: 0,
+                    padding: 0,
+                    width: podcastSlickEdgeWidth + "px",
+                    height: "100%",
+                    zIndex: 2,
+                    cursor: "pointer",
                   }}
+                  onClick={() => podcastSliderRef.current?.slickPrev()}
                 />
-              </Box>
-            ))}
-          </Slider>
+              )}
+              {podcastCurrentSlider + 1 < podcasts.length - 1 && (
+                <span
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    padding: 0,
+                    width: podcastSlickEdgeWidth + "px",
+                    height: "100%",
+                    zIndex: 2,
+                    cursor: "pointer",
+                  }}
+                  onClick={() => podcastSliderRef.current?.slickNext()}
+                />
+              )}
+              <Slider {...podcastCarouselSetting} ref={podcastSliderRef}>
+                {podcasts.map((podcast, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      width:
+                        (podcastSliderBoxWidth - podcastSlickEdgeWidth * 2) /
+                          2 +
+                        "px",
+                    }}
+                  >
+                    <div style={{ padding: "0 8px", height: "100%" }}>
+                      <iframe
+                        src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${podcast.id}`}
+                        style={{
+                          width: "100%",
+                          height: "140px",
+                          border: "none",
+                          borderRadius: "4px",
+                          boxShadow: "0 1px 8px rgba(0, 0, 0, .2)",
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </Slider>
+            </Box>
+            <Box
+              sx={{
+                my: 4,
+                textAlign: "center",
+              }}
+            >
+              <Link variant="button" href="/podcast">
+                <Button variant="contained">更多 podcast 單集</Button>
+              </Link>
+            </Box>
+          </Box>
           <SectionTitle>Latest Posts</SectionTitle>
           <Grid container>
             {posts.map((post) => (
@@ -200,6 +311,13 @@ const Home: NextPage<HomeProps> = ({
           </Box>
           <style jsx global>{`
             @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+            .banner-slick .slick-dots {
+              bottom: 5px;
+            }
+            .podcast-slick .slick-list {
+              margin: 0 -${podcastSlickEdgeWidth}px;
+              padding: 0 ${podcastSlickEdgeWidth}px;
+            }
           `}</style>
         </Container>
       </Layout>
