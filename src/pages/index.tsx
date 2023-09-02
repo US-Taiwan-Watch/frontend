@@ -208,6 +208,16 @@ const Home: NextPage<HomeProps> = ({
               policy and U.S.-Taiwan relations and recording weekly podcast
               episodes to discuss U.S.-Taiwan relations.
             </Typography>
+            <Box
+              sx={{
+                my: 4,
+                textAlign: "center",
+              }}
+            >
+              <Link variant="button" href="/">
+                <Button variant="contained">更多</Button>
+              </Link>
+            </Box>
           </Container>
           {/* <img src={`/assets/home_pc_1.svg`} alt={`icon`} width="100%" /> */}
         </Box>

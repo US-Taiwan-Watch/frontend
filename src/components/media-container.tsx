@@ -128,7 +128,7 @@ export const MediaContainer: React.FC<MediaContainer> = (params) => {
           )} */}
         </Grid>
         <Grid item md={3}>
-          <MediaCard />
+          <MediaCard title="標題" description="介紹內容" />
           {/* <Typography component="h5" variant="h5" gutterBottom>
             相關文章
           </Typography>

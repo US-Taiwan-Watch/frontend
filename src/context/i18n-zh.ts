@@ -1,6 +1,6 @@
 export default {
   brand: {
-    fullName: "US Taiwan Watch: 美國台灣觀測站",
+    fullName: "US Taiwan Watch",
     description:
       "「US Taiwan Watch 美國台灣觀測站」致力於深化台美關係，透過消弭資訊不對稱，以及提升民眾對於台美事務和國際動態的了解，來降低公民外交的門檻、創造更好的公民外交品質。2022 年觀測站以「拉近距離」作為團隊努力的目標，希望利用成員們在美國的地理優勢，製播更多影音內容，讓台灣觀眾能更貼近美國的社會、文化以及外交現場。",
   },

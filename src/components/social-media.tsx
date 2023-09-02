@@ -99,7 +99,11 @@ export const SocialMediaIcon: React.FC<
   { type: SocialMediaType } & SocialMediaIconProps
 > = (props) => {
   return (
-    <span style={props.size ? { width: props.size, height: props.size } : {}}>
+    <span
+      style={
+        props.size ? { width: props.size, height: props.size, fontSize: 0 } : {}
+      }
+    >
       <SocialMediaIconImpl {...props} />
     </span>
   );

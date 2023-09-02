@@ -32,13 +32,55 @@ export const Footer: React.FC<{ draftMode?: boolean }> = ({ draftMode }) => {
           sx={{
             maxHeight: "25vh",
             width: "100%",
-            backgroundImage: "url(/assets/footer-bg.svg)",
             backgroundSize: "100% 100%",
             paddingBottom: 5,
+            position: "relative",
           }}
         >
-          <Grid container height="100%">
-            <Grid item md={3} sm={3} xs={0}></Grid>
+          <img
+            src="/assets/footer-bg.svg"
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              objectFit: "fill",
+            }}
+          />
+          <Box
+            sx={{ marginTop: 7, display: { xs: "none", sm: "block" } }}
+          ></Box>
+          <Grid container sx={{ height: "100%" }}>
+            <Grid
+              item
+              md={3}
+              sm={3}
+              xs={12}
+              sx={{
+                display: "flex",
+                flexDirection: "column-reverse",
+                height: "100%",
+                paddingTop: 3,
+              }}
+            >
+              <Box
+                sx={{
+                  display: {
+                    sm: "none",
+                    xs: "flex",
+                  },
+                }}
+              >
+                <img
+                  src="/assets/raise.png"
+                  style={{
+                    height: "100%",
+                    width: "100%",
+                    maxHeight: "100px",
+                    objectFit: "contain",
+                  }}
+                />
+              </Box>
+            </Grid>
             <Grid
               item
               md={6}
@@ -47,8 +89,8 @@ export const Footer: React.FC<{ draftMode?: boolean }> = ({ draftMode }) => {
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "end",
                 alignItems: "center",
+                paddingTop: 1,
               }}
             >
               <Box
@@ -57,7 +99,6 @@ export const Footer: React.FC<{ draftMode?: boolean }> = ({ draftMode }) => {
                   flexDirection: "row",
                   justifyContent: "center",
                   alignItems: "center",
-                  my: 6,
                 }}
               >
                 {socialMedias.map((media) => (
@@ -81,10 +122,14 @@ export const Footer: React.FC<{ draftMode?: boolean }> = ({ draftMode }) => {
               </Box>
               <Box
                 sx={{
-                  display: "flex",
+                  display: {
+                    xs: "none",
+                    sm: "flex",
+                  },
                   flexDirection: "row",
                   justifyContent: "center",
                   alignItems: "center",
+                  marginTop: 8,
                 }}
               >
                 <NavBar />
@@ -96,19 +141,22 @@ export const Footer: React.FC<{ draftMode?: boolean }> = ({ draftMode }) => {
               sm={3}
               xs={0}
               sx={{
-                display: "flex",
+                display: {
+                  sm: "flex",
+                  xs: "none",
+                },
                 flexDirection: "column-reverse",
+                height: "100%",
+                paddingTop: 3,
               }}
             >
-              <Box
-                sx={{
-                  width: "100%",
+              <img
+                src="/assets/raise.png"
+                style={{
                   height: "100%",
+                  width: "100%",
                   maxHeight: "100px",
-                  backgroundImage: "url(/assets/raise.png)",
-                  backgroundPosition: "bottom",
-                  backgroundSize: "contain",
-                  backgroundRepeat: "no-repeat",
+                  objectFit: "contain",
                 }}
               />
             </Grid>

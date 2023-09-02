@@ -78,7 +78,7 @@ const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
             />
           </Grid>
           <Grid item md={3}>
-            <MediaCard />
+            <MediaCard title="標題" description="介紹內容" />
           </Grid>
         </Grid>
       </Container>
