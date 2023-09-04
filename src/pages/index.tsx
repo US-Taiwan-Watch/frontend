@@ -91,7 +91,7 @@ const Home: NextPage<HomeProps> = ({
   const isSm = useMediaQuery(theme.breakpoints.down("md"));
 
   if (draftMode) {
-    const buttonWidth = "100px";
+    const buttonWidth = "200px";
     const podcastSlickEdgeWidth = 40;
     const settings = {
       dots: true,

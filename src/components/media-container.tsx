@@ -24,9 +24,10 @@ export type MediaContainer = {
     url: string;
   } | null;
   breadcrumbs: [{ title: string; url: string }];
+  mediaCard?: React.ReactNode;
 };
 
-export const MediaContainer: React.FC<MediaContainer> = (params) => {
+export const MediaContainer: React.FC<MediaContainer> = (props) => {
   const theme = useTheme();
   return (
     <Container sx={{ my: 5 }}>
@@ -40,7 +41,7 @@ export const MediaContainer: React.FC<MediaContainer> = (params) => {
             <Link underline="hover" color="inherit" href="/">
               Home
             </Link>
-            {params.breadcrumbs.map((crumb) => (
+            {props.breadcrumbs.map((crumb) => (
               <Link
                 underline="hover"
                 color="inherit"
@@ -52,10 +53,10 @@ export const MediaContainer: React.FC<MediaContainer> = (params) => {
             ))}
           </Breadcrumbs>
           <Typography component="h4" variant="h4" gutterBottom>
-            {params.title}
+            {props.title}
           </Typography>
           <hr />
-          <Box sx={{ my: 4 }}>{params.children}</Box>
+          <Box sx={{ my: 4 }}>{props.children}</Box>
           <Box
             sx={{
               display: "flex",
@@ -64,31 +65,31 @@ export const MediaContainer: React.FC<MediaContainer> = (params) => {
             }}
           >
             <Box sx={{ maxWidth: 200 }}>
-              {params.prev && (
-                <Link href={params.prev.url}>
+              {props.prev && (
+                <Link href={props.prev.url}>
                   <Typography component="h2" variant="h5">
                     上一篇 <ArrowBackIcon />
                   </Typography>
                   <Typography variant="subtitle1" paragraph>
-                    {params.prev.title}
+                    {props.prev.title}
                   </Typography>
                 </Link>
               )}
             </Box>
             <Box sx={{ maxWidth: 200 }}>
-              {params.next && (
-                <Link href={params.next.url}>
+              {props.next && (
+                <Link href={props.next.url}>
                   <Typography component="h2" variant="h5">
                     <ArrowForwardIcon /> 下一篇
                   </Typography>
                   <Typography variant="subtitle1" paragraph>
-                    {params.next.title}
+                    {props.next.title}
                   </Typography>
                 </Link>
               )}
             </Box>
           </Box>
-          {/* {params.next && (
+          {/* {props.next && (
             <Box
               sx={{
                 display: "flex",
@@ -96,18 +97,18 @@ export const MediaContainer: React.FC<MediaContainer> = (params) => {
               }}
             >
               <Box sx={{ maxWidth: 200 }}>
-                <Link href={params.next.url}>
+                <Link href={props.next.url}>
                   <Typography component="h2" variant="h5">
                     <ArrowForwardIcon /> 下一篇
                   </Typography>
                   <Typography variant="subtitle1" paragraph>
-                    {params.next.title}
+                    {props.next.title}
                   </Typography>
                 </Link>
               </Box>
             </Box>
           )}
-          {params.next && (
+          {props.next && (
             <Box
               sx={{
                 display: "flex",
@@ -115,12 +116,12 @@ export const MediaContainer: React.FC<MediaContainer> = (params) => {
               }}
             >
               <Box sx={{ maxWidth: 200 }}>
-                <Link href={params.next.url}>
+                <Link href={props.next.url}>
                   <Typography component="h2" variant="h5">
                     <ArrowForwardIcon /> 下一篇
                   </Typography>
                   <Typography variant="subtitle1" paragraph>
-                    {params.next.title}
+                    {props.next.title}
                   </Typography>
                 </Link>
               </Box>
@@ -128,7 +129,7 @@ export const MediaContainer: React.FC<MediaContainer> = (params) => {
           )} */}
         </Grid>
         <Grid item md={3}>
-          <MediaCard title="標題" description="介紹內容" />
+          {props.mediaCard}
           {/* <Typography component="h5" variant="h5" gutterBottom>
             相關文章
           </Typography>
@@ -140,7 +141,7 @@ export const MediaContainer: React.FC<MediaContainer> = (params) => {
                 title="test"
                 content="test!"
                 displayDate="2022/2/2"
-                image={params.imageSrc || undefined}
+                image={props.imageSrc || undefined}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={12} sx={{ px: 2 }}>
@@ -149,7 +150,7 @@ export const MediaContainer: React.FC<MediaContainer> = (params) => {
                 title="test"
                 content="test!"
                 displayDate="2022/2/2"
-                image={params.imageSrc || undefined}
+                image={props.imageSrc || undefined}
               />
             </Grid>
           </Grid> */}

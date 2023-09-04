@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { initApolloClientWithLocale } from "../../lib/with-apollo";
 import { MediaContainer } from "../../components/media-container";
+import { MediaCard } from "../../components/media-card";
 
 export type PostPageProps = {
   post?: PublicPostQuery["getPublicArticle"];
@@ -68,6 +69,7 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost, prevPost }) => {
         //   }) ||
         //   undefined
         // }
+        mediaCard={<MediaCard title="標題" description="介紹內容" />}
       >
         <PostContent post={post} />
       </MediaContainer>
