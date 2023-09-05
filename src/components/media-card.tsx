@@ -4,6 +4,7 @@ import {
   IconButton,
   Paper,
   Typography,
+  alpha,
   useTheme,
 } from "@mui/material";
 import { SocialMediaIcon, socialMedias } from "./social-media";
@@ -25,7 +26,7 @@ export const MediaCard: React.FC<MediaCardProps> = (props) => {
         px: 4,
         py: 3,
         marginBottom: 5,
-        backgroundColor: theme.palette.primary.light,
+        backgroundColor: alpha(theme.palette.primary.light, 0.32),
         borderRadius: "10px",
         boxShadow: 0,
       }}
@@ -53,6 +54,7 @@ export const MediaCard: React.FC<MediaCardProps> = (props) => {
             aria-label={media.name}
             href={media.link}
             key={media.name}
+            color="primary"
           >
             <SocialMediaIcon size={25} type={media.type} bw={true} />
           </IconButton>

@@ -26,9 +26,14 @@ const color = {
   purple: {
     100: "#D6D8EB",
     200: "#949FF2",
-    300: "#6770E6",
-    400: "#4D54AD",
-    500: "#A1A5E6",
+    300: "#7C86C8",
+    400: "#4551B1",
+    500: "#36409B",
+  },
+  blue: {
+    100: "#035283",
+    200: "#0E81B8",
+    300: "#1FA2D9",
   },
   blueGrey: {
     100: "#366A83",
@@ -137,12 +142,12 @@ export const lightPalette: PaletteOptions = {
   //   secondary: color.blueGrey[100],
   // },
   secondary: {
-    light: color.yellow[100],
-    main: color.yellow[100],
-    dark: color.yellow[300],
+    light: color.blue[100],
+    main: color.blue[200],
+    dark: color.blue[300],
   },
   primary: {
-    light: color.purple[100],
+    light: color.purple[300],
     main: color.purple[400],
     dark: color.purple[500],
   },
@@ -150,6 +155,11 @@ export const lightPalette: PaletteOptions = {
     light: color.blueGrey[100],
     main: color.blueGrey[200],
     dark: color.blueGrey[300],
+  },
+  text: {
+    primary: color.black[300],
+    secondary: color.white[100],
+    disabled: "#828282",
   },
   background: {
     default: color.white[100],

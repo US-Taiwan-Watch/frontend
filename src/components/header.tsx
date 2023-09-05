@@ -21,12 +21,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { Footer } from "./footer";
 
 const NavLink: React.FC<LinkProps> = (props) => (
-  <Link
-    {...props}
-    variant="button"
-    color="primary.dark"
-    sx={{ my: 1, mx: 1.5 }}
-  >
+  <Link {...props} variant="button" color="inherit" sx={{ my: 1, mx: 1.5 }}>
     {props.children}
   </Link>
 );
@@ -53,6 +48,7 @@ export const NavBar: React.FC = () => (
       },
       flexWrap: "wrap",
     }}
+    color="primary.light"
   >
     <NavButtons />
   </Box>
@@ -72,7 +68,7 @@ const HeaderTitle: React.FC = () => {
         href="/"
         style={{ textDecoration: "none" }}
         scroll={false}
-        color="text.primary"
+        color="inherit"
         sx={{ display: "flex" }}
       >
         <Image
@@ -110,8 +106,8 @@ export const Header: React.FC<{
           boxShadow:
             "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
           justifyContent: "center",
+          color: theme.palette.text.primary,
         }}
-        color="text.primary"
       >
         <HeaderTitle />
         <NavBar />
@@ -124,7 +120,7 @@ export const Header: React.FC<{
             },
           }}
         >
-          <Box sx={{ marginTop: 1 }}>
+          <Box sx={{ marginTop: 1, color: theme.palette.primary.main }}>
             <LocaleSwitcher />
           </Box>
           <NavLink href="/#donate">
@@ -143,20 +139,24 @@ export const Header: React.FC<{
         <IconButton
           sx={{ display: { md: "none", lg: "none" } }}
           onClick={() => setShowDrawer(true)}
+          color="primary"
         >
           <MenuIcon />
         </IconButton>
         <Drawer
           anchor="right"
           PaperProps={{
-            sx: { width: "100%" },
+            sx: { width: "100%", background: theme.palette.primary.main },
           }}
           open={showDrawer}
           onClose={() => setShowDrawer(false)}
         >
-          <Toolbar>
+          <Toolbar sx={{ color: theme.palette.text.secondary }}>
             <HeaderTitle />
-            <IconButton onClick={() => setShowDrawer(false)}>
+            <IconButton
+              onClick={() => setShowDrawer(false)}
+              sx={{ color: theme.palette.text.secondary }}
+            >
               <CancelIcon />
             </IconButton>
           </Toolbar>
@@ -166,6 +166,7 @@ export const Header: React.FC<{
               flexDirection: "column",
               alignItems: "center",
               marginTop: 2,
+              color: theme.palette.text.secondary,
             }}
           >
             <NavButtons />
@@ -173,7 +174,12 @@ export const Header: React.FC<{
               <LocaleSwitcher />
             </Box>
             <NavLink href="/#donate">
-              <Button variant="contained">{i18n.strings.header.donate}</Button>
+              <Button
+                variant="contained"
+                sx={{ background: theme.palette.primary.dark }}
+              >
+                {i18n.strings.header.donate}
+              </Button>
             </NavLink>
           </Box>
           <Box sx={{ width: "100%", position: "fixed", bottom: 0 }}>

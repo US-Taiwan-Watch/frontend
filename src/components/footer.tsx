@@ -26,6 +26,7 @@ export const Footer: React.FC<{ draftMode?: boolean }> = ({ draftMode }) => {
           borderRadius: 0,
           boxShadow: 0,
           position: "relative",
+          background: "transparent",
         }}
       >
         <Box
@@ -107,14 +108,14 @@ export const Footer: React.FC<{ draftMode?: boolean }> = ({ draftMode }) => {
                     aria-label={media.name}
                     href={media.link}
                     key={media.name}
-                    color="primary"
+                    sx={{ color: theme.palette.primary.light }}
                   >
                     <SocialMediaIcon size={40} type={media.type} bw={true} />
                   </IconButton>
                 ))}
                 <IconButton
                   aria-label="email"
-                  color="primary"
+                  sx={{ color: theme.palette.primary.light }}
                   href={`mailto:${Constants.links.email}`}
                 >
                   <EmailRoundedIcon sx={{ width: 35, height: 35 }} />
@@ -165,8 +166,8 @@ export const Footer: React.FC<{ draftMode?: boolean }> = ({ draftMode }) => {
         <Box
           width={"100%"}
           sx={{
-            backgroundColor: theme.palette.primary.dark,
-            color: theme.palette.primary.light,
+            backgroundColor: theme.palette.primary.light,
+            color: theme.palette.text.secondary,
             py: 1,
           }}
         >

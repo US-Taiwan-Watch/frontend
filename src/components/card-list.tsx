@@ -79,7 +79,7 @@ export const CardListItem: React.FC<CardProps> = (props) => {
                 </Typography>
                 <Typography
                   variant="body1"
-                  color="text.secondary"
+                  color="text.disabled"
                   paragraph
                   sx={{
                     overflow: "hidden",
@@ -96,7 +96,7 @@ export const CardListItem: React.FC<CardProps> = (props) => {
             <Typography
               component="span"
               variant="subtitle1"
-              color="text.secondary"
+              color="text.disabled"
             >
               {props.displayDate}
             </Typography>
@@ -133,7 +133,7 @@ export const SmallCardItem: React.FC<CardProps> = (props) => (
           <Typography
             sx={{ display: "flex", direction: "rtl" }}
             variant="subtitle1"
-            color="text.secondary"
+            color="text.disabled"
           >
             {props.displayDate}
           </Typography>
@@ -231,7 +231,7 @@ export const FeaturedCards: React.FC<{
               </Typography>
               <Typography
                 variant="subtitle1"
-                color="text.secondary"
+                color="text.disabled"
                 sx={{ paddingBottom: 2 }}
               >
                 {card.displayDate}
