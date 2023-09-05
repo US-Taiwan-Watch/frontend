@@ -6,7 +6,7 @@ export const Copyright: React.FC = () => (
   <Box>
     <Typography variant="body2" align="center">
       {"© "}
-      <Link color="inherit" href=".">
+      <Link color="inherit" href="/">
         U.S. Taiwan Watch
       </Link>{" "}
       {new Date().getFullYear()}
