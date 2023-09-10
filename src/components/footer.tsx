@@ -31,7 +31,6 @@ export const Footer: React.FC<{ draftMode?: boolean }> = ({ draftMode }) => {
       >
         <Box
           sx={{
-            maxHeight: "25vh",
             width: "100%",
             backgroundSize: "100% 100%",
             paddingBottom: 5,

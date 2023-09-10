@@ -54,7 +54,7 @@ export const NavBar: React.FC = () => (
   </Box>
 );
 
-const HeaderTitle: React.FC = () => {
+const HeaderTitle: React.FC<{ whiteLogo?: boolean }> = ({ whiteLogo }) => {
   const { i18n } = useI18n();
   return (
     <Box
@@ -72,13 +72,13 @@ const HeaderTitle: React.FC = () => {
         sx={{ display: "flex" }}
       >
         <Image
-          src="/assets/logo.png"
+          src={whiteLogo ? "/assets/logo-white.png" : "/assets/logo.png"}
           width={30}
           height={30}
           alt="US Taiwan Watch"
         />
         <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
-          [DRAFT] {i18n.strings.brand.fullName}
+          {i18n.strings.brand.fullName}
         </Typography>
       </Link>
     </Box>
@@ -152,7 +152,7 @@ export const Header: React.FC<{
           onClose={() => setShowDrawer(false)}
         >
           <Toolbar sx={{ color: theme.palette.text.secondary }}>
-            <HeaderTitle />
+            <HeaderTitle whiteLogo={true} />
             <IconButton
               onClick={() => setShowDrawer(false)}
               sx={{ color: theme.palette.text.secondary }}

@@ -118,7 +118,7 @@ export const SmallCardItem: React.FC<CardProps> = (props) => (
               paddingTop: "60%",
               backgroundPosition: "center",
               overflow: "hidden",
-              borderRadius: 3,
+              borderRadius: 4,
             }}
           >
             <CardMedia

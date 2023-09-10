@@ -12,6 +12,7 @@ export const LocaleSwitcher: React.FC = () => {
   return (
     <ButtonGroup
       size="small"
+      color="inherit"
       aria-label="small button group"
       variant={"text"}
       sx={{ alignItems: "center" }}
