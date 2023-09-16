@@ -7,6 +7,7 @@ import {
   IconButton,
   Toolbar,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { useI18n } from "../context/i18n";
@@ -56,6 +57,9 @@ export const NavBar: React.FC = () => (
 
 const HeaderTitle: React.FC<{ whiteLogo?: boolean }> = ({ whiteLogo }) => {
   const { i18n } = useI18n();
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <Box
       sx={{
@@ -78,7 +82,7 @@ const HeaderTitle: React.FC<{ whiteLogo?: boolean }> = ({ whiteLogo }) => {
           alt="US Taiwan Watch"
         />
         <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
-          {i18n.strings.brand.fullName}
+          {isXs ? i18n.strings.brand.shortName : i18n.strings.brand.fullName}
         </Typography>
       </Link>
     </Box>

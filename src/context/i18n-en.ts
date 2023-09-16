@@ -1,6 +1,7 @@
 export default {
   brand: {
     fullName: "US Taiwan Watch",
+    shortName: "US Taiwan Watch",
     description:
       "US Taiwan Watch is committed to deepening the U.S.-Taiwan relationship, lowering the entry barrier to citizen diplomacy, and bolstering citizen diplomacy by reducing information asymmetry and enhancing public understanding of U.S.-Taiwan affairs and international trends. In 2022, US Taiwan Watch will continue its efforts in bridging the gap between Taiwan and the U.S. With the advantage of being physically located in the United States, our team will produce and broadcast more audio-visual content in the U.S. We hope doing so will connect Taiwanese and American societies and provide our Taiwanese audience with a more comprehensive understanding of U.S. society, culture, and diplomacy. ",
   },
