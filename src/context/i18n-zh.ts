@@ -66,6 +66,7 @@ export default {
     playEpisode: "播放單集",
     otherEpisodes: "其他單集",
     moreEpisodes: "更多單集",
+    allPodcastEpisodes: "所有 Podcast 單集",
   },
   common: {
     cardList: {

@@ -66,6 +66,7 @@ export default {
     playEpisode: "Play Episode",
     otherEpisodes: "Other Episodes",
     moreEpisodes: "More Episodes",
+    allPodcastEpisodes: "All Podcast Episodes",
   },
   common: {
     cardList: {
