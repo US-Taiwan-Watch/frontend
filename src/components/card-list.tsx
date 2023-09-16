@@ -33,7 +33,11 @@ export const CardListItem: React.FC<CardProps> = (props) => {
         />
       </Box>
       <Link href={props.url} sx={{ display: { xs: "none", sm: "block" } }}>
-        <CardActionArea>
+        <CardActionArea
+          sx={{
+            borderRadius: 1,
+          }}
+        >
           <Box>
             <Card
               sx={{
@@ -50,7 +54,7 @@ export const CardListItem: React.FC<CardProps> = (props) => {
                       paddingTop: "60%",
                       backgroundPosition: "center",
                       overflow: "hidden",
-                      borderRadius: 6,
+                      borderRadius: 4,
                     }}
                   >
                     <CardMedia
@@ -129,42 +133,45 @@ export const SmallCardItem: React.FC<CardProps> = (props) => (
             />
           </div>
         )}
-        <CardContent>
-          <Typography
-            sx={{ display: "flex", direction: "rtl" }}
-            variant="subtitle1"
-            color="text.disabled"
-          >
-            {props.displayDate}
-          </Typography>
-          <hr />
-          <Typography
-            component="h2"
-            variant="h6"
-            sx={{
-              overflow: "hidden",
-              lineBreak: "anywhere",
-              display: "-webkit-box",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 2,
-            }}
-          >
-            {props.title}
-          </Typography>
-          <Typography
-            variant="body1"
-            paragraph
-            sx={{
-              overflow: "hidden",
-              lineBreak: "anywhere",
-              display: "-webkit-box",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 3,
-            }}
-          >
-            {props.content}
-          </Typography>
-        </CardContent>
+        <Typography
+          sx={{
+            display: "flex",
+            direction: "rtl",
+            borderBottom: "1px solid",
+            marginBottom: 1,
+          }}
+          variant="subtitle1"
+          color="text.disabled"
+        >
+          {props.displayDate}
+        </Typography>
+        <Typography
+          component="h2"
+          variant="h6"
+          sx={{
+            overflow: "hidden",
+            lineBreak: "anywhere",
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: 2,
+          }}
+        >
+          {props.title}
+        </Typography>
+        <Typography
+          variant="body1"
+          color="text.disabled"
+          paragraph
+          sx={{
+            overflow: "hidden",
+            lineBreak: "anywhere",
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: 3,
+          }}
+        >
+          {props.content}
+        </Typography>
       </CardActionArea>
     </Card>
   </Link>
