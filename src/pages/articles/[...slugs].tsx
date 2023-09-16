@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { initApolloClientWithLocale } from "../../lib/with-apollo";
 import { MediaContainer } from "../../components/media-container";
 import { MediaCard } from "../../components/media-card";
+import { useI18n } from "../../context/i18n";
 
 export type PostPageProps = {
   post?: PublicPostQuery["getPublicArticle"];
@@ -24,6 +25,7 @@ export type PostPageProps = {
 
 const PostPage: NextPage<PostPageProps> = ({ post, nextPost, prevPost }) => {
   const router = useRouter();
+  const { i18n } = useI18n();
   useEffect(() => {
     if (!post?.publishedTime) {
       return;
@@ -54,7 +56,7 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost, prevPost }) => {
       <MediaContainer
         title={post.title?.text}
         imageSrc={post.imageSource}
-        breadcrumbs={[{ title: "Articles", url: "/articles" }]}
+        breadcrumbs={[{ title: i18n.strings.posts.ARTICLE, url: "/articles" }]}
         next={
           (nextPost && {
             title: nextPost.title?.text || "",
@@ -69,7 +71,12 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost, prevPost }) => {
           }) ||
           undefined
         }
-        mediaCard={<MediaCard title="標題" description="介紹內容" />}
+        mediaCard={
+          <MediaCard
+            title={i18n.strings.articles.mediaCardTitle}
+            description={i18n.strings.articles.mediaCardDesc}
+          />
+        }
       >
         <PostContent post={post} />
       </MediaContainer>

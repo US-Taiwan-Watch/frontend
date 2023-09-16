@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useI18n } from "../context/i18n";
 
 export type MediaContainer = {
   title?: string | null;
@@ -27,6 +28,7 @@ export type MediaContainer = {
 
 export const MediaContainer: React.FC<MediaContainer> = (props) => {
   const theme = useTheme();
+  const { i18n } = useI18n();
   return (
     <Container sx={{ my: 5 }}>
       <Grid container spacing={4}>
@@ -38,7 +40,7 @@ export const MediaContainer: React.FC<MediaContainer> = (props) => {
             sx={{ marginBottom: 2 }}
           >
             <Link underline="hover" color="inherit" href="/">
-              Home
+              {i18n.strings.common.home}
             </Link>
             {props.breadcrumbs.map((crumb) => (
               <Link
@@ -69,8 +71,13 @@ export const MediaContainer: React.FC<MediaContainer> = (props) => {
             <Grid item md={3} sm={3} xs={6} sx={{ alignItems: "end" }}>
               {props.prev && (
                 <Link href={props.prev.url}>
-                  <Typography component="h2" variant="h5">
-                    上一篇 <ArrowBackIcon />
+                  <Typography
+                    component="h2"
+                    variant="h5"
+                    sx={{ display: "flex", alignItems: "center" }}
+                  >
+                    {i18n.strings.media.prev}{" "}
+                    <ArrowBackIcon sx={{ marginLeft: 1 }} />
                   </Typography>
                   <Typography variant="subtitle1" paragraph>
                     {props.prev.title}
@@ -81,8 +88,13 @@ export const MediaContainer: React.FC<MediaContainer> = (props) => {
             <Grid item md={3} sm={3} xs={6}>
               {props.next && (
                 <Link href={props.next.url}>
-                  <Typography component="h2" variant="h5">
-                    <ArrowForwardIcon /> 下一篇
+                  <Typography
+                    component="h2"
+                    variant="h5"
+                    sx={{ display: "flex", alignItems: "center" }}
+                  >
+                    <ArrowForwardIcon sx={{ marginRight: 1 }} />{" "}
+                    {i18n.strings.media.next}
                   </Typography>
                   <Typography variant="subtitle1" paragraph>
                     {props.next.title}

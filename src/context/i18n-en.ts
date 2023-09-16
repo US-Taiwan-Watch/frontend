@@ -72,6 +72,7 @@ export default {
       readMore: "Continue reading...",
     },
     learnMore: "Learn More",
+    home: "Home",
   },
   posts: {
     ARTICLE: "Articles",
@@ -86,6 +87,13 @@ export default {
     desc: "News page!",
     moreArticles: "Mode Articles",
     latestArticles: "Latest Articles",
+    allArticles: "All Articles",
+    mediaCardTitle: "TITLE",
+    mediaCardDesc: "DESC",
+  },
+  media: {
+    prev: "Previous",
+    next: "Next",
   },
   posters: {
     title: "Updates",

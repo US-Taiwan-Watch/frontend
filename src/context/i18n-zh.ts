@@ -72,6 +72,7 @@ export default {
       readMore: "閱讀更多...",
     },
     learnMore: "更多",
+    home: "首頁",
   },
   posts: {
     ARTICLE: "文章",
@@ -86,6 +87,13 @@ export default {
     desc: "新聞分析文章！",
     moreArticles: "更多文章",
     latestArticles: "最新文章",
+    allArticles: "所有文章",
+    mediaCardTitle: "標題",
+    mediaCardDesc: "介紹",
+  },
+  media: {
+    prev: "上一則",
+    next: "下一則",
   },
   posters: {
     title: "公告訊息",
