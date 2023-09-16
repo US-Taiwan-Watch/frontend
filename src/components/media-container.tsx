@@ -1,4 +1,3 @@
-import { SmallCardItem } from "./card-list";
 import { Link } from "./link";
 import {
   Breadcrumbs,
@@ -10,7 +9,6 @@ import {
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { MediaCard } from "./media-card";
 
 export type MediaContainer = {
   title?: string | null;
@@ -31,10 +29,11 @@ export const MediaContainer: React.FC<MediaContainer> = (props) => {
   const theme = useTheme();
   return (
     <Container sx={{ my: 5 }}>
-      <Grid container spacing={2}>
-        <Grid item md={9}>
+      <Grid container spacing={4}>
+        <Grid item md={8}>
           <Breadcrumbs
-            separator="›"
+            separator=">"
+            color="text.disabled"
             aria-label="breadcrumb"
             sx={{ marginBottom: 2 }}
           >
@@ -55,16 +54,19 @@ export const MediaContainer: React.FC<MediaContainer> = (props) => {
           <Typography component="h4" variant="h4" gutterBottom>
             {props.title}
           </Typography>
-          <hr />
+          {/* <hr /> */}
           <Box sx={{ my: 4 }}>{props.children}</Box>
-          <Box
+          <Grid
+            container
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              alignItems: "center",
+              alignItems: "start",
+              marginTop: 8,
+              px: 1,
             }}
           >
-            <Box sx={{ maxWidth: 200 }}>
+            <Grid item md={3} sm={3} xs={6} sx={{ alignItems: "end" }}>
               {props.prev && (
                 <Link href={props.prev.url}>
                   <Typography component="h2" variant="h5">
@@ -75,8 +77,8 @@ export const MediaContainer: React.FC<MediaContainer> = (props) => {
                   </Typography>
                 </Link>
               )}
-            </Box>
-            <Box sx={{ maxWidth: 200 }}>
+            </Grid>
+            <Grid item md={3} sm={3} xs={6}>
               {props.next && (
                 <Link href={props.next.url}>
                   <Typography component="h2" variant="h5">
@@ -87,73 +89,11 @@ export const MediaContainer: React.FC<MediaContainer> = (props) => {
                   </Typography>
                 </Link>
               )}
-            </Box>
-          </Box>
-          {/* {props.next && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row-reverse",
-              }}
-            >
-              <Box sx={{ maxWidth: 200 }}>
-                <Link href={props.next.url}>
-                  <Typography component="h2" variant="h5">
-                    <ArrowForwardIcon /> 下一篇
-                  </Typography>
-                  <Typography variant="subtitle1" paragraph>
-                    {props.next.title}
-                  </Typography>
-                </Link>
-              </Box>
-            </Box>
-          )}
-          {props.next && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row-reverse",
-              }}
-            >
-              <Box sx={{ maxWidth: 200 }}>
-                <Link href={props.next.url}>
-                  <Typography component="h2" variant="h5">
-                    <ArrowForwardIcon /> 下一篇
-                  </Typography>
-                  <Typography variant="subtitle1" paragraph>
-                    {props.next.title}
-                  </Typography>
-                </Link>
-              </Box>
-            </Box>
-          )} */}
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid item md={3}>
+        <Grid item md={4}>
           {props.mediaCard}
-          {/* <Typography component="h5" variant="h5" gutterBottom>
-            相關文章
-          </Typography>
-          <hr />
-          <Grid container>
-            <Grid item xs={12} sm={6} md={12} sx={{ px: 2 }}>
-              <SmallCardItem
-                url="test"
-                title="test"
-                content="test!"
-                displayDate="2022/2/2"
-                image={props.imageSrc || undefined}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={12} sx={{ px: 2 }}>
-              <SmallCardItem
-                url="test"
-                title="test"
-                content="test!"
-                displayDate="2022/2/2"
-                image={props.imageSrc || undefined}
-              />
-            </Grid>
-          </Grid> */}
         </Grid>
       </Grid>
     </Container>

@@ -1,4 +1,4 @@
-import { Box, Container } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { PublicPostQuery } from "../lib/page-graphql/query-public-post.graphql.interface";
 import { AdaptiveEditor } from "./component-adaptive-editor";
 
@@ -11,7 +11,7 @@ export const PostContent: React.FC<{
   }
 
   return (
-    <Container sx={{ paddingBottom: 10 }}>
+    <>
       {/* {isEditor && <>
           <Link href={`admin/${post.id}`}>
             <Button variant="contained">EDIT</Button>
@@ -20,19 +20,43 @@ export const PostContent: React.FC<{
         </>} */}
       <Box
         alignItems="center"
-        sx={{ paddingTop: 3, display: "flex", flexDirection: "column" }}
+        sx={{
+          paddingTop: 1,
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+        }}
       >
         {/* <Typography component="h1" variant="h4">
           {post.title}
         </Typography> */}
         {post.imageSource && (
-          <img
-            src={post.imageSource}
-            style={{ paddingTop: 10, maxWidth: "100%", maxHeight: "50vh" }}
-          />
+          <div
+            style={{
+              position: "relative",
+              paddingTop: "69%",
+              backgroundPosition: "center",
+              overflow: "hidden",
+              width: "100%",
+            }}
+          >
+            <img
+              src={post.imageSource}
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: "100%",
+              }}
+            />
+          </div>
         )}
       </Box>
+      <Typography variant="subtitle2" paragraph sx={{ marginTop: 2 }}>
+        {post.publishedTime &&
+          new Date(post.publishedTime).toLocaleDateString()}
+      </Typography>
       <AdaptiveEditor value={post.content || ""} viewOnly={true} />
-    </Container>
+    </>
   );
 };

@@ -38,7 +38,9 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
           </Typography>
         </Container>
       </Banner>
-      <PostContent post={post} />
+      <Container>
+        <PostContent post={post} />
+      </Container>
     </Layout>
   );
 };

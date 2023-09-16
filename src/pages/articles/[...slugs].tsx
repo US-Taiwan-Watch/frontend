@@ -62,13 +62,13 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost, prevPost }) => {
           }) ||
           undefined
         }
-        // prev={
-        //   (prevPost && {
-        //     title: prevPost.title?.text || "",
-        //     url: getPostUrl(prevPost),
-        //   }) ||
-        //   undefined
-        // }
+        prev={
+          (prevPost && {
+            title: prevPost.title?.text || "",
+            url: getPostUrl(prevPost),
+          }) ||
+          undefined
+        }
         mediaCard={<MediaCard title="標題" description="介紹內容" />}
       >
         <PostContent post={post} />

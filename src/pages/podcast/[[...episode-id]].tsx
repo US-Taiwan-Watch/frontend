@@ -73,6 +73,9 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
   const nextEpIndex = partialEpisodes
     ? partialEpisodes.findIndex((ep) => ep.id === episodeID) + 1
     : null;
+  const prevEpIndex = partialEpisodes
+    ? partialEpisodes.findIndex((ep) => ep.id === episodeID) + 1
+    : null;
 
   useEffect(() => {
     const episodesInSession = sessionStorage.getItem("podcast-episodes");
@@ -184,6 +187,14 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
               ? {
                   title: partialEpisodes[nextEpIndex].title || "",
                   url: `/podcast/${EPISODE_PATH}/${partialEpisodes[nextEpIndex].id}`,
+                }
+              : null
+          }
+          prev={
+            prevEpIndex
+              ? {
+                  title: partialEpisodes[prevEpIndex].title || "",
+                  url: `/podcast/${EPISODE_PATH}/${partialEpisodes[prevEpIndex].id}`,
                 }
               : null
           }
