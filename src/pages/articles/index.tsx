@@ -46,7 +46,7 @@ const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
       </>} */}
       <Container sx={{ my: 5 }}>
         <Grid container spacing={2}>
-          <Grid item md={9}>
+          <Grid item md={8} sm={12} xs={12}>
             <Typography component="h5" variant="h5" gutterBottom>
               {i18n.strings.articles.allArticles}
             </Typography>
@@ -77,7 +77,7 @@ const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
               }))}
             />
           </Grid>
-          <Grid item md={3}>
+          <Grid item md={4} sm={12} xs={12}>
             <MediaCard
               title={i18n.strings.articles.mediaCardTitle}
               description={i18n.strings.articles.mediaCardDesc}

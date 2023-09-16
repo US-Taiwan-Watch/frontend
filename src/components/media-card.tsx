@@ -29,19 +29,19 @@ export const MediaCard: React.FC<MediaCardProps> = (props) => {
         backgroundColor: alpha(theme.palette.primary.light, 0.32),
         borderRadius: "10px",
         boxShadow: 0,
+        width: "100%",
       }}
     >
       <Avatar
-        alt="觀測站底加辣"
         src="https://static.ustw.watch/public-image/website/podcast.jpg"
         sx={{
-          width: "50%",
-          height: "50%",
+          width: 120,
+          height: 120,
           border: "3px solid #FFD823",
           marginBottom: 2,
         }}
       />
-      <Typography component="h6" variant="h6">
+      <Typography component="h6" variant="h6" sx={{ textAlign: "center" }}>
         {props.title}
       </Typography>
       <Typography variant="body1" sx={{ my: 2 }}>

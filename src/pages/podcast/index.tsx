@@ -136,7 +136,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
         />
         <Container sx={{ my: 5 }}>
           <Grid container spacing={2}>
-            <Grid item md={9}>
+            <Grid item md={8} sm={12} xs={12}>
               <Typography component="h5" variant="h5" gutterBottom>
                 所有 Podcast Episodes
               </Typography>
@@ -162,7 +162,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
                   }))}
               />
             </Grid>
-            <Grid item md={3}>
+            <Grid item md={4} sm={12} xs={12}>
               {mediaCard}
             </Grid>
           </Grid>

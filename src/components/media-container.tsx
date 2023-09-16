@@ -32,7 +32,7 @@ export const MediaContainer: React.FC<MediaContainer> = (props) => {
   return (
     <Container sx={{ my: 5 }}>
       <Grid container spacing={4}>
-        <Grid item md={8}>
+        <Grid item md={8} sm={12} xs={12}>
           <Breadcrumbs
             separator=">"
             color="text.disabled"
@@ -104,7 +104,7 @@ export const MediaContainer: React.FC<MediaContainer> = (props) => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item md={4}>
+        <Grid item md={4} sm={12} xs={12}>
           {props.mediaCard}
         </Grid>
       </Grid>
