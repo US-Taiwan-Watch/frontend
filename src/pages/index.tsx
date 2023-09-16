@@ -93,31 +93,6 @@ const Home: NextPage<HomeProps> = ({
   if (draftMode) {
     const buttonWidth = "200px";
     const podcastSlickEdgeWidth = 40;
-    const settings = {
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      centerMode: !isSm,
-      centerPadding: buttonWidth,
-      className: "banner-slick",
-      nextArrow: <></>,
-      prevArrow: <></>,
-    };
-    const podcastCarouselSetting = {
-      dots: true,
-      infinite: false,
-      speed: 500,
-      slidesToShow: isSm ? 1 : 2,
-      slidesToScroll: isSm ? 1 : 2,
-      className: "podcast-slick",
-      variableWidth: true,
-      nextArrow: <></>,
-      prevArrow: <></>,
-      afterChange: (currentSlide: number) =>
-        setPodcastCurrentSlider(currentSlide),
-    };
     return (
       <Layout draftMode={draftMode}>
         <Box sx={{ width: "100%", position: "relative", maxHeight: "100vh" }}>
@@ -153,7 +128,21 @@ const Home: NextPage<HomeProps> = ({
               </Avatar>
             </Button>
           )}
-          <Slider {...settings} ref={bannerSliderRef}>
+          <Slider
+            dots={true}
+            infinite={true}
+            speed={500}
+            slidesToShow={1}
+            slidesToScroll={1}
+            centerMode={!isSm}
+            centerPadding={buttonWidth}
+            className={"banner-slick"}
+            autoplay={true}
+            autoplaySpeed={6000}
+            nextArrow={<></>}
+            prevArrow={<></>}
+            ref={bannerSliderRef}
+          >
             {banners?.map((banner, i) => (
               <Box key={i}>
                 <img
@@ -261,7 +250,21 @@ const Home: NextPage<HomeProps> = ({
                   onClick={() => podcastSliderRef.current?.slickNext()}
                 />
               )}
-              <Slider {...podcastCarouselSetting} ref={podcastSliderRef}>
+              <Slider
+                dots={true}
+                infinite={false}
+                speed={500}
+                slidesToShow={isSm ? 1 : 2}
+                slidesToScroll={isSm ? 1 : 2}
+                className={"podcast-slick"}
+                variableWidth={true}
+                nextArrow={<></>}
+                prevArrow={<></>}
+                afterChange={(currentSlide: number) =>
+                  setPodcastCurrentSlider(currentSlide)
+                }
+                ref={podcastSliderRef}
+              >
                 {podcasts.map((podcast, i) => (
                   <div
                     key={i}
