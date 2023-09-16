@@ -177,25 +177,23 @@ const Home: NextPage<HomeProps> = ({
             }}
           >
             <Typography
-              variant="subtitle1"
-              style={{ fontFamily: "Inter, sans-serif" }}
+              variant="h6"
+              sx={{ fontFamily: "Inter, sans-serif", marginBottom: 2 }}
             >
-              USTW is...
+              {i18n.strings.landing.aboutIntro}
             </Typography>
             <Typography
               variant="subtitle1"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
-              US Taiwan Watch is a 501c(3) non-profit organization that aims to
-              strengthen U.S.-Taiwan relations through civil society and civil
-              engagement. US Taiwan Watch was founded in June 2017 by a group of
-              U.S.-based Taiwanese engineers. The founders’ initial objective
-              was to synthesize data on Taiwan-related bills in Congress on a
-              website to facilitate greater Taiwanese understanding of U.S.
-              policy. We later expanded to a series of other initiatives. This
-              included providing more comprehensive analysis on U.S. foreign
-              policy and U.S.-Taiwan relations and recording weekly podcast
-              episodes to discuss U.S.-Taiwan relations.
+              {i18n.strings.landing.aboutDesc.map((p) =>
+                i18n.formatString(
+                  p,
+                  ...i18n.strings.landing.aboutDescLinks.map((cta) => (
+                    <Link href={cta.url}>{cta.text!}</Link>
+                  ))
+                )
+              )}
             </Typography>
             <Box
               sx={{
@@ -204,14 +202,16 @@ const Home: NextPage<HomeProps> = ({
               }}
             >
               <Link variant="button" href="/">
-                <Button variant="contained">更多</Button>
+                <Button variant="contained">
+                  {i18n.strings.common.learnMore}
+                </Button>
               </Link>
             </Box>
           </Container>
           {/* <img src={`/assets/home_pc_1.svg`} alt={`icon`} width="100%" /> */}
         </Box>
         <Container>
-          <SectionTitle>Podcasts</SectionTitle>
+          <SectionTitle>{i18n.strings.header.podcast}</SectionTitle>
           <Box>
             <Box
               ref={podcastSliderBoxRef}
@@ -298,14 +298,16 @@ const Home: NextPage<HomeProps> = ({
               }}
             >
               <Link variant="button" href="/podcast">
-                <Button variant="contained">更多 podcast 單集</Button>
+                <Button variant="contained">
+                  {i18n.strings.podcast.moreEpisodes}
+                </Button>
               </Link>
             </Box>
           </Box>
-          <SectionTitle>Latest Posts</SectionTitle>
+          <SectionTitle>{i18n.strings.articles.latestArticles}</SectionTitle>
           <Grid container>
             {posts.map((post) => (
-              <Grid key={post.id} item xs={12} sm={6} md={3} sx={{ px: 1 }}>
+              <Grid key={post.id} item xs={12} sm={6} md={3} sx={{ px: 2 }}>
                 <SmallCardItem
                   url={getPostUrl(post)}
                   title={post.title?.text || ""}
@@ -327,7 +329,9 @@ const Home: NextPage<HomeProps> = ({
             }}
           >
             <Link variant="button" href="/articles">
-              <Button variant="contained">更多文章</Button>
+              <Button variant="contained">
+                {i18n.strings.articles.moreArticles}
+              </Button>
             </Link>
           </Box>
           <style jsx global>{`

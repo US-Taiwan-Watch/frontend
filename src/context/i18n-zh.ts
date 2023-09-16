@@ -18,6 +18,7 @@ export default {
   },
   landing: {
     testI18n: "I18n - 中文內容",
+    aboutIntro: "USTW 是...",
     aboutDesc: [
       "美國台灣觀測站為美國註冊的 501c(3) 非營利組織，致力於透過公民力量強化台美關係，並促進民眾有品質地參與台美外交。",
       "美國台灣觀測站成立於 2017 年 6 月，起初成員大多為旅美工程師，目標將美國國會的台灣相關法案整理於網站，提供台灣媒體與民眾更認識美國政策制定的平台。2018 年觀測站和長期向美國人教育台灣對美重要性的非營利組織 美台會（American Citizens for Taiwan）合併，並開始拓展其他計畫，包括擴大分析美國外交政策、台美中局勢，以及推出每週 Podcast 討論台美關係。",
@@ -64,11 +65,13 @@ export default {
     playLatestEpisode: "播放最新單集",
     playEpisode: "播放單集",
     otherEpisodes: "其他單集",
+    moreEpisodes: "更多單集",
   },
   common: {
     cardList: {
       readMore: "閱讀更多...",
     },
+    learnMore: "更多",
   },
   posts: {
     ARTICLE: "文章",
@@ -81,6 +84,8 @@ export default {
   articles: {
     title: "文章",
     desc: "新聞分析文章！",
+    moreArticles: "更多文章",
+    latestArticles: "最新文章",
   },
   posters: {
     title: "公告訊息",
