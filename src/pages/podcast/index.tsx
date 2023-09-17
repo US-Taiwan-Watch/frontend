@@ -45,7 +45,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
     []
   );
   const { query } = useRouter();
-  let pageQuery = query[PAGE_SEARCH_PAGE_NAME];
+  const pageQuery = query[PAGE_SEARCH_PAGE_NAME];
   const [page, setPage] = useState(
     typeof pageQuery === "string" ? parseInt(pageQuery) : defaultPage
   );
