@@ -128,7 +128,7 @@ export const Header: React.FC<{
           <Box sx={{ marginTop: 1, color: theme.palette.primary.main }}>
             <LocaleSwitcher />
           </Box>
-          <NavLink href="/#donate">
+          <NavLink href="/support-us">
             <Button variant="contained">{i18n.strings.header.donate}</Button>
           </NavLink>
           {user && (
@@ -178,7 +178,7 @@ export const Header: React.FC<{
             <Box sx={{ marginTop: 1 }}>
               <LocaleSwitcher />
             </Box>
-            <NavLink href="/#donate">
+            <NavLink href="/support-us">
               <Button
                 variant="contained"
                 sx={{ background: theme.palette.primary.dark }}
