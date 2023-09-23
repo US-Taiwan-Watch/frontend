@@ -11,15 +11,17 @@ import { BannersQueryDocument } from "../lib/page-graphql/query-banners.graphql.
 
 interface AboutProps {
   banner: string;
+  draftMode: boolean;
 }
 
 const About: NextPage<AboutProps> = ({ 
   banner,
+  draftMode
  }) => {
   const { i18n } = useI18n();
 
   return (
-    <Layout>
+    <Layout draftMode={draftMode}>
       <Box sx={{ width: "100%", position: "relative", maxHeight: "100vh", }}>
         <img
           src={banner}
@@ -70,12 +72,15 @@ const About: NextPage<AboutProps> = ({
   )
 };
 
-export const getStaticProps: GetStaticProps<AboutProps> = async () => {
+export const getStaticProps: GetStaticProps<AboutProps> = async ({
+  draftMode,
+}) => {
   const client = initApolloClient();
   const bannersRes = await client.query({ query: BannersQueryDocument });
   return {
     props: {
       banner: bannersRes.data.banners[0],
+      draftMode: !!draftMode,
     },
     revalidate: 300,
   };
