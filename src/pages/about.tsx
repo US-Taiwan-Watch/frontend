@@ -8,37 +8,28 @@ import {
 import { initApolloClient } from "../lib/with-apollo";
 import { useI18n } from "../context/i18n";
 import { BannersQueryDocument } from "../lib/page-graphql/query-banners.graphql.interface";
+import { Banner } from "../components/banner";
 
 interface AboutProps {
-  banner: string;
   draftMode: boolean;
 }
 
 const About: NextPage<AboutProps> = ({ 
-  banner,
   draftMode
  }) => {
   const { i18n } = useI18n();
 
   return (
     <Layout draftMode={draftMode}>
-      <Box sx={{ width: "100%", position: "relative", maxHeight: "100vh", }}>
-        <img
-          src={banner}
-          style={{
-            objectFit: "contain",
-            width: "100%",
-            margin: "0 auto",
-          }}
+      <Banner
+          imageSrc="https://static.ustw.watch/public-image/website/banners/ustw_book.png"
+          draftMode={true}
         />
-      </Box>
       <Box
           sx={{
             display: "flex",
             justifyContent: "center",
             width: "100%",
-            backgroundImage: "url(/assets/home-upper-bg.svg)",
-            backgroundSize: "100% 100%",
           }}
         >
           <Container
@@ -79,7 +70,6 @@ export const getStaticProps: GetStaticProps<AboutProps> = async ({
   const bannersRes = await client.query({ query: BannersQueryDocument });
   return {
     props: {
-      banner: bannersRes.data.banners[0],
       draftMode: !!draftMode,
     },
     revalidate: 300,
