@@ -1,0 +1,34 @@
+query Member($bioGuideId: String!) {
+  member(bioGuideId: $bioGuideId) {
+    id
+    profilePictureUri
+    firstName
+    firstName_zh
+    lastName
+    lastName_zh
+    nickname
+    gender
+    birthday
+    website
+    office
+    phone
+    cspanId
+    twitterId
+    facebookId
+    youtubeId
+    congressRoles {
+      chamber
+      state
+      district
+      senatorClass
+      congressNumbers
+      parties {
+        party
+        startDate
+        endDate
+      }
+      startDate
+      endDate
+    }
+  }
+}
