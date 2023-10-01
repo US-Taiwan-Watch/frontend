@@ -31,7 +31,7 @@ const NavButtons: React.FC = () => {
   const { i18n } = useI18n();
   return (
     <>
-      <NavLink href="/#about">{i18n.strings.header.about}</NavLink>
+      <NavLink href="/about">{i18n.strings.header.about}</NavLink>
       <NavLink href="/podcast">{i18n.strings.header.podcast}</NavLink>
       <NavLink href="/articles">{i18n.strings.header.articles}</NavLink>
     </>

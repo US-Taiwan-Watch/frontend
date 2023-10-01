@@ -22,12 +22,13 @@ const About: NextPage = () => {
       />
       <Container sx={{ my: 5 }}>
         <SectionTitle>{i18n.strings.header.about}</SectionTitle>
-        <Typography
-          variant="subtitle1"
-          style={{ fontFamily: "Inter, sans-serif" }}
-        >
-          {i18n.strings.about.ourStoryDesc}
-        </Typography>
+        <Box>
+          {i18n.strings.about.ourStoryDesc.map((p) => (
+            <Typography variant="subtitle1" paragraph>
+              {p}
+            </Typography>
+          ))}
+        </Box>
       </Container>
     </Layout>
   );

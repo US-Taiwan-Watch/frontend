@@ -186,7 +186,7 @@ const Home: NextPage<HomeProps> = ({
               variant="subtitle1"
               style={{ fontFamily: "Inter, sans-serif" }}
             >
-              {i18n.strings.landing.aboutDesc.map((p) =>
+              {i18n.strings.landing.aboutShort.map((p) =>
                 i18n.formatString(
                   p,
                   ...i18n.strings.landing.aboutDescLinks.map((cta) => (
@@ -201,7 +201,7 @@ const Home: NextPage<HomeProps> = ({
                 textAlign: "center",
               }}
             >
-              <Link variant="button" href="/">
+              <Link variant="button" href="/about">
                 <Button variant="contained">
                   {i18n.strings.common.learnMore}
                 </Button>

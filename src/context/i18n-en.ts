@@ -20,6 +20,9 @@ export default {
   landing: {
     testI18n: "I18n - 中文內容",
     aboutIntro: "USTW is...",
+    aboutShort: [
+      "US Taiwan Watch is a think tank and media creator focused on the relationship between the United States and Taiwan. We are building a community for a new generation of thinkers and doers. Join us:",
+    ],
     aboutDesc: [
       "US Taiwan Watch is a 501c(3) non-profit organization that aims to strengthen U.S.-Taiwan relations through civil society and civil engagement.",
       "US Taiwan Watch was founded in June 2017 by a group of U.S.-based Taiwanese engineers. The founders’ initial objective was to synthesize data on Taiwan-related bills in Congress on a website to facilitate greater Taiwanese understanding of U.S. policy. We later expanded to a series of other initiatives. This included providing more comprehensive analysis on U.S. foreign policy and U.S.-Taiwan relations and recording weekly podcast episodes to discuss U.S.-Taiwan relations.",
@@ -50,7 +53,10 @@ export default {
     moreEpisodeButton: "Mode Episodes",
   },
   about: {
-    ourStoryDesc: "hahaha",
+    ourStoryDesc: [
+      "US Taiwan Watch is a think tank and media creator dedicated to making the relationship between the United States and Taiwan more resilient, more productive, and more purposeful. ",
+      "We are building a community for a new generation of thinkers and doers, to tell the story of why the US matters for Taiwan, and why Taiwan matters for the US. Join us! ",
+    ],
   },
   social: {
     fb: "Facebook is our primary platform through which we aim to strengthen U.S.-Taiwan relations. On Facebook, we debunk misinformation and common myths by providing latest news and thorough analyses of current events and policies in the U.S. and Taiwan.",
