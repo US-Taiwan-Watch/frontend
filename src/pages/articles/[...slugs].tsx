@@ -1,6 +1,5 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { Layout } from "../../components/layout";
-import { getPaginatedPublishedPosts } from ".";
 import { Loading } from "../../components/loading";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
 import { PostContent } from "../../components/post-content";
@@ -16,6 +15,7 @@ import { initApolloClientWithLocale } from "../../lib/with-apollo";
 import { MediaContainer } from "../../components/media-container";
 import { MediaCard } from "../../components/media-card";
 import { useI18n } from "../../context/i18n";
+import { PublicPostSlugsDocument } from "../../lib/page-graphql/query-public-post-slugs.graphql.interface";
 
 export type PostPageProps = {
   post?: PublicPostQuery["getPublicArticle"];
@@ -84,31 +84,36 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost, prevPost }) => {
   );
 };
 
+export const getPublishedPostUrlPaths = async (
+  type: ArticleType,
+  offset: number,
+  limit: number
+): Promise<string[]> => {
+  const apolloClient = initApolloClientWithLocale();
+  const res = await apolloClient.query({
+    query: PublicPostSlugsDocument,
+    variables: {
+      type,
+      limit,
+      offset,
+    },
+    fetchPolicy: "cache-first",
+  });
+  return res.data.getPostsWithType.items.map((p) => getPostUrl(p));
+};
+
 export const getStaticPaths: GetStaticPaths<{ slugs: string[] }> = async ({
   locales,
 }) => {
-  const apolloClient = initApolloClientWithLocale();
-  const posts = (
-    await getPaginatedPublishedPosts(ArticleType.Article, 1, 20, apolloClient)
-  ).items;
+  const postUrls = await getPublishedPostUrlPaths(ArticleType.Article, 0, 10);
   return {
     paths: getStaticPathsWithLocale(
       // language!
-      posts.map((post) => {
-        if (!post.publishedTime) {
-          return {
-            params: {
-              slugs: [post.slug as string],
-            },
-          };
-        }
-        const date = getPostPublishDate(post.publishedTime);
-        return {
-          params: {
-            slugs: [date?.year, date?.month, post.slug as string],
-          },
-        };
-      }),
+      postUrls.map((url) => ({
+        params: {
+          slugs: url.split("/").slice(1),
+        },
+      })),
       locales
     ),
     fallback: true,
@@ -128,7 +133,7 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
     const data = await apolloClient.query({
       query: PublicPostDocument,
       variables: { slug: slugs[slugs.length - 1] },
-      fetchPolicy: "network-only",
+      fetchPolicy: "cache-first",
     });
     const post = data.data.getPublicArticle;
     if (!post || post.type !== ArticleType.Article || !post.publishedTime) {

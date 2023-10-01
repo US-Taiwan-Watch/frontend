@@ -43,7 +43,6 @@ export const Layout: React.FC<LayoutProps> = (props) => {
       <Head>
         <meta property="og:site_name" content={i18n.strings.brand.fullName} />
         <title>
-          {" "}
           {props.draftMode && "[DRAFT MODE] "}
           {title}
         </title>

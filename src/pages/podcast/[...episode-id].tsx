@@ -3,8 +3,6 @@ import { Layout } from "../../components/layout";
 import { useI18n } from "../../context/i18n";
 import { Banner } from "../../components/banner";
 import {
-  Container,
-  Grid,
   ListItem,
   ListItemButton,
   ListItemText,
@@ -241,7 +239,7 @@ export const getStaticPaths: GetStaticPaths<{
   paths: getStaticPathsWithLocale(
     (await getPodcastEpisodes())
       .map((ep) => [EPISODE_PATH, ep.id])
-      .slice(0, 10)
+      .slice(0, 20)
       .map((p) => ({
         params: { "episode-id": p },
       })),
