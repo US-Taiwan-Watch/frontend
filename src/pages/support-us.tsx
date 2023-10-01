@@ -68,12 +68,7 @@ const SupportUsPage: NextPage = () => {
                 url: Constants.links.donateTW,
               },
             ].map((action, i) => (
-              <Link
-                key={i}
-                variant="button"
-                href={Constants.links.donate}
-                sx={{ mx: 1 }}
-              >
+              <Link key={i} variant="button" href={action.url} sx={{ mx: 1 }}>
                 <Button variant="contained">{action.text}</Button>
               </Link>
             ))}
