@@ -49,6 +49,9 @@ export default {
     latestPodcastEpisode: "最新 Podcast 單集",
     moreEpisodeButton: "更多單集",
   },
+  about: {
+    ourStoryDesc: "hahaha",
+  },
   social: {
     fb: "Facebook 是觀測站觀測站最主要的資訊平台，透過新聞報導與深度分析等長篇文章，在破解謠言以及深化台美關係上盡一份心力。",
     ig: "Instagram 是觀測站接觸年輕族群、強化社群連結的重要管道。透過每週的直播聊天會拉近與粉絲的距離，也以 reel 短片，用活潑、簡要的方式分享美國新聞時事。",

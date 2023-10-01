@@ -49,6 +49,9 @@ export default {
     latestPodcastEpisode: "Latest Podcast Episode",
     moreEpisodeButton: "Mode Episodes",
   },
+  about: {
+    ourStoryDesc: "hahaha",
+  },
   social: {
     fb: "Facebook is our primary platform through which we aim to strengthen U.S.-Taiwan relations. On Facebook, we debunk misinformation and common myths by providing latest news and thorough analyses of current events and policies in the U.S. and Taiwan.",
     ig: "We use Instagram for community outreach and connecting with our younger audience members. We hope to build a greater connection with our audience by having weekly livestreams and short reels. This allows us to interact with our audience in a creative manner and provide them with digestable content.",
