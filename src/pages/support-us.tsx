@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { Link } from "../components/link";
 import { Constants } from "../utils/constants";
+import { SectionTitle } from ".";
 
 const SupportUsPage: NextPage = () => {
   const { i18n } = useI18n();
@@ -29,9 +30,7 @@ const SupportUsPage: NextPage = () => {
         draftMode={true}
       />
       <Container sx={{ my: 5 }}>
-        <Typography variant="h4" sx={{ my: 3 }}>
-          {i18n.strings.header.donate}
-        </Typography>
+        <SectionTitle>{i18n.strings.header.donate}</SectionTitle>
         <Paper
           sx={{
             display: "flex",

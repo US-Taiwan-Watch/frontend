@@ -46,7 +46,7 @@ interface HomeProps {
   posts: PublicPostsQuery["getPostsWithType"]["items"];
 }
 
-const SectionTitle = forwardRef<HTMLDivElement, TypographyProps>(
+export const SectionTitle = forwardRef<HTMLDivElement, TypographyProps>(
   ({ children, ...props }, ref) => {
     return (
       <Typography
