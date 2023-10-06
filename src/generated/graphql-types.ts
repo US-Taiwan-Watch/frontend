@@ -41,6 +41,12 @@ export enum Auth0RoleName {
   S2S = 'S2S'
 }
 
+export type Banner = {
+  __typename?: 'Banner';
+  cta?: Maybe<Scalars['String']>;
+  imageSource: Scalars['String'];
+};
+
 export type Bill = {
   __typename?: 'Bill';
   billNumber: Scalars['Float'];
@@ -271,7 +277,7 @@ export type PartyRecord = {
 
 export type Query = {
   __typename?: 'Query';
-  banners: Array<Scalars['String']>;
+  banners: Array<Banner>;
   bill?: Maybe<Bill>;
   bills: PaginatedBills;
   editors: Array<User>;

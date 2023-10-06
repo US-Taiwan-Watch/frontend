@@ -27,7 +27,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { initApolloClient } from "../lib/with-apollo";
-import { BannersQueryDocument } from "../lib/page-graphql/query-banners.graphql.interface";
+import {
+  BannersQueryDocument,
+  BannersQueryQuery,
+} from "../lib/page-graphql/query-banners.graphql.interface";
 import { SmallCardItem } from "../components/card-list";
 import { ArticleType } from "../generated/graphql-types";
 import { getPaginatedPublishedPosts } from "./articles";
@@ -41,7 +44,7 @@ import { theme } from "../styles/theme";
 interface HomeProps {
   newsLetters: NewsLetter[];
   podcasts: PodcastEpisode[];
-  banners: string[];
+  banners: BannersQueryQuery["banners"];
   draftMode: boolean;
   posts: PublicPostsQuery["getPostsWithType"]["items"];
 }
@@ -143,18 +146,33 @@ const Home: NextPage<HomeProps> = ({
             prevArrow={<></>}
             ref={bannerSliderRef}
           >
-            {banners?.map((banner, i) => (
-              <Box key={i}>
-                <img
-                  src={banner}
-                  style={{
-                    objectFit: "contain",
-                    width: "100%",
-                    margin: "0 auto",
-                  }}
-                />
-              </Box>
-            ))}
+            {banners?.map((banner, i) =>
+              banner.cta ? (
+                <Link key={i} href={banner.cta}>
+                  <Box>
+                    <img
+                      src={banner.imageSource}
+                      style={{
+                        objectFit: "contain",
+                        width: "100%",
+                        margin: "0 auto",
+                      }}
+                    />
+                  </Box>
+                </Link>
+              ) : (
+                <Box key={i}>
+                  <img
+                    src={banner.imageSource}
+                    style={{
+                      objectFit: "contain",
+                      width: "100%",
+                      margin: "0 auto",
+                    }}
+                  />
+                </Box>
+              )
+            )}
           </Slider>
         </Box>
         <Box
