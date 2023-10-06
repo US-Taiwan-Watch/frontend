@@ -128,7 +128,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
         image="https://static.ustw.watch/public-image/website/podcast.jpg"
       >
         <Banner
-          imageSrc="https://static.ustw.watch/public-image/website/banners/ustw_book.png"
+          imageSrc="https://static.ustw.watch/public-image/website/banners/podcast.png"
           draftMode={true}
         />
         <Container sx={{ my: 5 }}>

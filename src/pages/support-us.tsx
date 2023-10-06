@@ -26,7 +26,7 @@ const SupportUsPage: NextPage = () => {
       draftMode={true}
     >
       <Banner
-        imageSrc="https://static.ustw.watch/public-image/website/banners/ustw_book.png"
+        imageSrc="https://static.ustw.watch/public-image/website/banners/support-us.png"
         draftMode={true}
       />
       <Container sx={{ my: 5 }}>

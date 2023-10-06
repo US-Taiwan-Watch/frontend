@@ -1,13 +1,8 @@
-import { GetStaticProps, NextPage } from "next";
+import { NextPage } from "next";
 import Typography from "@mui/material/Typography";
 import { Layout } from "../components/layout";
-import {
-  Box,
-  Container,
-} from "@mui/material";
-import { initApolloClient } from "../lib/with-apollo";
+import { Box, Container } from "@mui/material";
 import { useI18n } from "../context/i18n";
-import { BannersQueryDocument } from "../lib/page-graphql/query-banners.graphql.interface";
 import { Banner } from "../components/banner";
 import { SectionTitle } from ".";
 
@@ -17,7 +12,7 @@ const About: NextPage = () => {
   return (
     <Layout draftMode={true}>
       <Banner
-        imageSrc="https://static.ustw.watch/public-image/website/banners/ustw_book.png"
+        imageSrc="https://static.ustw.watch/public-image/website/banners/about.png"
         draftMode={true}
       />
       <Container sx={{ my: 5 }}>
