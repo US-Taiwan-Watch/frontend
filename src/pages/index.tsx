@@ -40,6 +40,7 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { theme } from "../styles/theme";
+import { isLaunched } from "../utils/gate-keeper";
 
 interface HomeProps {
   newsLetters: NewsLetter[];
@@ -572,7 +573,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async ({
       newsLetters: letters.slice(0, 4),
       podcasts: podcasts.slice(0, draftMode ? 6 : 2),
       banners: bannersRes.data.banners,
-      draftMode: !!draftMode,
+      draftMode: !!draftMode !== isLaunched,
       posts: paginatedPosts.items,
     },
     revalidate: 300, // In seconds

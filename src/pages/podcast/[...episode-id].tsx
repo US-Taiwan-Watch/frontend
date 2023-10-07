@@ -19,6 +19,7 @@ import { Link } from "../../components/link";
 import { MediaContainer } from "../../components/media-container";
 import { MediaCard } from "../../components/media-card";
 import { Constants } from "../../utils/constants";
+import { isLaunched } from "../../utils/gate-keeper";
 
 const EPISODE_PATH = "ep";
 
@@ -281,7 +282,7 @@ export const getStaticProps: GetStaticProps<PodcastPageProps> = async ({
     props: {
       partialEpisodes: episodes.map((ep) => ({ id: ep.id, title: ep.title })),
       currentEpisode: episode,
-      draftMode: !!draftMode,
+      draftMode: !!draftMode !== isLaunched,
     },
     revalidate: 300, // In seconds
   };

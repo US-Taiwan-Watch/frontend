@@ -20,6 +20,7 @@ import { Link } from "../../components/link";
 import { CardList } from "../../components/card-list";
 import { MediaCard } from "../../components/media-card";
 import { PaginationControl } from "../../components/pagination-control";
+import { isLaunched } from "../../utils/gate-keeper";
 
 const EPISODE_PATH = "ep";
 const PAGE_SIZE = 20;
@@ -262,7 +263,8 @@ export const getServerSideProps: GetServerSideProps<PodcastPageProps> = async ({
       partialEpisodes: episodes.map((ep) => ({ id: ep.id, title: ep.title })),
       currentEpisode: episode,
       page: parseInt(pageQuery),
-      draftMode: !!req.headers.cookie?.includes("__prerender_bypass"),
+      draftMode:
+        !!req.headers.cookie?.includes("__prerender_bypass") !== isLaunched,
     },
   };
 };
