@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "yarn clean & concurrently --kill-others --prefix-colors \"bgGreen\",\"bgBlue\" \"NODE_OPTIONS='--inspect' next dev\" \"yarn graphql-gen --watch\"",
-    "build": "yarn clean & next build",
+    "build": "yarn clean && next build && yarn postbuild",
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
