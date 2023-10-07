@@ -81,6 +81,8 @@ const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
             <MediaCard
               title={i18n.strings.articles.mediaCardTitle}
               description={i18n.strings.articles.mediaCardDesc}
+              image="/assets/logo-large.png"
+              borderColor="white"
             />
           </Grid>
         </Grid>

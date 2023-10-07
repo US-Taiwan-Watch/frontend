@@ -12,6 +12,8 @@ import { SocialMediaIcon, socialMedias } from "./social-media";
 export type MediaCardProps = {
   title: string;
   description: string;
+  image: string;
+  borderColor?: string;
 };
 
 export const MediaCard: React.FC<MediaCardProps> = (props) => {
@@ -33,12 +35,15 @@ export const MediaCard: React.FC<MediaCardProps> = (props) => {
       }}
     >
       <Avatar
-        src="https://static.ustw.watch/public-image/website/podcast.jpg"
+        src={props.image}
         sx={{
           width: 120,
           height: 120,
-          border: "3px solid #FFD823",
           marginBottom: 2,
+          ...(props.borderColor && {
+            border: `5px solid ${props.borderColor}`,
+            background: props.borderColor,
+          }),
         }}
       />
       <Typography component="h6" variant="h6" sx={{ textAlign: "center" }}>

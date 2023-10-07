@@ -104,6 +104,8 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
     <MediaCard
       title={i18n.strings.podcast.name}
       description={i18n.strings.social.podcast}
+      image="/assets/podcast-no-border.jpg"
+      borderColor="#FFD823"
     />
   );
 
@@ -123,7 +125,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
             "https://static.ustw.watch/public-image/website/podcast.jpg"
           }
           next={
-            nextEpIndex
+            nextEpIndex && partialEpisodes[nextEpIndex]
               ? {
                   title: partialEpisodes[nextEpIndex].title || "",
                   url: `/podcast/${EPISODE_PATH}/${partialEpisodes[nextEpIndex].id}`,
@@ -131,7 +133,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
               : null
           }
           prev={
-            prevEpIndex
+            prevEpIndex && partialEpisodes[prevEpIndex]
               ? {
                   title: partialEpisodes[prevEpIndex].title || "",
                   url: `/podcast/${EPISODE_PATH}/${partialEpisodes[prevEpIndex].id}`,

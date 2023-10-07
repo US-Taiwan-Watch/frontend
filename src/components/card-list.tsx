@@ -47,7 +47,7 @@ export const CardListItem: React.FC<CardProps> = (props) => {
               }}
             >
               {props.image && (
-                <Box style={{ width: 240 }}>
+                <Box sx={{ width: 240, marginRight: "16px" }}>
                   <Box
                     style={{
                       position: "relative",
@@ -66,7 +66,7 @@ export const CardListItem: React.FC<CardProps> = (props) => {
                   </Box>
                 </Box>
               )}
-              <CardContent sx={{ py: 0, flex: 1 }}>
+              <Box sx={{ py: 0, flex: 1 }}>
                 <Typography
                   component="h2"
                   variant="h5"
@@ -95,7 +95,7 @@ export const CardListItem: React.FC<CardProps> = (props) => {
                 >
                   {props.content}
                 </Typography>
-              </CardContent>
+              </Box>
             </Card>
             <Typography
               component="span"

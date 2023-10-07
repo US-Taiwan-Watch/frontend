@@ -24,6 +24,8 @@ import { PaginationControl } from "../../components/pagination-control";
 const EPISODE_PATH = "ep";
 const PAGE_SIZE = 20;
 const PAGE_SEARCH_PAGE_NAME = "page";
+const PODCAST_COVER =
+  "https://files.soundon.fm/1620626429960-9ecce80b-d34c-4713-981d-a4b0abd8e2e0.jpeg";
 
 type PodcastPageProps = {
   partialEpisodes: Partial<PodcastEpisode>[];
@@ -115,6 +117,8 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
     <MediaCard
       title={i18n.strings.podcast.name}
       description={i18n.strings.social.podcast}
+      image="/assets/podcast-no-border.jpg"
+      borderColor="#FFD823"
     />
   );
   // List page
@@ -155,7 +159,8 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
                     displayDate: new Date(p.pubDate || 0).toLocaleDateString(), // change to pub date
                     content: p.description,
                     url: `/podcast/ep/${p.id}`,
-                    image: p.imageSrc,
+                    image:
+                      p.imageSrc === PODCAST_COVER ? undefined : p.imageSrc,
                   }))}
               />
             </Grid>

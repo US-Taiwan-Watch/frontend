@@ -75,6 +75,8 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost, prevPost }) => {
           <MediaCard
             title={i18n.strings.articles.mediaCardTitle}
             description={i18n.strings.articles.mediaCardDesc}
+            image="/assets/logo-large.png"
+            borderColor="white"
           />
         }
       >
