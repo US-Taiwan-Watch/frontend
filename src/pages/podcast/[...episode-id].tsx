@@ -18,6 +18,7 @@ import { Loading } from "../../components/loading";
 import { Link } from "../../components/link";
 import { MediaContainer } from "../../components/media-container";
 import { MediaCard } from "../../components/media-card";
+import { Constants } from "../../utils/constants";
 
 const EPISODE_PATH = "ep";
 
@@ -241,7 +242,7 @@ export const getStaticPaths: GetStaticPaths<{
   paths: getStaticPathsWithLocale(
     (await getPodcastEpisodes())
       .map((ep) => [EPISODE_PATH, ep.id])
-      .slice(0, 20)
+      .slice(0, Constants.prebuildListItemCounts)
       .map((p) => ({
         params: { "episode-id": p },
       })),

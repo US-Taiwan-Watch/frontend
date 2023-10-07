@@ -16,6 +16,7 @@ import { MediaContainer } from "../../components/media-container";
 import { MediaCard } from "../../components/media-card";
 import { useI18n } from "../../context/i18n";
 import { PublicPostSlugsDocument } from "../../lib/page-graphql/query-public-post-slugs.graphql.interface";
+import { Constants } from "../../utils/constants";
 
 export type PostPageProps = {
   post?: PublicPostQuery["getPublicArticle"];
@@ -107,7 +108,11 @@ export const getPublishedPostUrlPaths = async (
 export const getStaticPaths: GetStaticPaths<{ slugs: string[] }> = async ({
   locales,
 }) => {
-  const postUrls = await getPublishedPostUrlPaths(ArticleType.Article, 0, 10);
+  const postUrls = await getPublishedPostUrlPaths(
+    ArticleType.Article,
+    0,
+    Constants.prebuildListItemCounts
+  );
   return {
     paths: getStaticPathsWithLocale(
       // language!
