@@ -91,14 +91,22 @@ const Home: NextPage<HomeProps> = ({
     };
   }, []);
 
+  const isMd = useMediaQuery(theme.breakpoints.down("lg"));
   const isSm = useMediaQuery(theme.breakpoints.down("md"));
 
   if (draftMode) {
-    const buttonWidth = "200px";
+    const buttonWidth = isMd ? "100px" : "120px";
     const podcastSlickEdgeWidth = 40;
     return (
       <Layout draftMode={draftMode}>
-        <Box sx={{ width: "100%", position: "relative", maxHeight: "100vh" }}>
+        <Box
+          sx={{
+            width: "100%",
+            lineHeight: 0,
+            position: "relative",
+            maxHeight: "100vh",
+          }}
+        >
           {!isSm && (
             <Button
               sx={{
@@ -142,6 +150,7 @@ const Home: NextPage<HomeProps> = ({
             className={"banner-slick"}
             autoplay={true}
             autoplaySpeed={6000}
+            // adaptiveHeight={true}
             nextArrow={<></>}
             prevArrow={<></>}
             ref={bannerSliderRef}
@@ -356,6 +365,10 @@ const Home: NextPage<HomeProps> = ({
             @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
             .banner-slick .slick-dots {
               bottom: 5px;
+            }
+            .banner-slick .slick-track {
+              display: flex;
+              align-items: center;
             }
             .podcast-slick .slick-list {
               margin: 0 -${podcastSlickEdgeWidth}px;
