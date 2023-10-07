@@ -32,9 +32,9 @@ export const Banner: React.FC<BannerProps> = (props) => {
         borderRadius: 0,
         ...(props.draftMode && {
           height: "33vw",
+          minHeight: "20vh",
+          maxHeight: "60vh",
         }),
-        minHeight: "20vh",
-        maxHeight: "50vh",
       }}
     >
       {/* Increase the priority of the hero background image */}
