@@ -5,6 +5,7 @@ import {
   Button,
   Drawer,
   IconButton,
+  SvgIcon,
   Toolbar,
   Typography,
   useMediaQuery,
@@ -20,6 +21,8 @@ import { UserMenu } from "./user-menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Footer } from "./footer";
+import IconLogo from "../styles/assets/logo-full.svg";
+import IconLogoWhite from "../styles/assets/logo-full-white.svg";
 
 const NavLink: React.FC<LinkProps> = (props) => (
   <Link {...props} variant="button" color="inherit" sx={{ my: 1, mx: 1.5 }}>
@@ -75,14 +78,33 @@ const HeaderTitle: React.FC<{ whiteLogo?: boolean }> = ({ whiteLogo }) => {
         color="inherit"
         sx={{ display: "flex" }}
       >
-        <Image
+        {whiteLogo ? (
+          <SvgIcon
+            component={IconLogoWhite}
+            sx={{
+              width: "211px",
+              height: "43px",
+            }}
+            viewBox="0 0 211 43"
+          />
+        ) : (
+          <SvgIcon
+            component={IconLogo}
+            sx={{
+              width: "198px",
+              height: "45px",
+            }}
+            viewBox="0 0 200 46"
+          />
+        )}
+        {/* <img
           src={
-            whiteLogo ? "/assets/logo-long-white.svg" : "/assets/logo-long.svg"
+            whiteLogo ? "/assets/logo-full-white.svg" : "/assets/logo-full.svg"
           }
-          width={whiteLogo ? 211 : 198}
-          height={whiteLogo ? 43 : 45}
+          // width={whiteLogo ? 211 : 198}
+          // height={whiteLogo ? 43 : 45}
           alt="US Taiwan Watch"
-        />
+        /> */}
         {/* <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
           {isXs ? i18n.strings.brand.shortName : i18n.strings.brand.fullName}
         </Typography> */}
