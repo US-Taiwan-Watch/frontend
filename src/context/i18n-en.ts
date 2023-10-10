@@ -1,7 +1,7 @@
 export default {
   brand: {
-    fullName: "US Taiwan Watch",
-    shortName: "US Taiwan Watch",
+    fullName: "US TAIWAN WATCH",
+    shortName: "US TAIWAN WATCH",
     description:
       "US Taiwan Watch is committed to deepening the U.S.-Taiwan relationship, lowering the entry barrier to citizen diplomacy, and bolstering citizen diplomacy by reducing information asymmetry and enhancing public understanding of U.S.-Taiwan affairs and international trends. In 2022, US Taiwan Watch will continue its efforts in bridging the gap between Taiwan and the U.S. With the advantage of being physically located in the United States, our team will produce and broadcast more audio-visual content in the U.S. We hope doing so will connect Taiwanese and American societies and provide our Taiwanese audience with a more comprehensive understanding of U.S. society, culture, and diplomacy. ",
   },
@@ -64,7 +64,7 @@ export default {
     tw: "Twitter is our primary English language platform directed to our English-speaking audience. Beyond providing latest policy analyses and opinions, we also share Taiwanese news, culture, and experience with our English-speaking audiences interested in learning about Taiwan and its predicament in the global community. We also hope that Twitter can serve as a platform for our Taiwanese audience to exchange views with our English-speaking audience to understand the role of Taiwan in the world.",
     yt: "US Taiwan Watch produced a Youtube series of seven videos while they were in Washington, D.C. In this series, we explored the city of Washington, D.C., and visited Congress, the White House, and Embassy Row. We also interviewed policy analysts and political advocates in think tanks and political organizations such as the Global Taiwan Institute (GTI) and the Taiwan Democratic Progressive Party Mission in the U.S. We have also published our weekly podcast program on the Youtube Channel. We are also working on expanding our video platform to incorporate new programs that will educate our Taiwanese audience about the U.S. political system and atmosphere.",
     podcast:
-      '"Spice Up" is US Taiwan Watch’s Podcast program, providing weekly updates and analysis on the latest developments in US-Taiwan relations. Its special reports feature interviews with the best experts in the field, including Admiral Lee Hsi-min, Former Deputy Minister of the National Defense of Taiwan. \nThanks to our audiences -from Taiwan, the US, China, Japan, Vietnam, Hong Kong, Australia, and so many other places- Spice Up has accumulated more than 1 million downloads with the past 150+ episodes. \nStay tuned! Let us keep informed and provide you with the most up-to-date geopolitical analysis of Taiwan and the Indo-Pacific.',
+      "US Taiwan Watch’s podcasts provide updates and analysis on the latest developments in US-Taiwan relations, and our special reports feature interviews with the best experts in the field. Thanks to our audience, we have accumulated more than 1 million downloads with the past 150+ episodes. Let us keep you up to date. Stay tuned!",
   },
   newsletter: {
     title: "Subscribe US Taiwan Watch!",
@@ -99,8 +99,9 @@ export default {
     moreArticles: "Mode Articles",
     latestArticles: "Latest Articles",
     allArticles: "All Articles",
-    mediaCardTitle: "TITLE",
-    mediaCardDesc: "DESC",
+    mediaCardTitle: "US Taiwan Watch - Commentary & Analysis",
+    mediaCardDesc:
+      "Our team of editors and experts comment on the latest and most important events in the world and how they affect US-Taiwan relations. From geopolitics, security, and elections, to business, technology, and culture, this is where to find the freshest insights. ",
   },
   media: {
     prev: "Previous",
