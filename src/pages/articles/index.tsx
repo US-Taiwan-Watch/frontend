@@ -1,4 +1,4 @@
-import type { GetServerSideProps, GetStaticProps, NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { Layout } from "../../components/layout";
 import { Banner } from "../../components/banner";
 import { CardList } from "../../components/card-list";
@@ -17,11 +17,11 @@ import { Container, Grid, Typography } from "@mui/material";
 import { MediaCard } from "../../components/media-card";
 
 const PAGE_SIZE = 20;
+const PAGE_SEARCH_PAGE_NAME = "page";
 
 type ArticleListPageProps = {
   paginatedPosts: PublicPostsQuery["getPostsWithType"];
   page: number;
-  pageSize: number;
 };
 
 const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
@@ -52,9 +52,10 @@ const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
             </Typography>
             <hr />
             <PaginationControl
-              defaultPage={1}
+              defaultPage={prefetched.page}
               defaultPageSize={PAGE_SIZE}
               total={prefetched.paginatedPosts.total}
+              urlSearchName={PAGE_SEARCH_PAGE_NAME}
               updateItems={async (page, pageSize) => {
                 const paginatedPosts = await getPaginatedPublishedPosts(
                   ArticleType.Article,
@@ -93,21 +94,37 @@ const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
 
 export const getServerSideProps: GetServerSideProps<
   ArticleListPageProps
-> = async ({ locale }) => {
+> = async ({ locale, res, query }) => {
+  res.setHeader("Cache-Control", "public, max-age=60, immutable");
+  let pageQuery = query[PAGE_SEARCH_PAGE_NAME];
+  if (pageQuery === undefined) {
+    pageQuery = "1";
+  } else if (typeof pageQuery !== "string" || isNaN(parseInt(pageQuery))) {
+    return {
+      notFound: true,
+    };
+  }
+  const page = parseInt(pageQuery);
   const apolloClient = initApolloClientWithLocale(locale);
+  const paginatedPosts = await getPaginatedPublishedPosts(
+    ArticleType.Article,
+    page,
+    20,
+    apolloClient
+  );
+  if (paginatedPosts.items.length === 0) {
+    return {
+      notFound: true,
+    };
+  }
   return {
     props: {
-      paginatedPosts: await getPaginatedPublishedPosts(
-        ArticleType.Article,
-        1,
-        20,
-        apolloClient
-      ),
-      page: 1,
-      pageSize: PAGE_SIZE,
+      paginatedPosts,
+      page: page,
     },
   };
 };
+
 export const getPaginatedPublishedPosts = async (
   type: ArticleType,
   page: number,

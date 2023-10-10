@@ -116,6 +116,8 @@ const Home: NextPage<HomeProps> = ({
                 width: buttonWidth,
                 height: "100%",
                 zIndex: 2,
+                background: "rgba(255, 255, 255, 0.8)",
+                borderRadius: 0,
               }}
               onClick={() => bannerSliderRef.current?.slickPrev()}
             >
@@ -132,6 +134,8 @@ const Home: NextPage<HomeProps> = ({
                 width: buttonWidth,
                 height: "100%",
                 zIndex: 2,
+                background: "rgba(255, 255 ,255 ,0.8)",
+                borderRadius: 0,
               }}
               onClick={() => bannerSliderRef.current?.slickNext()}
             >

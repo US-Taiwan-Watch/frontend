@@ -76,14 +76,16 @@ const HeaderTitle: React.FC<{ whiteLogo?: boolean }> = ({ whiteLogo }) => {
         sx={{ display: "flex" }}
       >
         <Image
-          src={whiteLogo ? "/assets/logo-white.png" : "/assets/logo.png"}
-          width={30}
-          height={30}
+          src={
+            whiteLogo ? "/assets/logo-long-white.svg" : "/assets/logo-long.svg"
+          }
+          width={whiteLogo ? 211 : 198}
+          height={whiteLogo ? 43 : 45}
           alt="US Taiwan Watch"
         />
-        <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
+        {/* <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
           {isXs ? i18n.strings.brand.shortName : i18n.strings.brand.fullName}
-        </Typography>
+        </Typography> */}
       </Link>
     </Box>
   );

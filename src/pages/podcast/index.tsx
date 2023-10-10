@@ -147,7 +147,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
                 defaultPage={page}
                 defaultPageSize={PAGE_SIZE}
                 total={completedEpisodes.length}
-                // urlSearchName={PAGE_SEARCH_PAGE_NAME}
+                urlSearchName={PAGE_SEARCH_PAGE_NAME}
                 updateItems={async (page, _) => {
                   setPage(page);
                 }}
