@@ -21,8 +21,8 @@ const SupportUsPage: NextPage = () => {
 
   return (
     <Layout
-      title={i18n.strings.articles.title}
-      description={i18n.strings.articles.desc}
+      title={i18n.strings.header.donate}
+      description={i18n.strings.landing.donateDesc}
       draftMode={true}
     >
       <Banner

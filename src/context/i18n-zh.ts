@@ -1,7 +1,6 @@
 export default {
   brand: {
-    fullName: "US TAIWAN WATCH: 美國台灣觀測站",
-    shortName: "US TAIWAN WATCH",
+    fullName: "US Taiwan Watch: 美國台灣觀測站",
     description:
       "「US Taiwan Watch 美國台灣觀測站」致力於深化台美關係，透過消弭資訊不對稱，以及提升民眾對於台美事務和國際動態的了解，來降低公民外交的門檻、創造更好的公民外交品質。2022 年觀測站以「拉近距離」作為團隊努力的目標，希望利用成員們在美國的地理優勢，製播更多影音內容，讓台灣觀眾能更貼近美國的社會、文化以及外交現場。",
   },
@@ -15,7 +14,7 @@ export default {
     donate: "支持我們",
     subscribe: "訂閱電子報",
     podcast: "Podcast",
-    articles: "文章",
+    articles: "觀點分析",
   },
   landing: {
     testI18n: "I18n - 中文內容",
@@ -87,22 +86,19 @@ export default {
     home: "首頁",
   },
   posts: {
-    ARTICLE: "文章",
+    ARTICLE: "觀點分析",
     POSTER: "公告",
   },
   post: {
-    ARTICLE: "文章",
+    ARTICLE: "觀點分析",
     POSTER: "公告",
   },
   articles: {
-    title: "文章",
-    desc: "新聞分析文章！",
-    moreArticles: "更多文章",
-    latestArticles: "最新文章",
-    allArticles: "所有文章",
+    title: "觀點分析",
+    desc: "美國台灣觀測站的共同編輯和專家分析世界新聞大事對美國與台灣的衝擊。從地緣政治、國防安全、和選舉動態，到經濟、科技、與文藝趨勢，給您最新鮮的觀點。",
+    moreArticles: "更多觀點分析",
+    latestArticles: "最新觀點分析",
     mediaCardTitle: "觀測站觀點分析",
-    mediaCardDesc:
-      "美國台灣觀測站的共同編輯和專家分析世界新聞大事對美國與台灣的衝擊。從地緣政治、國防安全、和選舉動態，到經濟、科技、與文藝趨勢，給您最新鮮的觀點。",
   },
   media: {
     prev: "上一則",

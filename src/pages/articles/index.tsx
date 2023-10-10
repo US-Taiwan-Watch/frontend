@@ -48,7 +48,7 @@ const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
         <Grid container spacing={2}>
           <Grid item md={8} sm={12} xs={12}>
             <Typography component="h5" variant="h5" gutterBottom>
-              {i18n.strings.articles.allArticles}
+              {i18n.strings.articles.title}
             </Typography>
             <hr />
             <PaginationControl
@@ -81,7 +81,7 @@ const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
           <Grid item md={4} sm={12} xs={12}>
             <MediaCard
               title={i18n.strings.articles.mediaCardTitle}
-              description={i18n.strings.articles.mediaCardDesc}
+              description={i18n.strings.articles.desc}
               image="/assets/logo-large.png"
               borderColor="white"
             />

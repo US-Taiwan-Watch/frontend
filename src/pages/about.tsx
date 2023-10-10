@@ -10,7 +10,11 @@ const About: NextPage = () => {
   const { i18n } = useI18n();
 
   return (
-    <Layout draftMode={true}>
+    <Layout
+      title={i18n.strings.header.about}
+      description={i18n.strings.landing.aboutShort.join("")}
+      draftMode={true}
+    >
       <Banner
         imageSrc="https://static.ustw.watch/public-image/website/banners/about.png"
         draftMode={true}
