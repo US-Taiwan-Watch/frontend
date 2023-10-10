@@ -32,7 +32,13 @@ export const CardListItem: React.FC<CardProps> = (props) => {
           image={props.image}
         />
       </Box>
-      <Link href={props.url} sx={{ display: { xs: "none", sm: "block" } }}>
+      <Link
+        href={props.url}
+        target="_blank"
+        sx={{
+          display: { xs: "none", sm: "block" },
+        }}
+      >
         <CardActionArea
           sx={{
             borderRadius: 1,
@@ -112,7 +118,7 @@ export const CardListItem: React.FC<CardProps> = (props) => {
 };
 
 export const SmallCardItem: React.FC<CardProps> = (props) => (
-  <Link href={props.url}>
+  <Link href={props.url} target="_blank">
     <Card sx={{ width: "100%", boxShadow: "none" }}>
       <CardActionArea>
         {props.image && (

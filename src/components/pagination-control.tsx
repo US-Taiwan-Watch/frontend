@@ -6,6 +6,7 @@ type PaginationControlProps = {
   defaultPageSize?: number;
   total: number;
   params?: any;
+  urlSearchName?: string;
   updateItems: (page: number, pageSize: number) => Promise<void>;
 };
 
@@ -27,6 +28,23 @@ export const PaginationControl: React.FC<PaginationControlProps> = (props) => {
     }
     props.updateItems(page, pageSize);
   }, [page, pageSize, props.total, props.params]);
+
+  useEffect(() => {
+    if (props.urlSearchName) {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get(props.urlSearchName) || page !== 1) {
+        params.set(props.urlSearchName, `${page}`);
+        window.history.pushState("", "", `?${params.toString()}`);
+      }
+      // router.push(
+      //   {
+      //     query: { page: page },
+      //   },
+      //   undefined,
+      //   { shallow: true }
+      // );
+    }
+  }, [page]);
 
   return (
     <Pagination
