@@ -19,7 +19,8 @@ export default async function handler(
 
 export const getPodcastEpisodes = async (): Promise<PodcastEpisode[]> => {
   const response = await fetch(
-    "https://feeds.soundon.fm/podcasts/6cdfccc6-7c47-4c35-8352-7f634b1b6f71.xml"
+    "https://feeds.soundon.fm/podcasts/6cdfccc6-7c47-4c35-8352-7f634b1b6f71.xml",
+    { cache: "force-cache" }
   );
   const text = await response.text();
   const xml = await parseStringPromise(text);
