@@ -33,7 +33,7 @@ import {
 } from "../lib/page-graphql/query-banners.graphql.interface";
 import { SmallCardItem } from "../components/card-list";
 import { ArticleType } from "../generated/graphql-types";
-import { getPaginatedPublishedPosts } from "./articles";
+import { getPaginatedPublishedPosts } from "./analysis";
 import { PublicPostsQuery } from "../lib/page-graphql/query-public-posts.graphql.interface";
 import { getPostUrl } from "./admin/[post-type]";
 import { forwardRef, useEffect, useRef, useState } from "react";
@@ -360,7 +360,7 @@ const Home: NextPage<HomeProps> = ({
               textAlign: "center",
             }}
           >
-            <Link variant="button" href="/articles">
+            <Link variant="button" href="/analysis">
               <Button variant="contained">
                 {i18n.strings.articles.moreArticles}
               </Button>

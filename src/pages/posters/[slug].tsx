@@ -11,7 +11,7 @@ import {
 } from "../../lib/page-graphql/query-public-post.graphql.interface";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
 import { initApolloClientWithLocale } from "../../lib/with-apollo";
-import { getPublishedPostUrlPaths } from "../articles/[...slugs]";
+import { getPublishedPostUrlPaths } from "../analysis/[...slugs]";
 
 export type PostPageProps = {
   post?: PublicPostQuery["getPublicArticle"];

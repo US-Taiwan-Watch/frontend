@@ -27,7 +27,7 @@ module.exports = {
         ? [
             { rule: /^\/about$/, priority: 0.9 },
             { rule: /^\/support-us$/, priority: 0.9 },
-            { rule: /^\/articles$/, priority: 0.9 },
+            { rule: /^\/analysis$/, priority: 0.9 },
           ]
         : [{ rule: /^\/newsletters$/, priority: 0.9 }]),
     ];

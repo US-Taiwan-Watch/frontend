@@ -36,7 +36,7 @@ const NavButtons: React.FC = () => {
     <>
       <NavLink href="/about">{i18n.strings.header.about}</NavLink>
       <NavLink href="/podcast">{i18n.strings.header.podcast}</NavLink>
-      <NavLink href="/articles">{i18n.strings.header.articles}</NavLink>
+      <NavLink href="/analysis">{i18n.strings.header.articles}</NavLink>
     </>
   );
 };

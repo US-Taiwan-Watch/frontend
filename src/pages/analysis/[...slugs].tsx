@@ -57,7 +57,7 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost, prevPost }) => {
       <MediaContainer
         title={post.title?.text}
         imageSrc={post.imageSource}
-        breadcrumbs={[{ title: i18n.strings.posts.ARTICLE, url: "/articles" }]}
+        breadcrumbs={[{ title: i18n.strings.posts.ARTICLE, url: "/analysis" }]}
         next={
           (nextPost && {
             title: nextPost.title?.text || "",

@@ -3,7 +3,7 @@ import { getServerSideSitemap, ISitemapField } from 'next-sitemap'
 import { GetServerSideProps } from 'next'
 import { getPodcastEpisodes } from './api/podcast-episodes'
 import { ArticleType } from "../generated/graphql-types";
-import { getPublishedPostUrlPaths } from "./articles/[...slugs]";
+import { getPublishedPostUrlPaths } from "./analysis/[...slugs]";
 import { isLaunched } from "../utils/gate-keeper";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

@@ -36,7 +36,7 @@ const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
       draftMode={true}
     >
       <Banner
-        imageSrc="https://static.ustw.watch/public-image/website/banners/articles.png"
+        imageSrc="https://static.ustw.watch/public-image/website/banners/analysis.png"
         draftMode={true}
       />
       {/* {isEditor && <>
