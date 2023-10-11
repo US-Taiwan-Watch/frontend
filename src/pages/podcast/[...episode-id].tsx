@@ -118,7 +118,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
             "https://static.ustw.watch/public-image/website/podcast.jpg"
           }
           next={
-            nextEpIndex && partialEpisodes[nextEpIndex]
+            nextEpIndex !== null && partialEpisodes[nextEpIndex]
               ? {
                   title: partialEpisodes[nextEpIndex].title || "",
                   url: `/podcast/${EPISODE_PATH}/${partialEpisodes[nextEpIndex].id}`,
@@ -126,7 +126,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
               : null
           }
           prev={
-            prevEpIndex && partialEpisodes[prevEpIndex]
+            prevEpIndex !== null && partialEpisodes[prevEpIndex]
               ? {
                   title: partialEpisodes[prevEpIndex].title || "",
                   url: `/podcast/${EPISODE_PATH}/${partialEpisodes[prevEpIndex].id}`,
