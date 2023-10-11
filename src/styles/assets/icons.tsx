@@ -69,3 +69,8 @@ import SvgIconApplePodcasts from "./icon-apple-podcasts.svg";
 export const IconApplePodcasts = (props: SvgIconProps) => (
   <SizableSvgIcon component={SvgIconApplePodcasts} {...props} />
 );
+
+import SvgIconSoundOn from "./icon-soundon.svg";
+export const IconSoundOn = (props: SvgIconProps) => (
+  <SizableSvgIcon component={SvgIconSoundOn} {...props} />
+);

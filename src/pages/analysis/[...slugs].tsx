@@ -13,7 +13,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { initApolloClientWithLocale } from "../../lib/with-apollo";
 import { MediaContainer } from "../../components/media-container";
-import { MediaCard } from "../../components/media-card";
+import { ArticlesMediaCard } from "../../components/media-card";
 import { useI18n } from "../../context/i18n";
 import { PublicPostSlugsDocument } from "../../lib/page-graphql/query-public-post-slugs.graphql.interface";
 import { Constants } from "../../utils/constants";
@@ -72,14 +72,7 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost, prevPost }) => {
           }) ||
           undefined
         }
-        mediaCard={
-          <MediaCard
-            title={i18n.strings.articles.mediaCardTitle}
-            description={i18n.strings.articles.desc}
-            image="/assets/logo-large.png"
-            borderColor="white"
-          />
-        }
+        mediaCard={<ArticlesMediaCard />}
       >
         <PostContent post={post} />
       </MediaContainer>

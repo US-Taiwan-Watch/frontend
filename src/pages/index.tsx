@@ -208,16 +208,10 @@ const Home: NextPage<HomeProps> = ({
               marginBottom: 10,
             }}
           >
-            <Typography
-              variant="h6"
-              sx={{ fontFamily: "Inter, sans-serif", marginBottom: 2 }}
-            >
+            <Typography variant="h4" sx={{ marginBottom: 2 }}>
               {i18n.strings.landing.aboutIntro}
             </Typography>
-            <Typography
-              variant="subtitle1"
-              style={{ fontFamily: "Inter, sans-serif" }}
-            >
+            <Typography variant="subtitle1">
               {i18n.strings.landing.aboutShort.map((p) =>
                 i18n.formatString(
                   p,
@@ -234,9 +228,7 @@ const Home: NextPage<HomeProps> = ({
               }}
             >
               <Link variant="button" href="/about">
-                <Button variant="contained">
-                  {i18n.strings.common.learnMore}
-                </Button>
+                <Button variant="contained">{i18n.strings.header.about}</Button>
               </Link>
             </Box>
           </Container>

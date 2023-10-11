@@ -17,7 +17,7 @@ import { getStaticPathsWithLocale } from "../../utils/page-utils";
 import { Loading } from "../../components/loading";
 import { Link } from "../../components/link";
 import { MediaContainer } from "../../components/media-container";
-import { MediaCard } from "../../components/media-card";
+import { PodcastMediaCard } from "../../components/media-card";
 import { Constants } from "../../utils/constants";
 import { isLaunched } from "../../utils/gate-keeper";
 
@@ -102,15 +102,6 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
     return <Loading />;
   }
 
-  const mediaCard = (
-    <MediaCard
-      title={i18n.strings.podcast.name}
-      description={i18n.strings.social.podcast}
-      image="/assets/podcast-no-border.jpg"
-      borderColor="#FFD823"
-    />
-  );
-
   // Details page
   if (draftMode) {
     return (
@@ -145,7 +136,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
           breadcrumbs={[
             { title: i18n.strings.header.podcast, url: "/podcast" },
           ]}
-          mediaCard={mediaCard}
+          mediaCard={<PodcastMediaCard />}
         >
           <iframe
             src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${episodeID}`}

@@ -7,16 +7,21 @@ import {
   alpha,
   useTheme,
 } from "@mui/material";
-import { SocialMediaIcon, socialMedias } from "./social-media";
+import {
+  SocialMediaIcon,
+  podcastPlatforms,
+  socialMedias,
+} from "./social-media";
+import { useI18n } from "../context/i18n";
 
-export type MediaCardProps = {
+type MediaCardProps = {
   title: string;
   description: string;
   image: string;
   borderColor?: string;
 };
 
-export const MediaCard: React.FC<MediaCardProps> = (props) => {
+const MediaCard: React.FC<MediaCardProps> = (props) => {
   const theme = useTheme();
   return (
     <Paper
@@ -52,19 +57,56 @@ export const MediaCard: React.FC<MediaCardProps> = (props) => {
       <Typography variant="body1" sx={{ my: 2 }}>
         {props.description}
       </Typography>
-      <Box>
-        {socialMedias.map((media) => (
-          <IconButton
-            target="_blank"
-            aria-label={media.name}
-            href={media.link}
-            key={media.name}
-            color="primary"
-          >
-            <SocialMediaIcon size={25} type={media.type} bw={true} />
-          </IconButton>
-        ))}
-      </Box>
+      <Box>{props.children}</Box>
     </Paper>
+  );
+};
+
+export const ArticlesMediaCard: React.FC = () => {
+  const { i18n } = useI18n();
+  return (
+    <MediaCard
+      title={i18n.strings.articles.mediaCardTitle}
+      description={i18n.strings.articles.desc}
+      image="/assets/logo-large.png"
+      borderColor="white"
+    >
+      {socialMedias.map((media) => (
+        <IconButton
+          target="_blank"
+          aria-label={media.name}
+          href={media.link}
+          key={media.name}
+          color="primary"
+        >
+          <SocialMediaIcon size={25} type={media.type} bw={true} />
+        </IconButton>
+      ))}
+    </MediaCard>
+  );
+};
+
+export const PodcastMediaCard: React.FC = () => {
+  const { i18n } = useI18n();
+  return (
+    <MediaCard
+      title={i18n.strings.podcast.name}
+      description={i18n.strings.social.podcast}
+      image="/assets/podcast-no-border.jpg"
+      borderColor="#FFD823"
+    >
+      {podcastPlatforms.map((p) => (
+        <IconButton
+          sx={{ lineHeight: 0 }}
+          target="_blank"
+          href={p.link}
+          aria-label={p.name}
+          key={p.name}
+          color="primary"
+        >
+          <span style={{ width: "25px", height: "25px" }}>{p.icon}</span>
+        </IconButton>
+      ))}
+    </MediaCard>
   );
 };

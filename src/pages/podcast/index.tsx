@@ -18,7 +18,7 @@ import { getPodcastEpisodes, PodcastEpisode } from "../api/podcast-episodes";
 import { Loading } from "../../components/loading";
 import { Link } from "../../components/link";
 import { CardList } from "../../components/card-list";
-import { MediaCard } from "../../components/media-card";
+import { PodcastMediaCard } from "../../components/media-card";
 import { PaginationControl } from "../../components/pagination-control";
 import { isLaunched } from "../../utils/gate-keeper";
 
@@ -114,14 +114,6 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
     return <Loading />;
   }
 
-  const mediaCard = (
-    <MediaCard
-      title={i18n.strings.podcast.name}
-      description={i18n.strings.social.podcast}
-      image="/assets/podcast-no-border.jpg"
-      borderColor="#FFD823"
-    />
-  );
   // List page
   if (draftMode) {
     return (
@@ -166,7 +158,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
               />
             </Grid>
             <Grid item md={4} sm={12} xs={12}>
-              {mediaCard}
+              <PodcastMediaCard />
             </Grid>
           </Grid>
         </Container>

@@ -14,7 +14,7 @@ import { ApolloClient, useApolloClient } from "@apollo/client";
 import { useState } from "react";
 import { PaginationControl } from "../../components/pagination-control";
 import { Container, Grid, Typography } from "@mui/material";
-import { MediaCard } from "../../components/media-card";
+import { ArticlesMediaCard } from "../../components/media-card";
 
 const PAGE_SIZE = 20;
 const PAGE_SEARCH_PAGE_NAME = "page";
@@ -79,12 +79,7 @@ const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
             />
           </Grid>
           <Grid item md={4} sm={12} xs={12}>
-            <MediaCard
-              title={i18n.strings.articles.mediaCardTitle}
-              description={i18n.strings.articles.desc}
-              image="/assets/logo-large.png"
-              borderColor="white"
-            />
+            <ArticlesMediaCard />
           </Grid>
         </Grid>
       </Container>

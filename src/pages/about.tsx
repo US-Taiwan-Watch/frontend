@@ -1,10 +1,12 @@
 import { NextPage } from "next";
 import Typography from "@mui/material/Typography";
 import { Layout } from "../components/layout";
-import { Box, Container } from "@mui/material";
+import { Box, Button, Container } from "@mui/material";
 import { useI18n } from "../context/i18n";
 import { Banner } from "../components/banner";
 import { SectionTitle } from ".";
+import { Link } from "../components/link";
+import { Constants } from "../utils/constants";
 
 const About: NextPage = () => {
   const { i18n } = useI18n();
@@ -27,6 +29,16 @@ const About: NextPage = () => {
               {p}
             </Typography>
           ))}
+        </Box>
+        <Box
+          sx={{
+            my: 4,
+            textAlign: "center",
+          }}
+        >
+          <Link variant="button" href={`mailto:${Constants.links.email}`}>
+            <Button variant="contained">{i18n.strings.about.contactUs}</Button>
+          </Link>
         </Box>
       </Container>
     </Layout>
