@@ -55,7 +55,7 @@ const ArticleListPage: NextPage<ArticleListPageProps> = (prefetched) => {
               defaultPage={prefetched.page}
               defaultPageSize={PAGE_SIZE}
               total={prefetched.paginatedPosts.total}
-              urlSearchName={PAGE_SEARCH_PAGE_NAME}
+              // urlSearchName={PAGE_SEARCH_PAGE_NAME}
               updateItems={async (page, pageSize) => {
                 const paginatedPosts = await getPaginatedPublishedPosts(
                   ArticleType.Article,

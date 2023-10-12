@@ -1,4 +1,5 @@
 import { Pagination } from "@mui/material";
+import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
 type PaginationControlProps = {
@@ -11,14 +12,23 @@ type PaginationControlProps = {
 };
 
 export const PaginationControl: React.FC<PaginationControlProps> = (props) => {
-  const [page, setPage] = useState(props.defaultPage);
   const [pageSize, setPageSize] = useState(props.defaultPageSize || 20);
   const initialRender = useRef(true);
+  const router = useRouter();
+  let paramPage = null;
+  if (props.urlSearchName) {
+    const paramPageStr = router.query[props.urlSearchName];
+    if (typeof paramPageStr == "string") {
+      paramPage = parseInt(paramPageStr);
+    }
+  }
+  const [page, setPage] = useState(paramPage || props.defaultPage);
 
-  useEffect(() => {
-    setPage(props.defaultPage);
-    setPageSize(props.defaultPageSize || 20);
-  }, [props.defaultPage, props.defaultPageSize]);
+  // useEffect(() => {
+  //   console.log("default change");
+  //   setPage(props.defaultPage);
+  //   setPageSize(props.defaultPageSize || 20);
+  // }, [props.defaultPage, props.defaultPageSize]);
 
   useEffect(() => {
     // Skip the effect on the first render
@@ -27,24 +37,29 @@ export const PaginationControl: React.FC<PaginationControlProps> = (props) => {
       return;
     }
     props.updateItems(page, pageSize);
-  }, [page, pageSize, props.total, props.params]);
-
-  useEffect(() => {
     if (props.urlSearchName) {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get(props.urlSearchName) || page !== 1) {
-        params.set(props.urlSearchName, `${page}`);
-        window.history.pushState("", "", `?${params.toString()}`);
+      // const params = new URLSearchParams(window.location.search);
+      // if (params.get(props.urlSearchName) || page !== 1) {
+      //   params.set(props.urlSearchName, `${page}`);
+      //   window.history.pushState("", "", `?${params.toString()}`);
+      // }
+      const paramPage = router.query[props.urlSearchName];
+      if (!paramPage && page === 1) {
+        return;
       }
-      // router.push(
-      //   {
-      //     query: { page: page },
-      //   },
-      //   undefined,
-      //   { shallow: true }
-      // );
+      if (paramPage === `${page}`) {
+        return;
+      }
+      router.push(
+        {
+          query: { [props.urlSearchName]: page },
+          pathname: router.pathname,
+        },
+        undefined
+        // { shallow: true }
+      );
     }
-  }, [page]);
+  }, [page, pageSize, props.total, props.params]);
 
   return (
     <Pagination
