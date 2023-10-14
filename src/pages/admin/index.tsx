@@ -29,6 +29,10 @@ export const AdminPage: NextPage = () => {
         i18n.strings.posts[ArticleType.Poster]
       ) as string,
     },
+    {
+      href: "/admin/bills",
+      text: i18n.formatString("管理法案") as string,
+    },
   ];
 
   return (
