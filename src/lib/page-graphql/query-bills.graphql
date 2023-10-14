@@ -15,35 +15,38 @@ query Bills(
     total
     hasMore
     items {
-      id
-      congress
-      billType
-      billNumber
-      introducedDate
-      cosponsorsCount
-      sponsor {
-        firstName
-        firstName_zh
-        id
-        lastName
-        lastName_zh
-      }
-      title {
-        zh
-        en
-        text
-      }
-      trackers {
-        stepName
-        selected
-      }
-      id
-      isSyncing
-      summary {
-        en
-        zh
-        text
-      }
+      ...billFields
     }
+  }
+}
+
+fragment billFields on Bill {
+  id
+  congress
+  billType
+  billNumber
+  introducedDate
+  cosponsorsCount
+  sponsor {
+    firstName
+    firstName_zh
+    id
+    lastName
+    lastName_zh
+  }
+  title {
+    zh
+    en
+    text
+  }
+  trackers {
+    stepName
+    selected
+  }
+  isSyncing
+  summary {
+    en
+    zh
+    text
   }
 }
