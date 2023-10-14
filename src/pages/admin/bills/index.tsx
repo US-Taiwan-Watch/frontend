@@ -270,7 +270,7 @@ const BillsPage: NextPageWithApollo<BillsPageProps> = ({ initialBills }) => {
           }}
         />,
         <Link
-          href={getPostUrl(params.row)}
+          href={`/bill/${params.row.id}`}
           target="_blank"
           sx={{ textDecoration: "none" }}
         >
