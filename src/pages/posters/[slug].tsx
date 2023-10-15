@@ -10,8 +10,8 @@ import {
   PublicPostQuery,
 } from "../../lib/page-graphql/query-public-post.graphql.interface";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
-import { getPaginatedPublishedPosts } from "../articles";
 import { initApolloClientWithLocale } from "../../lib/with-apollo";
+import { getPublishedPostUrlPaths } from "../analysis/[...slugs]";
 
 export type PostPageProps = {
   post?: PublicPostQuery["getPublicArticle"];
@@ -38,7 +38,9 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
           </Typography>
         </Container>
       </Banner>
-      <PostContent post={post} />
+      <Container>
+        <PostContent post={post} />
+      </Container>
     </Layout>
   );
 };
@@ -46,18 +48,14 @@ const PostPage: NextPage<PostPageProps> = ({ post }) => {
 export const getStaticPaths: GetStaticPaths<{ slug: string }> = async ({
   locales,
 }) => {
-  const apolloClient = initApolloClientWithLocale();
+  const postUrls = await getPublishedPostUrlPaths(ArticleType.Poster, 0, 10);
   return {
     paths: getStaticPathsWithLocale(
-      (
-        await getPaginatedPublishedPosts(
-          ArticleType.Poster,
-          1,
-          20,
-          apolloClient
-        )
-      ).items.map((post) => ({
-        params: { slug: post.slug as string },
+      // language!
+      postUrls.map((url) => ({
+        params: {
+          slug: url.split("/")[1],
+        },
       })),
       locales
     ),

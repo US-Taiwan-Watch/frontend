@@ -19,7 +19,7 @@ import { uploadPostImage } from "../../utils/image-upload-utils";
 const useStyles = makeStyles((theme: USTWTheme) =>
   createStyles({
     root: {
-      padding: theme.spacing(2),
+      // padding: theme.spacing(2),
       // "& a": {
       //   color: theme.color.white[200],
       // },

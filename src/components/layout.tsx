@@ -42,11 +42,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
       )}
       <Head>
         <meta property="og:site_name" content={i18n.strings.brand.fullName} />
-        <title>
-          {" "}
-          {props.draftMode && "[DRAFT MODE] "}
-          {title}
-        </title>
+        <title>{title}</title>
         <meta property="og:title" content={title} />
         <meta property="og:type" content={props.type || "website"} />
         <meta
@@ -73,7 +69,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
         <div>{props.children}</div>
       </main>
 
-      <Footer />
+      <Footer draftMode={props.draftMode} />
 
       <style jsx global>{`
         body {

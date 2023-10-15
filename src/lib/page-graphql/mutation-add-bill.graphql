@@ -1,0 +1,5 @@
+mutation AddBill($bill: BillInput!) {
+  addBill(bill: $bill) {
+    ...billFields
+  }
+}

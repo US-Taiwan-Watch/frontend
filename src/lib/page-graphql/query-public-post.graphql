@@ -22,10 +22,27 @@ query PublicPost($slug: String!) {
       nickname
     }
   }
-  getPublicArticlesAfter(
+  after: getPublicArticlesAfter(
     slug: $slug
     limit: 1
     sortDirections: [-1]
+    sortFields: ["publishedTime"]
+  ) {
+    items {
+      id
+      isPublished
+      publishedTime
+      type
+      slug
+      title {
+        text
+      }
+    }
+  }
+  before: getPublicArticlesAfter(
+    slug: $slug
+    limit: 1
+    sortDirections: [1]
     sortFields: ["publishedTime"]
   ) {
     items {

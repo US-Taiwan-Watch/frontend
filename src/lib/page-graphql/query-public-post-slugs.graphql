@@ -1,0 +1,11 @@
+query PublicPostSlugs($type: ArticleType!, $limit: Float, $offset: Float) {
+  getPostsWithType(type: $type, limit: $limit, offset: $offset) {
+    items {
+      slug
+      id
+      publishedTime
+      type
+      isPublished
+    }
+  }
+}

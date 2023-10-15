@@ -24,6 +24,7 @@ query PublicPosts(
       preview {
         text
       }
+      text
       publishedTime
       imageSource
       type

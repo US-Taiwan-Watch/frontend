@@ -25,6 +25,7 @@ export type Article = {
   publishedTime?: Maybe<Scalars['Float']>;
   slug?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Scalars['String']>>;
+  text?: Maybe<Scalars['String']>;
   title?: Maybe<I18NText>;
   type?: Maybe<ArticleType>;
 };
@@ -39,6 +40,12 @@ export enum Auth0RoleName {
   Editor = 'Editor',
   S2S = 'S2S'
 }
+
+export type Banner = {
+  __typename?: 'Banner';
+  cta?: Maybe<Scalars['String']>;
+  imageSource: Scalars['String'];
+};
 
 export type Bill = {
   __typename?: 'Bill';
@@ -270,7 +277,7 @@ export type PartyRecord = {
 
 export type Query = {
   __typename?: 'Query';
-  banners: Array<Scalars['String']>;
+  banners: Array<Banner>;
   bill?: Maybe<Bill>;
   bills: PaginatedBills;
   editors: Array<User>;
@@ -295,7 +302,6 @@ export type QueryBillArgs = {
 
 
 export type QueryBillsArgs = {
-  after?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;
   query?: InputMaybe<BillQueryInput>;
@@ -310,7 +316,6 @@ export type QueryGetArticleArgs = {
 
 
 export type QueryGetPostsWithTypeArgs = {
-  after?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;
   sortDirections?: InputMaybe<Array<Scalars['Float']>>;
@@ -325,7 +330,6 @@ export type QueryGetPublicArticleArgs = {
 
 
 export type QueryGetPublicArticlesAfterArgs = {
-  after?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;
   slug: Scalars['String'];
@@ -351,7 +355,6 @@ export type QueryMemberArgs = {
 
 
 export type QueryMembersArgs = {
-  after?: InputMaybe<Scalars['String']>;
   filters?: InputMaybe<MemberFiltersInput>;
   limit?: InputMaybe<Scalars['Float']>;
   offset?: InputMaybe<Scalars['Float']>;

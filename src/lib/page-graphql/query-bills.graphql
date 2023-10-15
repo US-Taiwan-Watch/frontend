@@ -1,31 +1,52 @@
-query bills($offset: Float, $limit: Float) {
-  bills(offset: $offset, limit: $limit) {
+query Bills(
+  $offset: Float
+  $limit: Float
+  $sortFields: [String!]
+  $sortDirections: [Float!]
+  $query: BillQueryInput!
+) {
+  bills(
+    offset: $offset
+    limit: $limit
+    sortFields: $sortFields
+    sortDirections: $sortDirections
+    query: $query
+  ) {
     total
     hasMore
     items {
-      congress
-      billType
-      billNumber
-      introducedDate
-      cosponsorsCount
-      sponsor {
-        firstName
-        firstName_zh
-        id
-        lastName
-        lastName_zh
-      }
-      title {
-        zh
-        en
-        text
-      }
-      trackers {
-        stepName
-        selected
-      }
-      id
-      isSyncing
+      ...billFields
     }
+  }
+}
+
+fragment billFields on Bill {
+  id
+  congress
+  billType
+  billNumber
+  introducedDate
+  cosponsorsCount
+  sponsor {
+    firstName
+    firstName_zh
+    id
+    lastName
+    lastName_zh
+  }
+  title {
+    zh
+    en
+    text
+  }
+  trackers {
+    stepName
+    selected
+  }
+  isSyncing
+  summary {
+    en
+    zh
+    text
   }
 }

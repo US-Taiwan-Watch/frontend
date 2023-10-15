@@ -1,0 +1,5 @@
+mutation SyncBill($billId: String!) {
+  syncBill(billId: $billId) {
+    ...billFields
+  }
+}

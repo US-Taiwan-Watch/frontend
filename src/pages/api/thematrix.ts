@@ -6,9 +6,12 @@ export default async function handler(
 ) {
   if (req.query["bye"] === "1") {
     res.setDraftMode({ enable: false });
-    res.redirect("/");
+  } else {
+    res.setDraftMode({ enable: true });
+  }
+  if (req.query["redirect"] && typeof req.query["redirect"] === "string") {
+    res.redirect(req.query["redirect"]);
     return;
   }
-  res.setDraftMode({ enable: true });
   res.redirect("/");
 }

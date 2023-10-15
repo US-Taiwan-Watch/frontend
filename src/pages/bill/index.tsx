@@ -47,7 +47,11 @@ export const getStaticPaginatedBills = async (): Promise<BillsQuery['bills']['it
   const client = createApolloClient();
   const res = await client.query({
     query: BillsDocument,
-    variables: { offset: 0 as number, limit: 20 as number },
+    variables: {
+      offset: 0 as number,
+      limit: 20 as number,
+      query: { keywords: [] },
+    },
     fetchPolicy: "network-only",
   });
   return res.data.bills.items.map((bill) => ({

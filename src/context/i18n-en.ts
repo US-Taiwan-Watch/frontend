@@ -14,10 +14,14 @@ export default {
     donate: "Support Us",
     subscribe: "Subscribe",
     podcast: "Podcast",
-    articles: "Articles",
+    articles: "Analysis",
   },
   landing: {
     testI18n: "I18n - 中文內容",
+    aboutIntro: "USTW is...",
+    aboutShort: [
+      "US Taiwan Watch is a think tank and media creator focused on the relationship between the United States and Taiwan. We are building a community for a new generation of thinkers and doers to tell the story of why the US matters for Taiwan, and why Taiwan matters for the US. To learn more:",
+    ],
     aboutDesc: [
       "US Taiwan Watch is a 501c(3) non-profit organization that aims to strengthen U.S.-Taiwan relations through civil society and civil engagement.",
       "US Taiwan Watch was founded in June 2017 by a group of U.S.-based Taiwanese engineers. The founders’ initial objective was to synthesize data on Taiwan-related bills in Congress on a website to facilitate greater Taiwanese understanding of U.S. policy. We later expanded to a series of other initiatives. This included providing more comprehensive analysis on U.S. foreign policy and U.S.-Taiwan relations and recording weekly podcast episodes to discuss U.S.-Taiwan relations.",
@@ -47,13 +51,23 @@ export default {
     latestPodcastEpisode: "Latest Podcast Episode",
     moreEpisodeButton: "Mode Episodes",
   },
+  about: {
+    ourStoryDesc: [
+      "US Taiwan Watch is a 501c(3) non-profit organization that is a think tank and media creator. We are dedicated to making the relationship between the United States and Taiwan more resilient, more productive, and more purposeful through civil society and civil engagement.",
+      'US Taiwan Watch was founded in 2017 to synthesize data on Taiwan-related bills in Congress. Later, we expanded to include analysis on U.S. foreign policy and podcasts discussing U.S.-Taiwan relations. Our 2021 book "Why and How the US Matters?" examines important issues within the U.S.-Taiwan-China dynamic. ',
+      "We have over 150,000 followers on Facebook, and our podcasts have accumulated over 1.6 million plays. Our Twitter account is followed by prominent scholars, journalists, and political leaders in Taiwan and the United States. Our editors are also recurrent commentators on news media.",
+      "Going forward, we will provide the global audience with insights on Taiwan’s current affairs, history, and culture. We are also planning more in-person events around the world.",
+      "We are building a community for a new generation of thinkers and doers, to tell the story of why the US matters for Taiwan, and why Taiwan matters for the US. Join us!",
+    ],
+    contactUs: "Contact Us",
+  },
   social: {
     fb: "Facebook is our primary platform through which we aim to strengthen U.S.-Taiwan relations. On Facebook, we debunk misinformation and common myths by providing latest news and thorough analyses of current events and policies in the U.S. and Taiwan.",
     ig: "We use Instagram for community outreach and connecting with our younger audience members. We hope to build a greater connection with our audience by having weekly livestreams and short reels. This allows us to interact with our audience in a creative manner and provide them with digestable content.",
     tw: "Twitter is our primary English language platform directed to our English-speaking audience. Beyond providing latest policy analyses and opinions, we also share Taiwanese news, culture, and experience with our English-speaking audiences interested in learning about Taiwan and its predicament in the global community. We also hope that Twitter can serve as a platform for our Taiwanese audience to exchange views with our English-speaking audience to understand the role of Taiwan in the world.",
     yt: "US Taiwan Watch produced a Youtube series of seven videos while they were in Washington, D.C. In this series, we explored the city of Washington, D.C., and visited Congress, the White House, and Embassy Row. We also interviewed policy analysts and political advocates in think tanks and political organizations such as the Global Taiwan Institute (GTI) and the Taiwan Democratic Progressive Party Mission in the U.S. We have also published our weekly podcast program on the Youtube Channel. We are also working on expanding our video platform to incorporate new programs that will educate our Taiwanese audience about the U.S. political system and atmosphere.",
     podcast:
-      '"Spice Up" is US Taiwan Watch’s Podcast program, providing weekly updates and analysis on the latest developments in US-Taiwan relations. Its special reports feature interviews with the best experts in the field, including Admiral Lee Hsi-min, Former Deputy Minister of the National Defense of Taiwan. \nThanks to our audiences -from Taiwan, the US, China, Japan, Vietnam, Hong Kong, Australia, and so many other places- Spice Up has accumulated more than 1 million downloads with the past 150+ episodes. \nStay tuned! Let us keep informed and provide you with the most up-to-date geopolitical analysis of Taiwan and the Indo-Pacific.',
+      "US Taiwan Watch’s podcasts provide updates and analysis on the latest developments in US-Taiwan relations, and our special reports feature interviews with the best experts in the field. Thanks to our audience, we have accumulated more than 2 million downloads with the past 150+ episodes. Let us keep you up to date. Stay tuned!",
   },
   newsletter: {
     title: "Subscribe US Taiwan Watch!",
@@ -64,23 +78,34 @@ export default {
     playLatestEpisode: "Play Latest Episode",
     playEpisode: "Play Episode",
     otherEpisodes: "Other Episodes",
+    moreEpisodes: "More Episodes",
+    allPodcastEpisodes: "All Podcast Episodes",
   },
   common: {
     cardList: {
       readMore: "Continue reading...",
     },
+    learnMore: "Learn More",
+    home: "Home",
   },
   posts: {
-    ARTICLE: "Articles",
+    ARTICLE: "Analysis",
     POSTER: "Posters",
   },
   post: {
-    ARTICLE: "Article",
+    ARTICLE: "Analysis",
     POSTER: "Poster",
   },
   articles: {
-    title: "News",
-    desc: "News page!",
+    title: "Commentary and Analysis",
+    desc: "Our team of editors and experts comment on the latest and most important events in the world and how they affect US-Taiwan relations. From geopolitics, security, and elections, to business, technology, and culture, this is where to find the freshest insights. ",
+    moreArticles: "More Analysis",
+    latestArticles: "Latest Analysis",
+    mediaCardTitle: "US Taiwan Watch - Commentary and Analysis",
+  },
+  media: {
+    prev: "Previous",
+    next: "Next",
   },
   posters: {
     title: "Updates",

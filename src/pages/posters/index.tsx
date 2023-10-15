@@ -7,7 +7,7 @@ import { useI18n } from "../../context/i18n";
 import { ArticleType } from "../../generated/graphql-types";
 import { PublicPostsQuery } from "../../lib/page-graphql/query-public-posts.graphql.interface";
 import { getPostUrl } from "../admin/[post-type]";
-import { getPaginatedPublishedPosts } from "../articles";
+import { getPaginatedPublishedPosts } from "../analysis";
 import { initApolloClientWithLocale } from "../../lib/with-apollo";
 
 export type PostsPageProps = {

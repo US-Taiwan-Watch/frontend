@@ -191,7 +191,7 @@ export const getPostTypeSlug = (type?: ArticleType | null) => {
   if (type === ArticleType.Poster) {
     return "posters";
   }
-  return "articles";
+  return "analysis";
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

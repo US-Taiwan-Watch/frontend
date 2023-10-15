@@ -53,7 +53,7 @@ export const AdminHeader: React.FC<{ title: string }> = ({ title }) => {
       >
         {canEdit && (
           <>
-            <NavLink href="/admin/articles">
+            <NavLink href="/admin/analysis">
               {
                 i18n.formatString(
                   i18n.strings.admin.posts.managePosts,
@@ -70,7 +70,7 @@ export const AdminHeader: React.FC<{ title: string }> = ({ title }) => {
               }
             </NavLink>
             <NavLink href="/">回到首頁</NavLink>
-            <NavLink href="/articles" target="_blank">
+            <NavLink href="/analysis" target="_blank">
               文章欄
             </NavLink>
             <NavLink href="/posters" target="_blank">

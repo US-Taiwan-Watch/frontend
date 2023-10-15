@@ -1,6 +1,16 @@
 import * as React from "react";
-import { IUser, useFetchUser } from "../lib/user";
-import { Box, Button, Toolbar, Typography, useTheme } from "@mui/material";
+import { useFetchUser } from "../lib/user";
+import {
+  Box,
+  Button,
+  Drawer,
+  IconButton,
+  SvgIcon,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useI18n } from "../context/i18n";
 import { LocaleSwitcher } from "./locale-switcher";
 import { Link, LinkProps } from "./link";
@@ -8,17 +18,100 @@ import Image from "next/image";
 import { ColorModeContext } from "../pages/_app";
 import { useRouter } from "next/router";
 import { UserMenu } from "./user-menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { Footer } from "./footer";
+import IconLogo from "../styles/assets/logo-full.svg";
+import IconLogoWhite from "../styles/assets/logo-full-white.svg";
 
 const NavLink: React.FC<LinkProps> = (props) => (
-  <Link
-    {...props}
-    variant="button"
-    color="text.primary"
-    sx={{ my: 1, mx: 1.5 }}
-  >
+  <Link {...props} variant="button" color="inherit" sx={{ my: 1, mx: 1.5 }}>
     {props.children}
   </Link>
 );
+
+const NavButtons: React.FC = () => {
+  const { i18n } = useI18n();
+  return (
+    <>
+      <NavLink href="/about">{i18n.strings.header.about}</NavLink>
+      <NavLink href="/podcast">{i18n.strings.header.podcast}</NavLink>
+      <NavLink href="/analysis">{i18n.strings.header.articles}</NavLink>
+    </>
+  );
+};
+
+export const NavBar: React.FC = () => (
+  <Box
+    sx={{
+      position: "absolute",
+      display: {
+        xs: "none",
+        sm: "none",
+        md: "flex",
+      },
+      flexWrap: "wrap",
+    }}
+    color="primary.light"
+  >
+    <NavButtons />
+  </Box>
+);
+
+const HeaderTitle: React.FC<{ whiteLogo?: boolean }> = ({ whiteLogo }) => {
+  const { i18n } = useI18n();
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.down("sm"));
+
+  return (
+    <Box
+      sx={{
+        my: 1,
+        flexGrow: 1,
+        display: "flex",
+      }}
+    >
+      <Link
+        href="/"
+        style={{ textDecoration: "none" }}
+        scroll={false}
+        color="inherit"
+        sx={{ display: "flex" }}
+      >
+        {whiteLogo ? (
+          <SvgIcon
+            component={IconLogoWhite}
+            sx={{
+              width: "211px",
+              height: "43px",
+            }}
+            viewBox="0 0 211 43"
+          />
+        ) : (
+          <SvgIcon
+            component={IconLogo}
+            sx={{
+              width: "198px",
+              height: "45px",
+            }}
+            viewBox="0 0 200 46"
+          />
+        )}
+        {/* <img
+          src={
+            whiteLogo ? "/assets/logo-full-white.svg" : "/assets/logo-full.svg"
+          }
+          // width={whiteLogo ? 211 : 198}
+          // height={whiteLogo ? 43 : 45}
+          alt="US Taiwan Watch"
+        /> */}
+        {/* <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
+          {isXs ? i18n.strings.brand.shortName : i18n.strings.brand.fullName}
+        </Typography> */}
+      </Link>
+    </Box>
+  );
+};
 
 export const Header: React.FC<{
   draftMode: boolean;
@@ -28,6 +121,7 @@ export const Header: React.FC<{
   const { pathname } = useRouter();
   const theme = useTheme();
   const colorMode = React.useContext(ColorModeContext);
+  const [showDrawer, setShowDrawer] = React.useState(false);
   const isHome = pathname === "/";
 
   if (draftMode) {
@@ -39,56 +133,26 @@ export const Header: React.FC<{
           px: 2,
           boxShadow:
             "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
+          marginBottom: "1px",
           justifyContent: "center",
+          color: theme.palette.text.primary,
         }}
       >
+        <HeaderTitle />
+        <NavBar />
         <Box
           sx={{
-            my: 1,
-            flexGrow: 1,
-            display: "flex",
+            display: {
+              xs: "none",
+              sm: "none",
+              md: "flex",
+            },
           }}
         >
-          <Link
-            href="/"
-            style={{ textDecoration: "none" }}
-            scroll={false}
-            color="text.primary"
-            sx={{ display: "flex" }}
-          >
-            <Image
-              src="/assets/logo.png"
-              width={30}
-              height={30}
-              alt="US Taiwan Watch"
-            />
-            <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
-              {draftMode && "[DRAFT MODE] "}
-              {i18n.strings.brand.fullName}
-            </Typography>
-          </Link>
-        </Box>
-        <Box
-          sx={{
-            position: "absolute",
-            display: "flex",
-            flexWrap: "wrap",
-          }}
-        >
-          <NavLink href="/#about">{i18n.strings.header.about}</NavLink>
-          <NavLink href="/podcast">{i18n.strings.header.podcast}</NavLink>
-          <NavLink href="/posts">{i18n.strings.header.articles}</NavLink>
-        </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-          }}
-        >
-          <Box sx={{ marginTop: 1 }}>
+          <Box sx={{ marginTop: 1, color: theme.palette.primary.main }}>
             <LocaleSwitcher />
           </Box>
-          <NavLink href="/#donate">
+          <NavLink href="/support-us">
             <Button variant="contained">{i18n.strings.header.donate}</Button>
           </NavLink>
           {user && (
@@ -101,6 +165,56 @@ export const Header: React.FC<{
                 {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton> */}
         </Box>
+        <IconButton
+          sx={{ display: { md: "none", lg: "none" } }}
+          onClick={() => setShowDrawer(true)}
+          color="primary"
+        >
+          <MenuIcon />
+        </IconButton>
+        <Drawer
+          anchor="right"
+          PaperProps={{
+            sx: { width: "100%", background: theme.palette.primary.main },
+          }}
+          open={showDrawer}
+          onClose={() => setShowDrawer(false)}
+        >
+          <Toolbar sx={{ color: theme.palette.text.secondary }}>
+            <HeaderTitle whiteLogo={true} />
+            <IconButton
+              onClick={() => setShowDrawer(false)}
+              sx={{ color: theme.palette.text.secondary }}
+            >
+              <CancelIcon />
+            </IconButton>
+          </Toolbar>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              marginTop: 2,
+              color: theme.palette.text.secondary,
+            }}
+          >
+            <NavButtons />
+            <Box sx={{ marginTop: 1 }}>
+              <LocaleSwitcher />
+            </Box>
+            <NavLink href="/support-us">
+              <Button
+                variant="contained"
+                sx={{ background: theme.palette.primary.dark }}
+              >
+                {i18n.strings.header.donate}
+              </Button>
+            </NavLink>
+          </Box>
+          <Box sx={{ width: "100%", position: "fixed", bottom: 0 }}>
+            <Footer draftMode={true} />
+          </Box>
+        </Drawer>
       </Toolbar>
     );
   }
@@ -129,7 +243,6 @@ export const Header: React.FC<{
           />
           {/* <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' }, a: { textDecoration: 'none' } }} /> */}
           <Typography variant="h6" color="inherit" noWrap sx={{ mx: 1.5 }}>
-            {draftMode && "[DRAFT MODE] "}
             {i18n.strings.brand.fullName}
           </Typography>
         </Link>

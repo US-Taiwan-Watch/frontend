@@ -22,8 +22,14 @@ module.exports = {
   transform: async (config, path) => {
     const includePaths = [
       { rule: /^\/$/, priority: 1 },
-      { rule: /^\/newsletters$/, priority: 0.9 },
       { rule: /^\/podcast$/, priority: 0.9 },
+      ...(!!parseInt(process.env.IS_LAUNCHED || "0")
+        ? [
+            { rule: /^\/about$/, priority: 0.9 },
+            { rule: /^\/support-us$/, priority: 0.9 },
+            { rule: /^\/analysis$/, priority: 0.9 },
+          ]
+        : [{ rule: /^\/newsletters$/, priority: 0.9 }]),
     ];
     const pathWithPrio = includePaths.find(iPath => iPath.rule.test(path));
     if (!pathWithPrio) {

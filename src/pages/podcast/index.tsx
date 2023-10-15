@@ -1,23 +1,37 @@
-import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { Layout } from "../../components/layout";
 import { useI18n } from "../../context/i18n";
 import { Banner } from "../../components/banner";
-import { ListItem, ListItemButton, ListItemText, Typography } from "@mui/material";
+import {
+  Container,
+  Grid,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import { Section } from "../../components/section";
 import { useRouter } from "next/router";
 import { podcastPlatforms } from "../../components/social-media";
 import { useEffect, useState } from "react";
 import { getPodcastEpisodes, PodcastEpisode } from "../api/podcast-episodes";
-import { getStaticPathsWithLocale } from "../../utils/page-utils";
 import { Loading } from "../../components/loading";
 import { Link } from "../../components/link";
-import { MediaContainer } from "../../components/media-container";
+import { CardList } from "../../components/card-list";
+import { PodcastMediaCard } from "../../components/media-card";
+import { PaginationControl } from "../../components/pagination-control";
+import { isLaunched } from "../../utils/gate-keeper";
 
 const EPISODE_PATH = "ep";
+const PAGE_SIZE = 20;
+const PAGE_SEARCH_PAGE_NAME = "page";
+const PODCAST_COVER =
+  "https://files.soundon.fm/1620626429960-9ecce80b-d34c-4713-981d-a4b0abd8e2e0.jpeg";
 
 type PodcastPageProps = {
   partialEpisodes: Partial<PodcastEpisode>[];
   currentEpisode: PodcastEpisode;
+  page: number;
   draftMode: boolean;
 };
 
@@ -25,12 +39,18 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
   partialEpisodes,
   currentEpisode,
   draftMode,
+  page: defaultPage,
 }) => {
   const { i18n } = useI18n();
   const router = useRouter();
   const [episode, setEpisode] = useState(currentEpisode);
   const [completedEpisodes, setCompletedEpisodes] = useState<PodcastEpisode[]>(
     []
+  );
+  const { query } = useRouter();
+  const pageQuery = query[PAGE_SEARCH_PAGE_NAME];
+  const [page, setPage] = useState(
+    typeof pageQuery === "string" ? parseInt(pageQuery) : defaultPage
   );
 
   // The commented out codes should work according to https://nextjs.org/docs/routing/shallow-routing
@@ -58,9 +78,12 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
     ? router.query["episode-id"][1]
     : partialEpisodes && partialEpisodes[0].id;
 
-  const nextEpIndex =
-    partialEpisodes.findIndex((ep) => ep.id === episodeID) + 1;
-  const nextEp = partialEpisodes[nextEpIndex];
+  // useEffect(() => {
+  //   const pageQuery = query[PAGE_SEARCH_PAGE_NAME];
+  //   if (typeof pageQuery === "string") {
+  //     setPage(parseInt(pageQuery));
+  //   }
+  // }, [query]);
 
   useEffect(() => {
     const episodesInSession = sessionStorage.getItem("podcast-episodes");
@@ -91,56 +114,63 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
     return <Loading />;
   }
 
-  const isIndex = router.query["episode-id"] ? false : true;
-  const desc = isIndex ? i18n.strings.social.podcast : episode.description;
-
+  // List page
   if (draftMode) {
     return (
       <Layout
-        title={isIndex ? i18n.strings.podcast.name : episode.title}
-        type={isIndex ? "music.album" : "music.song"}
-        description={desc}
+        title={i18n.strings.podcast.name}
+        type="music.album"
+        description={i18n.strings.social.podcast}
+        draftMode={draftMode}
         image="https://static.ustw.watch/public-image/website/podcast.jpg"
       >
-        <MediaContainer
-          title={episode.title}
-          imageSrc={
-            "https://static.ustw.watch/public-image/website/podcast.jpg"
-          }
-          next={{
-            title: nextEp.title || "",
-            url: `/podcast/${EPISODE_PATH}/${nextEp.id}`,
-          }}
-        >
-          <iframe
-            src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${episodeID}`}
-            style={{
-              marginBottom: 20,
-              height: "140px",
-              width: "100%",
-              border: "none",
-              borderRadius: "4px",
-              boxShadow: "0 1px 8px rgba(0, 0, 0, .2)",
-            }}
-          />
-          <Typography variant="subtitle2" paragraph>
-            {episode.pubDate && new Date(episode.pubDate).toLocaleDateString()}
-          </Typography>
-          <div
-            dangerouslySetInnerHTML={(() => ({
-              __html: episode.encodedDesc,
-            }))()}
-          />
-        </MediaContainer>
+        <Banner
+          imageSrc="https://static.ustw.watch/public-image/website/banners/podcast.png"
+          draftMode={true}
+        />
+        <Container sx={{ my: 5 }}>
+          <Grid container spacing={2}>
+            <Grid item md={8} sm={12} xs={12}>
+              <Typography component="h5" variant="h5" gutterBottom>
+                {i18n.strings.podcast.allPodcastEpisodes}
+              </Typography>
+              <hr />
+              <PaginationControl
+                defaultPage={page}
+                defaultPageSize={PAGE_SIZE}
+                total={completedEpisodes.length}
+                // urlSearchName={PAGE_SEARCH_PAGE_NAME}
+                updateItems={async (page, _) => {
+                  setPage(page);
+                }}
+              />
+              <CardList
+                cards={completedEpisodes
+                  .slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+                  .map((p) => ({
+                    title: p.title,
+                    displayDate: new Date(p.pubDate || 0).toLocaleDateString(), // change to pub date
+                    content: p.description,
+                    url: `/podcast/ep/${p.id}`,
+                    image:
+                      p.imageSrc === PODCAST_COVER ? undefined : p.imageSrc,
+                  }))}
+              />
+            </Grid>
+            <Grid item md={4} sm={12} xs={12}>
+              <PodcastMediaCard />
+            </Grid>
+          </Grid>
+        </Container>
       </Layout>
     );
   }
 
   return (
     <Layout
-      title={isIndex ? i18n.strings.podcast.name : episode.title}
-      type={isIndex ? "music.album" : "music.song"}
-      description={desc}
+      title={i18n.strings.podcast.name}
+      type={"music.album"}
+      description={i18n.strings.social.podcast}
       image="https://static.ustw.watch/public-image/website/podcast.jpg"
     >
       <Banner
@@ -153,14 +183,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
           buttonProps: { sx: { textTransform: "none" } },
         }))}
       />
-      <Section
-        id="podcast"
-        title={
-          isIndex
-            ? i18n.strings.podcast.playLatestEpisode
-            : i18n.strings.podcast.playEpisode
-        }
-      >
+      <Section id="podcast" title={i18n.strings.podcast.playLatestEpisode}>
         <iframe
           src={`https://player.soundon.fm/embed/?podcast=6cdfccc6-7c47-4c35-8352-7f634b1b6f71&episode=${episodeID}`}
           style={{
@@ -191,7 +214,7 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
             color="text.primary"
             onClick={(e) => {
               e.preventDefault();
-              router.push(`${EPISODE_PATH}/${ep.id}`, undefined, {
+              router.push(`/podcast/${EPISODE_PATH}/${ep.id}`, undefined, {
                 shallow: true,
               });
               window.scrollTo(0, 0);
@@ -209,55 +232,32 @@ const PodcastPage: NextPage<PodcastPageProps> = ({
   );
 };
 
-export const getStaticPaths: GetStaticPaths<{
-  "episode-id": string[];
-}> = async ({ locales }) => ({
-  paths: getStaticPathsWithLocale(
-    (await getPodcastEpisodes())
-      .map((ep) => [EPISODE_PATH, ep.id])
-      .slice(0, 10)
-      .concat([[]])
-      .map((p) => ({
-        params: { "episode-id": p },
-      })),
-    locales
-  ),
-  fallback: true,
-});
-
-export const getStaticProps: GetStaticProps<PodcastPageProps> = async ({
-  params,
-  draftMode,
+export const getServerSideProps: GetServerSideProps<PodcastPageProps> = async ({
+  req,
+  query,
 }) => {
-  if (!params) {
-    return { notFound: true };
-  }
-  const episodeIdParam = params["episode-id"];
   const episodes = await getPodcastEpisodes();
-  let episode;
-  if (!episodeIdParam) {
-    episode = episodes[0];
-  } else if (
-    !Array.isArray(episodeIdParam) ||
-    episodeIdParam.length !== 2 ||
-    episodeIdParam[0] !== EPISODE_PATH
-  ) {
-    return { notFound: true };
-  } else {
-    episode =
-      episodeIdParam && episodes.find((e) => e.id === episodeIdParam[1]);
-  }
+  const episode = episodes[0];
   if (!episode) {
     return { notFound: true };
+  }
+  let pageQuery = query[PAGE_SEARCH_PAGE_NAME];
+  if (pageQuery === undefined) {
+    pageQuery = "1";
+  } else if (typeof pageQuery !== "string" || isNaN(parseInt(pageQuery))) {
+    return {
+      notFound: true,
+    };
   }
 
   return {
     props: {
       partialEpisodes: episodes.map((ep) => ({ id: ep.id, title: ep.title })),
       currentEpisode: episode,
-      draftMode: !!draftMode,
+      page: parseInt(pageQuery),
+      draftMode:
+        !!req.headers.cookie?.includes("__prerender_bypass") !== isLaunched,
     },
-    revalidate: 300, // In seconds
   };
 };
 

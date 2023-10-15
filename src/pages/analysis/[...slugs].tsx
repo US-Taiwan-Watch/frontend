@@ -1,10 +1,8 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { Layout } from "../../components/layout";
-import { getPaginatedPublishedPosts } from ".";
 import { Loading } from "../../components/loading";
 import { getStaticPathsWithLocale } from "../../utils/page-utils";
 import { PostContent } from "../../components/post-content";
-import { useTheme } from "@mui/material";
 import {
   PublicPostDocument,
   PublicPostQuery,
@@ -15,14 +13,20 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { initApolloClientWithLocale } from "../../lib/with-apollo";
 import { MediaContainer } from "../../components/media-container";
+import { ArticlesMediaCard } from "../../components/media-card";
+import { useI18n } from "../../context/i18n";
+import { PublicPostSlugsDocument } from "../../lib/page-graphql/query-public-post-slugs.graphql.interface";
+import { Constants } from "../../utils/constants";
 
 export type PostPageProps = {
   post?: PublicPostQuery["getPublicArticle"];
   nextPost: Partial<PublicPostQuery["getPublicArticle"]>;
+  prevPost: Partial<PublicPostQuery["getPublicArticle"]>;
 };
 
-const PostPage: NextPage<PostPageProps> = ({ post, nextPost }) => {
+const PostPage: NextPage<PostPageProps> = ({ post, nextPost, prevPost }) => {
   const router = useRouter();
+  const { i18n } = useI18n();
   useEffect(() => {
     if (!post?.publishedTime) {
       return;
@@ -38,7 +42,6 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost }) => {
     }
     router.replace(getPostUrl(post), undefined, { shallow: true });
   }, [post, router]);
-  const theme = useTheme();
 
   if (!post) {
     return <Loading />;
@@ -49,10 +52,12 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost }) => {
       type="article"
       description={post.preview?.text || ""}
       image={post.imageSource}
+      draftMode={true}
     >
       <MediaContainer
         title={post.title?.text}
         imageSrc={post.imageSource}
+        breadcrumbs={[{ title: i18n.strings.posts.ARTICLE, url: "/analysis" }]}
         next={
           (nextPost && {
             title: nextPost.title?.text || "",
@@ -60,6 +65,14 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost }) => {
           }) ||
           undefined
         }
+        prev={
+          (prevPost && {
+            title: prevPost.title?.text || "",
+            url: getPostUrl(prevPost),
+          }) ||
+          undefined
+        }
+        mediaCard={<ArticlesMediaCard />}
       >
         <PostContent post={post} />
       </MediaContainer>
@@ -67,31 +80,40 @@ const PostPage: NextPage<PostPageProps> = ({ post, nextPost }) => {
   );
 };
 
+export const getPublishedPostUrlPaths = async (
+  type: ArticleType,
+  offset: number,
+  limit: number
+): Promise<string[]> => {
+  const apolloClient = initApolloClientWithLocale();
+  const res = await apolloClient.query({
+    query: PublicPostSlugsDocument,
+    variables: {
+      type,
+      limit,
+      offset,
+    },
+    fetchPolicy: "cache-first",
+  });
+  return res.data.getPostsWithType.items.map((p) => getPostUrl(p));
+};
+
 export const getStaticPaths: GetStaticPaths<{ slugs: string[] }> = async ({
   locales,
 }) => {
-  const apolloClient = initApolloClientWithLocale();
-  const posts = (
-    await getPaginatedPublishedPosts(ArticleType.Article, 1, 20, apolloClient)
-  ).items;
+  const postUrls = await getPublishedPostUrlPaths(
+    ArticleType.Article,
+    0,
+    Constants.prebuildListItemCounts
+  );
   return {
     paths: getStaticPathsWithLocale(
       // language!
-      posts.map((post) => {
-        if (!post.publishedTime) {
-          return {
-            params: {
-              slugs: [post.slug as string],
-            },
-          };
-        }
-        const date = getPostPublishDate(post.publishedTime);
-        return {
-          params: {
-            slugs: [date?.year, date?.month, post.slug as string],
-          },
-        };
-      }),
+      postUrls.map((url) => ({
+        params: {
+          slugs: url.split("/").slice(1),
+        },
+      })),
       locales
     ),
     fallback: true,
@@ -111,15 +133,20 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async ({
     const data = await apolloClient.query({
       query: PublicPostDocument,
       variables: { slug: slugs[slugs.length - 1] },
-      fetchPolicy: "network-only",
+      fetchPolicy: "cache-first",
     });
     const post = data.data.getPublicArticle;
     if (!post || post.type !== ArticleType.Article || !post.publishedTime) {
       return { notFound: true };
     }
-    const nextPosts = data.data.getPublicArticlesAfter.items;
+    const nextPosts = data.data.after.items;
+    const prevPosts = data.data.before.items;
     return {
-      props: { post, nextPost: nextPosts.length > 0 ? nextPosts[0] : null },
+      props: {
+        post,
+        nextPost: nextPosts.length > 0 ? nextPosts[0] : null,
+        prevPost: prevPosts.length > 0 ? prevPosts[0] : null,
+      },
       revalidate: 300,
     };
   } catch (err) {

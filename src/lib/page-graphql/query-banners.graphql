@@ -1,0 +1,6 @@
+query BannersQuery {
+  banners {
+    imageSource
+    cta
+  }
+}

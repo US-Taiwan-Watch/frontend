@@ -16,7 +16,7 @@ export const AdminPage: NextPage = () => {
   const { i18n } = useI18n();
   const links = [
     {
-      href: "/admin/articles",
+      href: "/admin/analysis",
       text: i18n.formatString(
         i18n.strings.admin.posts.managePosts,
         i18n.strings.posts[ArticleType.Article]
@@ -28,6 +28,10 @@ export const AdminPage: NextPage = () => {
         i18n.strings.admin.posts.managePosts,
         i18n.strings.posts[ArticleType.Poster]
       ) as string,
+    },
+    {
+      href: "/admin/bills",
+      text: i18n.formatString("管理法案") as string,
     },
   ];
 

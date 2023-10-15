@@ -1,15 +1,15 @@
-import { theme } from "../styles";
-import { SmallCardItem } from "./card-list";
 import { Link } from "./link";
 import {
   Breadcrumbs,
   Box,
   Container,
   Grid,
-  Paper,
   Typography,
+  useTheme,
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useI18n } from "../context/i18n";
 
 export type MediaContainer = {
   title?: string | null;
@@ -17,94 +17,95 @@ export type MediaContainer = {
   next?: {
     title: string;
     url: string;
-  };
+  } | null;
+  prev?: {
+    title: string;
+    url: string;
+  } | null;
+  breadcrumbs: [{ title: string; url: string }];
+  mediaCard?: React.ReactNode;
 };
 
-export const MediaContainer: React.FC<MediaContainer> = (params) => {
+export const MediaContainer: React.FC<MediaContainer> = (props) => {
+  const theme = useTheme();
+  const { i18n } = useI18n();
   return (
-    <Container>
-      <Grid container spacing={2}>
-        <Grid item md={8}>
-          <Breadcrumbs separator="›" aria-label="breadcrumb">
+    <Container sx={{ my: 5 }}>
+      <Grid container spacing={4}>
+        <Grid item md={8} sm={12} xs={12}>
+          <Breadcrumbs
+            separator=">"
+            color="text.disabled"
+            aria-label="breadcrumb"
+            sx={{ marginBottom: 2 }}
+          >
             <Link underline="hover" color="inherit" href="/">
-              Home
+              {i18n.strings.common.home}
             </Link>
-            <Link underline="hover" color="inherit" href="/articles">
-              Articles
-            </Link>
+            {props.breadcrumbs.map((crumb) => (
+              <Link
+                underline="hover"
+                color="inherit"
+                href={crumb.url}
+                key={crumb.title}
+              >
+                {crumb.title}
+              </Link>
+            ))}
           </Breadcrumbs>
           <Typography component="h4" variant="h4" gutterBottom>
-            {params.title}
+            {props.title}
           </Typography>
-          <hr />
-          {params.children}
-          {params.next && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row-reverse",
-                marginTop: 5,
-              }}
-            >
-              <Box sx={{ maxWidth: 200 }}>
-                <Link href={params.next.url}>
-                  <Typography component="h2" variant="h5">
-                    <ArrowForwardIcon /> 下一篇
-                  </Typography>
-                  <Typography variant="subtitle1" paragraph>
-                    {params.next.title}
-                  </Typography>
-                </Link>
-              </Box>
-            </Box>
-          )}
-        </Grid>
-        <Grid item md={4}>
-          <Paper
+          {/* <hr /> */}
+          <Box sx={{ my: 4 }}>{props.children}</Box>
+          <Grid
+            container
             sx={{
-              textAlign: "center",
-              px: 5,
-              py: 4,
-              my: 5,
-              backgroundColor: theme.palette.primary.light,
-              borderRadius: "10px",
-              boxShadow: 0,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "start",
+              marginTop: 8,
+              px: 1,
             }}
           >
-            <Typography component="h6" variant="h6">
-              #觀測站底加辣
-            </Typography>
-            <Typography variant="body1">
-              「觀測站底加辣」已推出第三季，每週不間斷地為聽眾帶來台美關係最新動態與分析，並時不時推出專題報導，以訪問來賓包括前參謀總長李喜明、美國聖湯瑪斯大學國際研究葉耀元教授等。謝謝每一位聽眾的陪伴，過去超過
-              150 集的 podcast 累績下載超過 100
-              萬，收聽地區除了台美外，還包括中國、日本、越南、香港、澳洲等。讓我們繼續用耳朵追時事、破解台美中地緣政治
-              主持群：李可心、陳方隅、Jerry、Ledo、Ting
-            </Typography>
-          </Paper>
-          <Typography component="h5" variant="h5" gutterBottom>
-            相關文章
-          </Typography>
-          <hr />
-          <Grid container>
-            <Grid item xs={12} sm={6} md={12} sx={{ px: 2 }}>
-              <SmallCardItem
-                url="test"
-                title="test"
-                content="test!"
-                displayDate="2022/2/2"
-                image={params.imageSrc || undefined}
-              />
+            <Grid item md={3} sm={3} xs={6} sx={{ alignItems: "end" }}>
+              {props.prev && (
+                <Link href={props.prev.url}>
+                  <Typography
+                    component="h2"
+                    variant="h5"
+                    sx={{ display: "flex", alignItems: "center" }}
+                  >
+                    {i18n.strings.media.prev}{" "}
+                    <ArrowBackIcon sx={{ marginLeft: 1 }} />
+                  </Typography>
+                  <Typography variant="subtitle1" paragraph>
+                    {props.prev.title}
+                  </Typography>
+                </Link>
+              )}
             </Grid>
-            <Grid item xs={12} sm={6} md={12} sx={{ px: 2 }}>
-              <SmallCardItem
-                url="test"
-                title="test"
-                content="test!"
-                displayDate="2022/2/2"
-                image={params.imageSrc || undefined}
-              />
+            <Grid item md={3} sm={3} xs={6}>
+              {props.next && (
+                <Link href={props.next.url}>
+                  <Typography
+                    component="h2"
+                    variant="h5"
+                    sx={{ display: "flex", alignItems: "center" }}
+                  >
+                    <ArrowForwardIcon sx={{ marginRight: 1 }} />{" "}
+                    {i18n.strings.media.next}
+                  </Typography>
+                  <Typography variant="subtitle1" paragraph>
+                    {props.next.title}
+                  </Typography>
+                </Link>
+              )}
             </Grid>
           </Grid>
+        </Grid>
+        <Grid item md={4} sm={12} xs={12}>
+          {props.mediaCard}
         </Grid>
       </Grid>
     </Container>
