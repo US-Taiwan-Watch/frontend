@@ -39,7 +39,10 @@ const MemberBriefCard: React.FC<MemberBriefCardProps> = (props) => {
   }
   if (!additionName)  additionName = "　";    // TODO: control layout with grid
 
-  const latestJobRec = props.member_data?.congressRoles[0];
+  const latestJobRec = 
+    (props.member_data?.congressRoles.length)?
+      props.member_data.congressRoles[props.member_data.congressRoles.length - 1] : undefined;
+
   const latestJob = {
     "jobType" :
       (latestJobRec?.chamber == 's')? "Senator" : ((latestJobRec?.chamber == 'h')? "Representative" : "Unknown Job"),
