@@ -108,7 +108,7 @@ export const Footer: React.FC<{ draftMode?: boolean }> = ({ draftMode }) => {
                     href={media.link}
                     key={media.name}
                     sx={{
-                      color: theme.palette.text.secondary,
+                      color: theme.palette.common.white,
                     }}
                   >
                     <span
@@ -126,7 +126,7 @@ export const Footer: React.FC<{ draftMode?: boolean }> = ({ draftMode }) => {
                 ))}
                 <IconButton
                   aria-label="email"
-                  sx={{ color: theme.palette.text.secondary }}
+                  sx={{ color: theme.palette.common.white }}
                   href={`mailto:${Constants.links.email}`}
                 >
                   <span
@@ -188,7 +188,7 @@ export const Footer: React.FC<{ draftMode?: boolean }> = ({ draftMode }) => {
           width={"100%"}
           sx={{
             backgroundColor: theme.palette.primary.light,
-            color: theme.palette.text.secondary,
+            color: theme.palette.common.white,
             py: 1,
           }}
         >

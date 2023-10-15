@@ -156,14 +156,30 @@ export const lightPalette: PaletteOptions = {
     main: color.blueGrey[200],
     dark: color.blueGrey[300],
   },
+  common: {
+    black: color.black[300],
+    white: color.white[100],
+  },
   text: {
     primary: color.black[300],
-    secondary: color.white[100],
+    // secondary: color.white[100],
     disabled: "#828282",
   },
   background: {
     default: color.white[100],
     // paper: color.white[200],
+  },
+  getContrastText: (background: string): string => {
+    // Convert the background color to RGB
+    const r = parseInt(background.slice(1, 3), 16);
+    const g = parseInt(background.slice(3, 5), 16);
+    const b = parseInt(background.slice(5, 7), 16);
+
+    // Calculate the contrast using the WCAG formula
+    const contrast = (r * 299 + g * 587 + b * 114) / 1000;
+
+    // Return black or white based on the contrast
+    return contrast >= 128 ? "#000" : "#fff";
   },
 };
 
