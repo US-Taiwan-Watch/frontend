@@ -25,7 +25,11 @@ query Bill($billId: String!) {
         startDate
         state
       }
+      firstName
+      firstName_zh
       id
+      lastName
+      lastName_zh
       displayName {
         text
       }
