@@ -106,7 +106,7 @@ const MemberListPage: NextPage<MemberListPageProps> = (prefetched) => {
           displayDate: "", // change to pub date
           content: "",
           image: member.profilePictureUri || undefined,
-          url: `/bill/${member.id}`,
+          url: `/congress/members/${member.id}`,
         }))}
       />
     </Layout>
