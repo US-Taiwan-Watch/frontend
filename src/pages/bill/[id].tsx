@@ -45,15 +45,14 @@ const BillPage: NextPage<BillPageProps> = ({ bill }) => {
       .entries()
   );
   return (
-    <Layout>
+    <Layout draftMode={true}>
       <Banner>
         <BillCard
-          url={`/bill/${bill.id}`}
           id={bill.id}
           billNumber={bill.billNumber}
           billType={bill.billType}
           congress={bill.congress}
-          title={bill.title?.text || ""}
+          title={bill.title || undefined}
           introducedDate={bill.introducedDate || undefined}
           sponsor={bill.sponsor || undefined}
           cosponsorsCount={bill.cosponsorsCount || undefined}

@@ -2,11 +2,8 @@ import * as React from "react";
 import {
   Container,
   Card,
-  CardActions,
   CardContent,
-  Chip,
   Divider,
-  Button,
   Typography,
   Box,
   List,
@@ -20,24 +17,21 @@ import {
   Step,
   StepLabel
 } from '@mui/material';
-import { BillTracker, Member } from "../generated/graphql-types";
+import { BillFieldsFragment } from "../lib/page-graphql/query-bills.graphql.interface";
 
 const stepsForSenate = ['Introduced', 'Pass Senate', 'Pass House', 'Resolving Differences', 'To President', 'Became Law'];
 const stepsForHouse = ['Introduced', 'Pass House', 'Pass Senate', 'Resolving Differences', 'To President', 'Became Law'];
 
 export type BillCardProps = {
-  url: string,
-  id: string,
-  billNumber: number,
-  billType: string,
-  congress: number,
-  title?: string,
-  introducedDate?: string,
-  tags?: string[],
-  sponsor?: Member,
-  cosponsorsCount?: number,
-  cosponsors?: string[],
-  trackers?: BillTracker[]
+  id: BillFieldsFragment['id'],
+  billNumber: BillFieldsFragment['billNumber'],
+  billType: BillFieldsFragment['billType'],
+  congress: BillFieldsFragment['congress'],
+  title?: BillFieldsFragment['title'],
+  introducedDate?: BillFieldsFragment['introducedDate'],
+  sponsor?: BillFieldsFragment['sponsor'],
+  cosponsorsCount?: BillFieldsFragment['cosponsorsCount'],
+  trackers?: BillFieldsFragment['trackers']
 }
 
 /*
@@ -64,6 +58,8 @@ export const BillCard: React.FC<BillCardProps> = (props) => {
   const congress = props.congress;
   const billType = props.billType;
   const billNumber = props.billNumber;
+  const title = props.title;
+  const sponsor = props.sponsor;
   let steps = null;
   let selectedStepNum = -1;
   if (props.trackers) {
@@ -76,8 +72,12 @@ export const BillCard: React.FC<BillCardProps> = (props) => {
       }
     }
   }
-  const sponsorNameZh = props.sponsor?.firstName_zh ? "" + props.sponsor?.firstName_zh + "．" + props.sponsor?.lastName_zh : "";
-  const sponsorNameEn = "" + props.sponsor?.firstName + " " + props.sponsor?.lastName;
+  const sponsorNameZh = sponsor?.firstName_zh ? "" + sponsor?.firstName_zh + "．" + sponsor?.lastName_zh : "";
+  const sponsorNameEn = "" + sponsor?.firstName + " " + sponsor?.lastName;
+  let sponsorAvatar = "X";
+  if (sponsor?.firstName && sponsor.lastName) {
+    sponsorAvatar = sponsor.firstName?.charAt(0) + sponsor.lastName.charAt(0);
+  }
   return (
     <Container maxWidth="lg">
       <Box
@@ -109,30 +109,30 @@ export const BillCard: React.FC<BillCardProps> = (props) => {
                 m: 1,
               }}
             >
-              <Stack direction="row" spacing={2}>
-                {props.tags && props.tags.map((data) => <Chip label={data} />)}
-              </Stack>
+
             </Box>
 
-            <Box width="100%">
+            {title && <Box width="100%">
               <Typography variant="h6">
-                {props.title}
+                {title?.text}
               </Typography>
-            </Box>
+            </Box>}
 
             <Box width="100%">
-              <Typography variant="subtitle1">
-                提案人
-              </Typography>
-              <List>
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>X</Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={props.sponsor?.displayName?.text} />
-                </ListItem>
-
-              </List>
+              {props.sponsor && <Box>
+                <Typography variant="subtitle1">
+                  提案人
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>{sponsorAvatar}</Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={sponsorNameEn +  " " + sponsorNameZh} />
+                  </ListItem>
+                </List>
+              </Box>}
+              
               <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                   <Grid item xs={2} sm={4} md={4}>
@@ -147,14 +147,14 @@ export const BillCard: React.FC<BillCardProps> = (props) => {
 
                   </Grid>
                   <Grid item xs={2} sm={4} md={4}>
-                    <Box>
+                    {props.introducedDate && <Box>
                       <Typography variant="subtitle1">
                         提案日
                       </Typography>
                       <Typography variant="body1">
                         {props.introducedDate}
                       </Typography>
-                    </Box>
+                    </Box>}
                   </Grid>
                   <Grid item xs={2} sm={4} md={4}>
                     {props.cosponsorsCount && <Box>

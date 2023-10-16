@@ -10,7 +10,7 @@ import { ApolloClient, useApolloClient } from "@apollo/client";
 import { useState } from "react";
 import { PaginationControl } from "../../components/pagination-control";
 import { Container, Grid, Typography } from "@mui/material";
-import { MediaCard } from "../../components/media-card";
+// import { MediaCard } from "../../components/media-card";
 import { BillCardList } from "../../components/bill-card-list";
 
 const PAGE_SIZE = 10;
@@ -22,7 +22,6 @@ type BillListPageProps = {
 }
 
 const BillListPage: NextPage<BillListPageProps> = (prefetched) => {
-  console.log(prefetched)
   const { i18n } = useI18n();
   const [bills, setBills] = useState(prefetched.paginatedBills.items);
   const client = useApolloClient();
@@ -30,6 +29,7 @@ const BillListPage: NextPage<BillListPageProps> = (prefetched) => {
     <Layout
       title={i18n.strings.bills.title}
       description={i18n.strings.bills.desc}
+      draftMode={true}
     >
       <Banner
         title={i18n.strings.bills.title}
@@ -62,12 +62,11 @@ const BillListPage: NextPage<BillListPageProps> = (prefetched) => {
               /> */}
               <BillCardList
                 cards={bills.map((bill) => ({
-                  url: `/bill/${bill.id}`,
                   id: bill.id,
                   billNumber: bill.billNumber,
                   billType: bill.billType,
                   congress: bill.congress,
-                  title: bill.title?.text || "",
+                  title: bill.title || undefined,
                   introducedDate: bill.introducedDate || undefined,
                   sponsor: bill.sponsor || undefined,
                   cosponsorsCount: bill.cosponsorsCount || undefined,
@@ -75,9 +74,9 @@ const BillListPage: NextPage<BillListPageProps> = (prefetched) => {
                 }))}
               />
             </Grid>
-          <Grid item md={3}>
+          {/* <Grid item md={3}>
             <MediaCard />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </Layout>
@@ -122,9 +121,6 @@ export const getPaginatedBills = async (
       ...b,
     })),
   }
-  // return res.data.bills.items.map((bill) => ({
-  //   ...bill,
-  // }));
 
 };
 
