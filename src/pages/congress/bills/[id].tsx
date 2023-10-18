@@ -1,19 +1,19 @@
-import { Layout } from "../../components/layout";
-import { BillCard } from "../../components/bill-card";
+import { Layout } from "../../../components/layout";
+import { BillCard } from "../../../components/bill-card";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import {
   BillDocument,
   BillQuery,
-} from "../../lib/page-graphql/query-bill.graphql.interface";
+} from "../../../lib/page-graphql/query-bill.graphql.interface";
 import { getPaginatedBills } from ".";
-import { Loading } from "../../components/loading";
-import { Banner } from "../../components/banner";
-import { USStatesMap } from "../../components/us-states-map";
+import { Loading } from "../../../components/loading";
+import { Banner } from "../../../components/banner";
+import { USStatesMap } from "../../../components/us-states-map";
 import { Avatar, Box, Chip, Container, styled } from "@mui/material";
-import { Link } from "../../components/link";
-import { initApolloClientWithLocale } from "../../lib/with-apollo";
+import { Link } from "../../../components/link";
+import { initApolloClientWithLocale } from "../../../lib/with-apollo";
 import { useApolloClient } from "@apollo/client";
-import { getStaticPathsWithLocale } from "../../utils/page-utils";
+import { getStaticPathsWithLocale } from "../../../utils/page-utils";
 
 type BillPageProps = {
   bill: BillQuery["bill"];

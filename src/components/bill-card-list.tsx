@@ -14,7 +14,7 @@ import { BillCard, BillCardProps } from "./bill-card";
 
 export const BillCardListItem: React.FC<BillCardProps> = (props) => {
   const { i18n } = useI18n();
-  const url = `/bill/${props.id}`
+  const url = `bills/${props.id}`;
   return (
     <CardActionArea
       href={url}
