@@ -180,11 +180,11 @@ export const Header: React.FC<{
           open={showDrawer}
           onClose={() => setShowDrawer(false)}
         >
-          <Toolbar sx={{ color: theme.palette.text.secondary }}>
+          <Toolbar sx={{ color: theme.palette.common.white }}>
             <HeaderTitle whiteLogo={true} />
             <IconButton
               onClick={() => setShowDrawer(false)}
-              sx={{ color: theme.palette.text.secondary }}
+              sx={{ color: theme.palette.common.white }}
             >
               <CancelIcon />
             </IconButton>
@@ -195,7 +195,7 @@ export const Header: React.FC<{
               flexDirection: "column",
               alignItems: "center",
               marginTop: 2,
-              color: theme.palette.text.secondary,
+              color: theme.palette.common.white,
             }}
           >
             <NavButtons />
