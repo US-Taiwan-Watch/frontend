@@ -49,15 +49,15 @@ export const CardListItem: React.FC<CardProps> = (props) => {
               sx={{
                 display: "flex",
                 boxShadow: "none",
-                height: 144,
+                minHeight: 144,
               }}
             >
               {props.image && (
-                <Box sx={{ width: 240, marginRight: "16px" }}>
+                <Box sx={{ width: '25%', marginRight: "16px" }}>
                   <Box
                     style={{
                       position: "relative",
-                      paddingTop: "60%",
+                    
                       backgroundPosition: "center",
                       overflow: "hidden",
                       borderRadius: 4,
@@ -67,7 +67,7 @@ export const CardListItem: React.FC<CardProps> = (props) => {
                       component="img"
                       image={props.image}
                       alt={props.title}
-                      sx={{ position: "absolute", left: 0, top: 0 }}
+                      sx={{ width: '100%', objectFit: "contain" }}
                     />
                   </Box>
                 </Box>
@@ -135,7 +135,7 @@ export const SmallCardItem: React.FC<CardProps> = (props) => (
               component="img"
               image={props.image}
               alt={props.title}
-              sx={{ position: "absolute", left: 0, top: 0 }}
+              sx={{ position: "absolute", left: 0, top: 0, height: "100%", objectFit: "contain" }}
             />
           </div>
         )}
@@ -236,7 +236,7 @@ export const FeaturedCards: React.FC<{
             sx={{ height: "100%" }}
           >
             {card.image && (
-              <CardMedia component="img" image={card.image} alt="random" />
+              <CardMedia component="img" image={card.image} alt="random" sx={{ objectFit: "contain" }}  />
             )}
             <CardContent sx={{ flexGrow: 1 }}>
               <Typography gutterBottom variant="h6" component="h2">
