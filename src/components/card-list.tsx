@@ -125,7 +125,7 @@ export const SmallCardItem: React.FC<CardProps> = (props) => (
           <div
             style={{
               position: "relative",
-              paddingTop: "60%",
+              paddingTop: "57%",
               backgroundPosition: "center",
               overflow: "hidden",
               borderRadius: 4,

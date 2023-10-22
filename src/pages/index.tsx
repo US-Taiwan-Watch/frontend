@@ -44,7 +44,7 @@ import { isLaunched } from "../utils/gate-keeper";
 
 interface HomeProps {
   newsLetters: NewsLetter[];
-  podcasts: PodcastEpisode[];
+  podcasts: Partial<PodcastEpisode>[];
   banners: BannersQueryQuery["banners"];
   draftMode: boolean;
   posts: PublicPostsQuery["getPostsWithType"]["items"];
@@ -236,8 +236,22 @@ const Home: NextPage<HomeProps> = ({
         </Box>
         <Container>
           <SectionTitle>{i18n.strings.header.podcast}</SectionTitle>
-          <Box>
-            <Box
+          <Grid container>
+            {podcasts.slice(0, isSm ? 2 : 4).map((ep) => (
+              <Grid key={ep.id} item xs={12} sm={6} md={3} sx={{ px: 2 }}>
+                <SmallCardItem
+                  url={`/podcast/ep/${ep.id}`}
+                  title={ep.title || ""}
+                  content={""}
+                  displayDate={
+                    ep.pubDate ? new Date(ep.pubDate).toLocaleDateString() : ""
+                  }
+                  image={ep.imageSrc}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          {/* <Box
               ref={podcastSliderBoxRef}
               sx={{
                 px: podcastSlickEdgeWidth + "px",
@@ -314,19 +328,18 @@ const Home: NextPage<HomeProps> = ({
                   </div>
                 ))}
               </Slider>
-            </Box>
-            <Box
-              sx={{
-                my: 4,
-                textAlign: "center",
-              }}
-            >
-              <Link variant="button" href="/podcast">
-                <Button variant="contained">
-                  {i18n.strings.podcast.moreEpisodes}
-                </Button>
-              </Link>
-            </Box>
+            </Box> */}
+          <Box
+            sx={{
+              my: 4,
+              textAlign: "center",
+            }}
+          >
+            <Link variant="button" href="/podcast">
+              <Button variant="contained">
+                {i18n.strings.podcast.moreEpisodes}
+              </Button>
+            </Link>
           </Box>
           <SectionTitle>{i18n.strings.articles.latestArticles}</SectionTitle>
           <Grid container>
@@ -567,7 +580,15 @@ export const getStaticProps: GetStaticProps<HomeProps> = async ({
   return {
     props: {
       newsLetters: letters.slice(0, 4),
-      podcasts: podcasts.slice(0, !!draftMode !== isLaunched ? 6 : 2),
+      podcasts: podcasts
+        .map((p) => ({
+          id: p.id,
+          title: p.title,
+          description: p.description,
+          pubDate: p.pubDate,
+          imageSrc: p.imageSrc,
+        }))
+        .slice(0, !!draftMode !== isLaunched ? 4 : 2),
       banners: bannersRes.data.banners,
       draftMode: !!draftMode !== isLaunched,
       posts: paginatedPosts.items,
