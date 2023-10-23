@@ -162,6 +162,7 @@ export type Mutation = {
   emitGlobalEvent: Scalars['Boolean'];
   emitUserEvent: Scalars['Boolean'];
   syncBill?: Maybe<Bill>;
+  syncFromNotion: Scalars['Boolean'];
   updateArticleWithId?: Maybe<Article>;
   updateBill?: Maybe<Bill>;
   updateUser: User;
@@ -221,6 +222,11 @@ export type MutationSyncBillArgs = {
 };
 
 
+export type MutationSyncFromNotionArgs = {
+  type: NotionSyncType;
+};
+
+
 export type MutationUpdateArticleWithIdArgs = {
   authors?: InputMaybe<Array<Scalars['String']>>;
   content?: InputMaybe<Scalars['String']>;
@@ -246,6 +252,10 @@ export type MutationUpdateUserArgs = {
   nickname?: InputMaybe<Scalars['String']>;
   picture?: InputMaybe<Scalars['String']>;
 };
+
+export enum NotionSyncType {
+  Article = 'ARTICLE'
+}
 
 export type PaginatedArticles = {
   __typename?: 'PaginatedArticles';

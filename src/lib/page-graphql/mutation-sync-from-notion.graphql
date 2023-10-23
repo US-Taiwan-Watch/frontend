@@ -1,0 +1,3 @@
+mutation SyncFromNotion($type: NotionSyncType!) {
+  syncFromNotion(type: $type)
+}
